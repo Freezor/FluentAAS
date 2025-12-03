@@ -5,6 +5,7 @@
         <LangVersion>14</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>FluentAAS.Core</RootNamespace>
     </PropertyGroup>
 
 </Project>
