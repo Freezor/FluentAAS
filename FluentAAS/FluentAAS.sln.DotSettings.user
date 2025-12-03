@@ -1,0 +1,26 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=12d3fb4b_002Dfe35_002D4d20_002D9c5d_002D62d483522c7c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FluentAasEndToEndTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAasTests.Integration.FluentAasEndToEndTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=33984424_002Db7d8_002D4c15_002Dbdf3_002D966a2495982d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="FluentAasEndToEndTests #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAasTests.Integration.FluentAasEndToEndTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fab312dd_002D887f_002D4428_002D9aca_002D26b4edafe62b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FluentAasEndToEndTests #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAasTests.Integration.FluentAasEndToEndTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fd1371c4_002D420a_002D4901_002Dac39_002Dd16de97a4897/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Build_Validate_Serialize_And_Deserialize_Environment" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAasTests.Integration.FluentAasEndToEndTests.Build_Validate_Serialize_And_Deserialize_Environment&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ff116a2f_002Deb03_002D44c5_002Db171_002D6be6e5b5c884/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FluentAasEndToEndTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAasTests.Integration.FluentAasEndToEndTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

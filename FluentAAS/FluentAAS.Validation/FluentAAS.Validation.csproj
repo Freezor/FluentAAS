@@ -5,11 +5,14 @@
         <LangVersion>13</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>FluentAAS.Core</RootNamespace>
+        <RootNamespace>FluentAAS.Validation</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AasCore.Aas3_0" Version="1.0.5" />
+        <PackageReference Include="AasCore.Aas3_0" Version="1.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\FluentAAS.Core\FluentAAS.Core.csproj" />
+    </ItemGroup>
 </Project>
