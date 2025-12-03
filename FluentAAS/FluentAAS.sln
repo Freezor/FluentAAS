@@ -2,10 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAAS.Core", "FluentAAS.Core\FluentAAS.Core.csproj", "{991E7F2C-45C7-4CD4-9CE4-6C9FC6EFDC10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAAS.ModelGeneration", "FluentAAS.ModelGeneration\FluentAAS.ModelGeneration.csproj", "{C4D97516-A304-4E35-BB0F-760313EE0CB2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAAS.Submodels", "FluentAAS.Submodels\FluentAAS.Submodels.csproj", "{FA143077-FE2D-4068-9588-EA256380DE71}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,13 +12,5 @@ Global
 		{991E7F2C-45C7-4CD4-9CE4-6C9FC6EFDC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{991E7F2C-45C7-4CD4-9CE4-6C9FC6EFDC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{991E7F2C-45C7-4CD4-9CE4-6C9FC6EFDC10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4D97516-A304-4E35-BB0F-760313EE0CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4D97516-A304-4E35-BB0F-760313EE0CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4D97516-A304-4E35-BB0F-760313EE0CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4D97516-A304-4E35-BB0F-760313EE0CB2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA143077-FE2D-4068-9588-EA256380DE71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA143077-FE2D-4068-9588-EA256380DE71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA143077-FE2D-4068-9588-EA256380DE71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA143077-FE2D-4068-9588-EA256380DE71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

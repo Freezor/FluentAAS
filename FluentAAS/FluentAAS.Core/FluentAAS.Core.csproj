@@ -8,4 +8,8 @@
         <RootNamespace>FluentAAS.Core</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AasCore.Aas3_0" Version="1.0.5" />
+    </ItemGroup>
+
 </Project>
