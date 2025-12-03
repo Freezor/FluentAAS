@@ -6,7 +6,7 @@ public sealed class UniqueIdRule : IValidationRule
     {
         var seen = new HashSet<string>();
 
-        foreach (AssetAdministrationShell shell in (IEnumerable<AssetAdministrationShell>) env.Environment.AssetAdministrationShells ?? Enumerable.Empty<AssetAdministrationShell>())
+        foreach (IAssetAdministrationShell shell in (IEnumerable<IAssetAdministrationShell>) env.Environment.AssetAdministrationShells ?? Enumerable.Empty<IAssetAdministrationShell>())
         {
             if (!seen.Add(shell.Id))
             {
@@ -19,7 +19,7 @@ public sealed class UniqueIdRule : IValidationRule
             }
         }
 
-        foreach (Submodel submodel in (IEnumerable<Submodel>) env.Environment.Submodels ?? Enumerable.Empty<Submodel>())
+        foreach (ISubmodel submodel in (IEnumerable<ISubmodel>) env.Environment.Submodels ?? Enumerable.Empty<ISubmodel>())
         {
             if (!seen.Add(submodel.Id))
             {

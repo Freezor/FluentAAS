@@ -5,7 +5,7 @@ namespace FluentAas.Builder;
 public sealed class SubmodelBuilder
 {
     private readonly string                 _id;
-    private readonly List<ISubmodelElement> _elements = new();
+    private readonly List<ISubmodelElement> _elements = [];
 
     private SubmodelBuilder(string id)
     {

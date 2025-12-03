@@ -44,10 +44,10 @@ public class FluentAasEndToEndTests
                     .Build();
 
         // 3) Build environment via fluent DSL
-        IAasEnvironmentAdapter envAdapter = AasFluent.CreateEnvironment()
-                                                     .AddShell(shell)
-                                                     .AddSubmodel(submodel)
-                                                     .Build();
+        var envAdapter = AasFluent.CreateEnvironment()
+                                  .AddShell(shell)
+                                  .AddSubmodel(submodel)
+                                  .Build();
 
         // 4) Validate
         var validationService = new ValidationService(
@@ -57,7 +57,7 @@ public class FluentAasEndToEndTests
                                                           new UniqueIdRule()
                                                       });
 
-        ValidationReport report = validationService.Validate(envAdapter);
+        var report = validationService.Validate(envAdapter);
 
         // ASSERT: validation succeeded
         report.ShouldNotBeNull();
@@ -65,7 +65,7 @@ public class FluentAasEndToEndTests
         report.Results.ShouldAllBe(r => r.Level != ValidationLevel.Error);
 
         // 5) Serialize
-        string json = AasJsonSerializer.ToJson(envAdapter);
+        var json = AasJsonSerializer.ToJson(envAdapter);
 
         // ASSERT: JSON looks sane
         json.ShouldNotBeNullOrWhiteSpace();
@@ -74,7 +74,7 @@ public class FluentAasEndToEndTests
         json.ShouldContain("ACME Corp");
 
         // 6) Deserialize back
-        IAasEnvironmentAdapter deserialized = AasJsonSerializer.FromJson(json);
+        var deserialized = AasJsonSerializer.FromJson(json);
 
         // ASSERT: roundtrip preserved core structure
         deserialized.ShouldNotBeNull();
