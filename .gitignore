@@ -52,3 +52,4 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+FluentAAS/.idea/.idea.FluentAAS/.idea/vcs.xml
