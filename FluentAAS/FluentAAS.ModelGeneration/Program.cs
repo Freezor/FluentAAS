@@ -15,11 +15,7 @@
 //      * shows total JSON files found
 //      * shows SKIPPED and FAILED files with filenames and reasons
 //
-// Note: JSON files in the externals folder are READ ONLY and not modified.
-
-using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
+// Note: JSON files in the externals folder are READ-ONLY and not modified.
 
 namespace FluentAas.ModelGeneration;
 

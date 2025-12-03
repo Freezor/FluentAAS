@@ -65,7 +65,7 @@ internal static class JsonContent
         return "One"; // default
     }
 
-    public static string MapValueType(string? valueType)
+    private static string MapValueType(string? valueType)
     {
         if (string.IsNullOrWhiteSpace(valueType))
             return "string";
