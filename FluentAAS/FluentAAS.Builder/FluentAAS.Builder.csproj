@@ -4,6 +4,9 @@
         <TargetFramework>net9.0</TargetFramework>
         <LangVersion>13</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <WarningsAsErrors>CS1591</WarningsAsErrors>
+        <NoWarn>CS1591</NoWarn>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 

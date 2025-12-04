@@ -6,6 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>FluentAAS.Validation</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <WarningsAsErrors>CS1591</WarningsAsErrors>
+        <NoWarn>CS1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
