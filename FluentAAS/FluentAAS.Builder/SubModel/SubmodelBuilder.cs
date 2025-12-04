@@ -1,4 +1,4 @@
-namespace FluentAAS.Builder;
+namespace FluentAAS.Builder.SubModel;
 
 /// <summary>
 /// Provides a fluent API for constructing and configuring an AAS <see cref="Submodel"/>.

@@ -1,6 +1,6 @@
 using FluentAAS.Builder;
 
-namespace FluentAAS.Templates;
+namespace FluentAAS.Templates.DigitalNameplate;
 
 /// <summary>
 /// Provides extension methods for <see cref="ShellBuilder"/> to simplify

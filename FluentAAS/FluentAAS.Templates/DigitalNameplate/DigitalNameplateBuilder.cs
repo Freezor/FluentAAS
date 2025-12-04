@@ -1,7 +1,8 @@
 using FluentAAS.Builder;
-using static FluentAAS.Templates.DigitalNameplateSemantics;
+using FluentAAS.Builder.SubModel;
+using static FluentAAS.Templates.DigitalNameplate.DigitalNameplateSemantics;
 
-namespace FluentAAS.Templates;
+namespace FluentAAS.Templates.DigitalNameplate;
 
 /// <summary>
 /// Provides a guided fluent builder for the IDTA Digital Nameplate submodel.

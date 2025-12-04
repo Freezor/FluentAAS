@@ -1,4 +1,4 @@
-namespace FluentAAS.Templates;
+namespace FluentAAS.Templates.DigitalNameplate;
 
 /// <summary>
 /// Provides semantic identifiers (IRDI / concept description references)

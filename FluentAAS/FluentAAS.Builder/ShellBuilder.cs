@@ -1,3 +1,5 @@
+using FluentAAS.Builder.SubModel;
+
 namespace FluentAAS.Builder;
 
 /// <summary>
