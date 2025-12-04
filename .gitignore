@@ -53,3 +53,4 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 FluentAAS/.idea/.idea.FluentAAS/.idea/vcs.xml
+/FluentAAS/.idea/.idea.FluentAAS/.idea/dictionaries/project.xml

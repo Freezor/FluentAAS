@@ -20,20 +20,21 @@ public class DigitalNameplateTests
     {
         // Arrange & Act
         var environment = EnvironmentBuilder.Create()
-            .AddShell("urn:aas:example:my-shell", "MyShell")
-            .WithGlobalAssetId("urn:asset:example:my-asset")
-            .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
-                .WithManufacturerName("de", "Muster AG")
-                .WithManufacturerName("en", "Sample Corp")
-                .WithManufacturerProductDesignation("de", "Super-Antriebseinheit XS")
-                .WithManufacturerProductDesignation("en", "Super Drive Unit XS")
-                .WithSerialNumber("SN-000123")
-                .Build()
-            .Done()
-            .Build();
+                                            .AddShell("urn:aas:example:my-shell", "MyShell")
+                                            .WithGlobalAssetId("urn:asset:example:my-asset")
+                                            .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
+                                            .WithManufacturerName("de", "Muster AG")
+                                            .WithManufacturerName("en", "Sample Corp")
+                                            .WithManufacturerProductDesignation("de", "Super-Antriebseinheit XS")
+                                            .WithManufacturerProductDesignation("en", "Super Drive Unit XS")
+                                            .WithSerialNumber("SN-000123")
+                                            .Build()
+                                            .Done()
+                                            .Build();
 
-        var json = AasJsonSerializer.ToJson(environment);
-        
+        var json               = AasJsonSerializer.ToJson(environment);
+        var createdEnvironment = AasJsonSerializer.FromJson(json);
+
         // Assert
         environment.ShouldNotBeNull();
         environment.AssetAdministrationShells.ShouldHaveSingleItem();
@@ -46,6 +47,8 @@ public class DigitalNameplateTests
         var submodel = environment.Submodels!.First();
         submodel.IdShort.ShouldBe("DigitalNameplate");
         submodel.SubmodelElements!.Count.ShouldBe(3);
+
+        createdEnvironment.ShouldBeEquivalentTo(environment, "Serializing and Deserializing the same object should result in identical objects");
     }
 
     /// <summary>
@@ -57,9 +60,9 @@ public class DigitalNameplateTests
     {
         // Arrange
         var builder = EnvironmentBuilder.Create()
-            .AddShell("urn:aas:example:my-shell", "MyShell")
-            .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
-                .WithManufacturerName("de", "Muster AG");
+                                        .AddShell("urn:aas:example:my-shell", "MyShell")
+                                        .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
+                                        .WithManufacturerName("de", "Muster AG");
 
         // Act
         var exception = Should.Throw<InvalidOperationException>(() => builder.Build());
