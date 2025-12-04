@@ -2,7 +2,6 @@
 using FluentAAS.Builder;
 using FluentAas.IO;
 using FluentAAS.IO;
-using FluentAAS.Templates;
 using FluentAAS.Templates.DigitalNameplate;
 using Shouldly;
 using File = System.IO.File;
