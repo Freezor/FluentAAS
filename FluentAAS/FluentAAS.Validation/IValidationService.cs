@@ -18,5 +18,5 @@ public interface IValidationService
     /// <returns>
     /// A <see cref="ValidationReport"/> summarizing all validation outcomes.
     /// </returns>
-    ValidationReport Validate(IAasEnvironmentAdapter environment);
+    ValidationReport Validate(IEnvironment environment);
 }

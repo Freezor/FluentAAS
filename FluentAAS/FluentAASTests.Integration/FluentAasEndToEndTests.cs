@@ -1,4 +1,5 @@
 ﻿using FluentAAS.Builder;
+using FluentAas.IO;
 using FluentAAS.Templates;
 using Shouldly;
 
@@ -31,6 +32,8 @@ public class DigitalNameplateTests
             .Done()
             .Build();
 
+        var json = AasJsonSerializer.ToJson(environment);
+        
         // Assert
         environment.ShouldNotBeNull();
         environment.AssetAdministrationShells.ShouldHaveSingleItem();

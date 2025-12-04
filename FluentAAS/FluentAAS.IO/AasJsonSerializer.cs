@@ -19,24 +19,24 @@ public static class AasJsonSerializer
                                                             };
 
     /// <summary>
-    /// Serializes an <see cref="IAasEnvironmentAdapter"/> into a JSON string.
+    /// Serializes an <see cref="IEnvironment"/> into a JSON string.
     /// </summary>
     /// <param name="env">The AAS environment adapter containing the <see cref="Environment"/> to serialize.</param>
     /// <returns>A formatted JSON representation of the AAS environment.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="env"/> is <c>null</c>.</exception>
-    public static string ToJson(IAasEnvironmentAdapter env)
+    public static string ToJson(IEnvironment env)
     {
         ArgumentNullException.ThrowIfNull(env);
 
-        return JsonSerializer.Serialize(env.Environment, Options);
+        return JsonSerializer.Serialize(env, Options);
     }
 
     /// <summary>
-    /// Deserializes a JSON string into an <see cref="IAasEnvironmentAdapter"/>.
+    /// Deserializes a JSON string into an <see cref="IEnvironment"/>.
     /// </summary>
     /// <param name="json">The JSON string representing an AAS <see cref="Environment"/>.</param>
     /// <returns>
-    /// An <see cref="IAasEnvironmentAdapter"/> wrapping the deserialized <see cref="Environment"/>.
+    /// An <see cref="IEnvironment"/>
     /// </returns>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="json"/> is null, empty, or whitespace.
@@ -44,7 +44,7 @@ public static class AasJsonSerializer
     /// <exception cref="InvalidOperationException">
     /// Thrown when deserialization fails or results in a <c>null</c> environment instance.
     /// </exception>
-    public static IAasEnvironmentAdapter FromJson(string json)
+    public static IEnvironment FromJson(string json)
     {
         if (string.IsNullOrWhiteSpace(json))
         {
@@ -54,6 +54,6 @@ public static class AasJsonSerializer
         var environment = JsonSerializer.Deserialize<Environment>(json, Options)
                           ?? throw new InvalidOperationException("Failed to deserialize AAS environment.");
 
-        return new DefaultAasEnvironmentAdapter(environment);
+        return environment;
     }
 }

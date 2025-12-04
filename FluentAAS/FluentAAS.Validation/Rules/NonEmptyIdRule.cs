@@ -12,14 +12,13 @@ public sealed class NonEmptyIdRule : IValidationRule
     /// Evaluates all shells and submodels in the AAS environment, producing errors
     /// when an element contains an empty or whitespace identifier.
     /// </summary>
-    /// <param name="env">The environment adapter providing access to the AAS environment.</param>
+    /// <param name="environment">The environment adapter providing access to the AAS environment.</param>
     /// <returns>A sequence of <see cref="ValidationResult"/> objects.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="env"/> is null.</exception>
-    public IEnumerable<ValidationResult> Evaluate(IAasEnvironmentAdapter env)
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="environment"/> is null.</exception>
+    public IEnumerable<ValidationResult> Evaluate(IEnvironment environment)
     {
-        ArgumentNullException.ThrowIfNull(env);
+        ArgumentNullException.ThrowIfNull(environment);
 
-        var environment = env.Environment;
 
         // Validate Asset Administration Shells
         if (environment.AssetAdministrationShells is not null)

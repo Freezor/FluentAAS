@@ -12,16 +12,15 @@ public sealed class UniqueIdRule : IValidationRule
     /// Evaluates the environment for duplicate identifiers among Asset Administration Shells
     /// and Submodels. If the same identifier is used more than once, an error is reported.
     /// </summary>
-    /// <param name="env">The environment adapter providing access to the AAS environment.</param>
+    /// <param name="environment">The environment adapter providing access to the AAS environment.</param>
     /// <returns>
     /// A sequence of <see cref="ValidationResult"/> entries describing any duplicate IDs found.
     /// </returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="env"/> is <c>null</c>.</exception>
-    public IEnumerable<ValidationResult> Evaluate(IAasEnvironmentAdapter env)
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="environment"/> is <c>null</c>.</exception>
+    public IEnumerable<ValidationResult> Evaluate(IEnvironment environment)
     {
-        ArgumentNullException.ThrowIfNull(env);
+        ArgumentNullException.ThrowIfNull(environment);
 
-        var environment = env.Environment;
         var seen = new HashSet<string>(StringComparer.Ordinal);
 
         // Check Asset Administration Shell IDs

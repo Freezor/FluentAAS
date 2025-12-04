@@ -33,7 +33,7 @@ public sealed class ValidationService : IValidationService
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="environment"/> is <c>null</c>.
     /// </exception>
-    public ValidationReport Validate(IAasEnvironmentAdapter environment)
+    public ValidationReport Validate(IEnvironment environment)
     {
         if (environment is null)
         {
