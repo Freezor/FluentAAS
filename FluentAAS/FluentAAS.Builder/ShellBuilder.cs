@@ -9,12 +9,12 @@ public sealed class ShellBuilder
     /// <summary>
     ///     Initializes a new instance of the <see cref="ShellBuilder" /> class.
     /// </summary>
-    /// <param name="parent">The parent <see cref="EnvironmentBuilder" />.</param>
+    /// <param name="parent">The parent <see cref="AasBuilder" />.</param>
     /// <param name="shell">The <see cref="AssetAdministrationShell" /> being configured.</param>
     /// <exception cref="ArgumentNullException">
     ///     Thrown when <paramref name="parent" /> or <paramref name="shell" /> is <c>null</c>.
     /// </exception>
-    internal ShellBuilder(EnvironmentBuilder parent, AssetAdministrationShell shell)
+    internal ShellBuilder(AasBuilder parent, AssetAdministrationShell shell)
     {
         Parent = parent ?? throw new ArgumentNullException(nameof(parent));
         Shell  = shell ?? throw new ArgumentNullException(nameof(shell));
@@ -22,7 +22,7 @@ public sealed class ShellBuilder
 
     private AssetAdministrationShell Shell { get; }
 
-    private EnvironmentBuilder Parent { get; }
+    private AasBuilder Parent { get; }
 
     /// <summary>
     ///     Sets the global asset identifier of the underlying asset.
@@ -120,10 +120,10 @@ public sealed class ShellBuilder
     }
 
     /// <summary>
-    ///     Completes configuration of this shell and returns to the parent <see cref="EnvironmentBuilder" />.
+    ///     Completes configuration of this shell and returns to the parent <see cref="AasBuilder" />.
     /// </summary>
-    /// <returns>The parent <see cref="EnvironmentBuilder" />.</returns>
-    public EnvironmentBuilder Done()
+    /// <returns>The parent <see cref="AasBuilder" />.</returns>
+    public AasBuilder Done()
     {
         Parent.AddShellInternal(Shell);
         return Parent;

@@ -6,35 +6,52 @@ using FluentAAS.Templates;
 using Shouldly;
 using File = System.IO.File;
 
+
 namespace FluentAASTests.Integration;
 
 /// <summary>
-/// Contains integration tests for building a Digital Nameplate submodel
-/// using the fluent FluentAAS builder API.
+///     Contains integration tests for building a Digital Nameplate submodel
+///     using the fluent FluentAAS builder API.
 /// </summary>
 public class DigitalNameplateTests
 {
     /// <summary>
-    /// Verifies that a Digital Nameplate submodel can be created and attached
-    /// to an Asset Administration Shell using the fluent API.
-    /// Every piece of content configured via the builder is asserted.
+    ///     Verifies that a Digital Nameplate submodel can be created and attached
+    ///     to an Asset Administration Shell using the fluent API.
+    ///     Every piece of content configured via the builder is asserted.
     /// </summary>
     [Fact]
     public void CanCreateDigitalNameplateWithFluentApi()
     {
         // Arrange & Act
-        var environment = EnvironmentBuilder.Create()
-                                            .AddShell("urn:aas:example:my-shell", "MyShell")
-                                            .WithGlobalAssetId("urn:asset:example:my-asset")
-                                            .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
-                                            .WithManufacturerName("de", "Muster AG")
-                                            .WithManufacturerName("en", "Sample Corp")
-                                            .WithManufacturerProductDesignation("de", "Super-Antriebseinheit XS")
-                                            .WithManufacturerProductDesignation("en", "Super Drive Unit XS")
-                                            .WithSerialNumber("SN-000123")
-                                            .Build()
-                                            .Done()
-                                            .Build();
+        var environment = AasBuilder.Create()
+                                    .AddShell("urn:aas:example:my-shell", "MyShell")
+                                    .WithGlobalAssetId("urn:asset:example:my-asset")
+                                    .AddSubmodel("urn:aas:example:generic-submodel:1", "GenericSubmodel")
+                                    .WithSemanticId(
+                                                    new Reference(
+                                                                  ReferenceTypes.ExternalReference,
+                                                                  [
+                                                                      new Key(
+                                                                              KeyTypes.Submodel,
+                                                                              "urn:aas:example:generic-submodel:semantic-id")
+                                                                  ]
+                                                                 ))
+                                    .AddMultiLanguageProperty(
+                                                              "GenericMultiLanguageProperty", ls => ls
+                                                                                                    .Add("en", "Example value")
+                                                                                                    .Add("de", "Beispielwert"))
+                                    .AddElement("GenericProperty", "example value")
+                                    .Done()
+                                    .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
+                                    .WithManufacturerName("de", "Muster AG")
+                                    .WithManufacturerName("en", "Sample Corp")
+                                    .WithManufacturerProductDesignation("de", "Super-Antriebseinheit XS")
+                                    .WithManufacturerProductDesignation("en", "Super Drive Unit XS")
+                                    .WithSerialNumber("SN-000123")
+                                    .Build()
+                                    .Done()
+                                    .Build();
 
         // Create De/Serializing environment
         var json               = AasJsonSerializer.ToJson(environment);
@@ -50,7 +67,7 @@ public class DigitalNameplateTests
         // Assert: environment basics
         environment.ShouldNotBeNull();
         environment.AssetAdministrationShells.ShouldHaveSingleItem();
-        environment.Submodels.ShouldHaveSingleItem();
+        environment.Submodels!.Count.ShouldBe(2);
 
         // Assert: shell and asset info
         var shell = environment.AssetAdministrationShells!.First();
@@ -58,8 +75,8 @@ public class DigitalNameplateTests
         shell.AssetInformation.GlobalAssetId.ShouldBe("urn:asset:example:my-asset");
 
         // Assert: submodel basics
-        var submodel = environment.Submodels!.First();
-        submodel.IdShort.ShouldBe("DigitalNameplate");
+        var submodel = environment.Submodels!.Find(x => x.IdShort!.Equals("DigitalNameplate"));
+        submodel.ShouldNotBeNull();
         submodel.SubmodelElements!.Count.ShouldBe(3);
 
         // Assert: Digital Nameplate content
@@ -93,17 +110,17 @@ public class DigitalNameplateTests
     }
 
     /// <summary>
-    /// Verifies that the <see cref="DigitalNameplateBuilder"/> throws an
-    /// <see cref="InvalidOperationException"/> when required fields are missing.
+    ///     Verifies that the <see cref="DigitalNameplateBuilder" /> throws an
+    ///     <see cref="InvalidOperationException" /> when required fields are missing.
     /// </summary>
     [Fact]
     public void DigitalNameplateBuilder_ThrowsOnMissingRequiredFields()
     {
         // Arrange
-        var builder = EnvironmentBuilder.Create()
-                                        .AddShell("urn:aas:example:my-shell", "MyShell")
-                                        .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
-                                        .WithManufacturerName("de", "Muster AG");
+        var builder = AasBuilder.Create()
+                                .AddShell("urn:aas:example:my-shell", "MyShell")
+                                .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
+                                .WithManufacturerName("de", "Muster AG");
 
         // Act
         var exception = Should.Throw<InvalidOperationException>(() => builder.Build());
@@ -115,12 +132,16 @@ public class DigitalNameplateTests
     }
 
     private static Property? GetProperty(ISubmodel submodel, string idShort)
-        => submodel.SubmodelElements!
-                   .OfType<Property>()
-                   .FirstOrDefault(p => p.IdShort == idShort);
+    {
+        return submodel.SubmodelElements!
+                       .OfType<Property>()
+                       .FirstOrDefault(p => p.IdShort == idShort);
+    }
 
     private static MultiLanguageProperty? GetMultiLanguageProperty(ISubmodel submodel, string idShort)
-        => submodel.SubmodelElements!
-                   .OfType<MultiLanguageProperty>()
-                   .FirstOrDefault(p => p.IdShort == idShort);
+    {
+        return submodel.SubmodelElements!
+                       .OfType<MultiLanguageProperty>()
+                       .FirstOrDefault(p => p.IdShort == idShort);
+    }
 }

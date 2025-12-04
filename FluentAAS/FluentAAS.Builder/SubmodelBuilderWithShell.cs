@@ -150,6 +150,12 @@ public sealed class SubmodelBuilderWithShell
         _parentShell.AddSubmodelReference(_submodel);
         return _parentShell;
     }
+    
+    /// <summary>
+    /// Convenience wrapper to add a simple Property submodel element.
+    /// </summary>
+    public SubmodelBuilderWithShell AddElement(string idShort, string value)
+        => AddProperty(idShort, value);
 
     /// <summary>
     /// Builds and returns the configured <see cref="Submodel"/> instance

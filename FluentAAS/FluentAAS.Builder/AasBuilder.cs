@@ -4,26 +4,26 @@ namespace FluentAAS.Builder;
 /// Provides a fluent API for constructing an AAS <see cref="Environment"/> 
 /// with asset administration shells and submodels.
 /// </summary>
-public sealed class EnvironmentBuilder
+public sealed class AasBuilder
 {
     private readonly List<IAssetAdministrationShell> _shells    = [];
     private readonly List<ISubmodel>                 _submodels = [];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EnvironmentBuilder"/> class.
-    /// Use <see cref="Create"/> or <see cref="AasFluent.CreateEnvironment"/> to obtain an instance.
+    /// Initializes a new instance of the <see cref="AasBuilder"/> class.
+    /// Use <see cref="Create"/> or <see cref="AasFluent.CreateEnvironment"/> to get an instance.
     /// </summary>
-    internal EnvironmentBuilder()
+    internal AasBuilder()
     {
     }
 
     /// <summary>
-    /// Creates a new <see cref="EnvironmentBuilder"/> instance.
+    /// Creates a new <see cref="AasBuilder"/> instance.
     /// </summary>
     /// <returns>
-    /// A new <see cref="EnvironmentBuilder"/> that can be used to configure an AAS environment.
+    /// A new <see cref="AasBuilder"/> that can be used to configure an AAS environment.
     /// </returns>
-    public static EnvironmentBuilder Create() => new();
+    public static AasBuilder Create() => new();
 
     /// <summary>
     /// Adds a new <see cref="AssetAdministrationShell"/> definition to the environment
@@ -68,9 +68,9 @@ public sealed class EnvironmentBuilder
     /// Adds an existing <see cref="Submodel"/> to the environment.
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
-    /// <returns>The current <see cref="EnvironmentBuilder"/> instance for fluent chaining.</returns>
+    /// <returns>The current <see cref="AasBuilder"/> instance for fluent chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
-    public EnvironmentBuilder AddExistingSubmodel(Submodel submodel)
+    public AasBuilder AddExistingSubmodel(Submodel submodel)
     {
         ArgumentNullException.ThrowIfNull(submodel);
         _submodels.Add(submodel);

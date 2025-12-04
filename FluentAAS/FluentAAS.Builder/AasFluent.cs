@@ -7,12 +7,12 @@ namespace FluentAAS.Builder;
 public static class AasFluent
 {
     /// <summary>
-    /// Creates a new <see cref="EnvironmentBuilder"/> instance that can be used
+    /// Creates a new <see cref="AasBuilder"/> instance that can be used
     /// to fluently construct an AAS environment.
     /// </summary>
     /// <returns>
-    /// A new <see cref="EnvironmentBuilder"/> for configuring an AAS environment.
+    /// A new <see cref="AasBuilder"/> for configuring an AAS environment.
     /// </returns>
-    public static EnvironmentBuilder CreateEnvironment() =>
-        new EnvironmentBuilder();
+    public static AasBuilder CreateEnvironment() =>
+        new AasBuilder();
 }
