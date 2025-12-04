@@ -56,26 +56,33 @@ public sealed class ShellBuilder
     /// </exception>
     public ShellBuilder WithSpecificAssetId(string key, string value, string nameSpace)
     {
-        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Specific asset id key must not be empty.", nameof(key));
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentException("Specific asset id key must not be empty.", nameof(key));
 
-        if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Specific asset id value must not be empty.", nameof(value));
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ArgumentException("Specific asset id value must not be empty.", nameof(value));
 
-        if (string.IsNullOrWhiteSpace(nameSpace)) throw new ArgumentException("Specific asset id namespace must not be empty.", nameof(nameSpace));
+        if (string.IsNullOrWhiteSpace(nameSpace))
+            throw new ArgumentException("Specific asset id namespace must not be empty.", nameof(nameSpace));
 
-        if (Shell.AssetInformation is null) throw new InvalidOperationException("AssetInformation must be initialized before adding specific asset ids.");
+        if (Shell.AssetInformation is null)
+            throw new InvalidOperationException("AssetInformation must be initialized before adding specific asset ids.");
 
-        Shell.AssetInformation.SpecificAssetIds ??= new List<ISpecificAssetId>();
+        Shell.AssetInformation.SpecificAssetIds ??= [];
 
-        // Use constructor parameters instead of a non-existent ExternalSubjectId property.
-        // NameSpace is the correct property name for the meta-model field "nameSpace".
+        // Create an ExternalReference with one GlobalReference key that carries the namespace.
         var externalSubjectRef = new Reference(
                                                ReferenceTypes.ExternalReference,
-                                               []);
+                                               [
+                                                   new Key(
+                                                           KeyTypes.GlobalReference,
+                                                           nameSpace)
+                                               ]);
 
         Shell.AssetInformation.SpecificAssetIds.Add(
                                                     new SpecificAssetId(
-                                                                        key,
-                                                                        value,
+                                                                        name: key,
+                                                                        value: value,
                                                                         externalSubjectId: externalSubjectRef));
 
         return this;
@@ -91,7 +98,7 @@ public sealed class ShellBuilder
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel" /> is <c>null</c>.</exception>
     public void AddSubmodelReference(Submodel submodel, KeyTypes idType = KeyTypes.Submodel)
     {
-        if (submodel is null) throw new ArgumentNullException(nameof(submodel));
+        ArgumentNullException.ThrowIfNull(submodel);
 
         Shell.Submodels ??= [];
 

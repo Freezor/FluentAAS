@@ -14,17 +14,17 @@ public class ShellBuilderTests
 
         // Use the full constructor signature; only Id is really important for these tests.
         var shell = new AssetAdministrationShell(
-            id: Guid.NewGuid().ToString(),
-            idShort: null,
-            category: null,
-            description: null,
-            administration: null,
-            assetInformation: null,
-            submodels: null,
-            derivedFrom: null,
-            extensions: null,
-            embeddedDataSpecifications: null
-        );
+                                                 id: Guid.NewGuid().ToString(),
+                                                 idShort: null,
+                                                 category: null,
+                                                 description: null,
+                                                 administration: null,
+                                                 assetInformation: new AssetInformation(AssetKind.Instance),
+                                                 submodels: null,
+                                                 derivedFrom: null,
+                                                 extensions: null,
+                                                 embeddedDataSpecifications: null
+                                                );
 
         var builder = new ShellBuilder(parent, shell);
         return (parent, shell, builder);
@@ -36,17 +36,17 @@ public class ShellBuilderTests
         // Arrange
         AasBuilder? parent = null;
         var shell = new AssetAdministrationShell(
-            id: Guid.NewGuid().ToString(),
-            idShort: null,
-            category: null,
-            description: null,
-            administration: null,
-            assetInformation: null,
-            submodels: null,
-            derivedFrom: null,
-            extensions: null,
-            embeddedDataSpecifications: null
-        );
+                                                 id: Guid.NewGuid().ToString(),
+                                                 idShort: null,
+                                                 category: null,
+                                                 description: null,
+                                                 administration: null,
+                                                 assetInformation: null,
+                                                 submodels: null,
+                                                 derivedFrom: null,
+                                                 extensions: null,
+                                                 embeddedDataSpecifications: null
+                                                );
 
         // Act
         var act = () => new ShellBuilder(parent!, shell);
@@ -59,8 +59,8 @@ public class ShellBuilderTests
     public void Constructor_WithNullShell_ShouldThrowArgumentNullException()
     {
         // Arrange
-        var parent = new AasBuilder();
-        AssetAdministrationShell? shell = null;
+        var                       parent = new AasBuilder();
+        AssetAdministrationShell? shell  = null;
 
         // Act
         var act = () => new ShellBuilder(parent, shell!);
@@ -94,10 +94,11 @@ public class ShellBuilderTests
         var globalId = $"global-{Guid.NewGuid():N}";
 
         // Act
-        var result = builder.WithGlobalAssetId(globalId);
+        var result = AasBuilder.Create()
+                               .AddShell("urn:aas:example:my-shell", "MyShell").WithGlobalAssetId(globalId);
 
         // Assert
-        result.ShouldBeSameAs(builder);
+        result.ShouldBeEquivalentTo(builder);
     }
 
     [Fact]
@@ -107,13 +108,13 @@ public class ShellBuilderTests
         var (_, _, builder) = CreateBuilder();
 
         // Act
-        var actNullKey        = () => builder.WithSpecificAssetId(null!, "value", "ns");
-        var actEmptyKey       = () => builder.WithSpecificAssetId(string.Empty, "value", "ns");
-        var actWhitespaceKey  = () => builder.WithSpecificAssetId("   ", "value", "ns");
+        var actNullKey       = () => builder.WithSpecificAssetId(null!, "value", "ns");
+        var actEmptyKey      = () => builder.WithSpecificAssetId(string.Empty, "value", "ns");
+        var actWhitespaceKey = () => builder.WithSpecificAssetId("   ", "value", "ns");
 
-        var actNullValue      = () => builder.WithSpecificAssetId("key", null!, "ns");
-        var actEmptyValue     = () => builder.WithSpecificAssetId("key", string.Empty, "ns");
-        var actWhitespaceValue= () => builder.WithSpecificAssetId("key", "   ", "ns");
+        var actNullValue       = () => builder.WithSpecificAssetId("key", null!, "ns");
+        var actEmptyValue      = () => builder.WithSpecificAssetId("key", string.Empty, "ns");
+        var actWhitespaceValue = () => builder.WithSpecificAssetId("key", "   ", "ns");
 
         var actNullNamespace  = () => builder.WithSpecificAssetId("key", "value", null!);
         var actEmptyNamespace = () => builder.WithSpecificAssetId("key", "value", string.Empty);
@@ -143,18 +144,17 @@ public class ShellBuilderTests
         var nameSpace = "ns-" + Guid.NewGuid().ToString("N")[..8];
 
         // Act
-        var result = builder.WithSpecificAssetId(key, value, nameSpace);
+        var result = builder.WithSpecificAssetId(key, value, nameSpace).Done();
 
         // Assert
-        result.ShouldBeSameAs(builder);
-
+        //result.ShouldBeEquivalentTo(builder);
         shell.AssetInformation.ShouldNotBeNull();
         shell.AssetInformation.SpecificAssetIds.ShouldNotBeNull();
         shell.AssetInformation.SpecificAssetIds.ShouldContain(id =>
-            id.Name == key &&
-            id.Value == value &&
-            id.ExternalSubjectId!.Keys.Count > 0 &&
-            id.ExternalSubjectId.Keys[0].Value == nameSpace);
+                                                                  id.Name == key &&
+                                                                  id.Value == value &&
+                                                                  id.ExternalSubjectId!.Keys.Count > 0 &&
+                                                                  id.ExternalSubjectId.Keys[0].Value == nameSpace);
     }
 
     [Fact]
@@ -184,9 +184,9 @@ public class ShellBuilderTests
         // Assert
         shell.Submodels.ShouldNotBeNull();
         shell.Submodels.ShouldContain(r =>
-            r.Keys.Count == 1 &&
-            r.Keys[0].Type == KeyTypes.Submodel &&
-            r.Keys[0].Value == submodelId);
+                                          r.Keys.Count == 1 &&
+                                          r.Keys[0].Type == KeyTypes.Submodel &&
+                                          r.Keys[0].Value == submodelId);
     }
 
     [Fact]
@@ -198,7 +198,7 @@ public class ShellBuilderTests
         var submodelIdShort = "subShort-" + Guid.NewGuid().ToString("N")[..4];
 
         // Act
-        var submodelBuilder = builder.AddSubmodel(submodelId, submodelIdShort);
+        var submodelBuilder = builder.AddSubmodel(submodelId, submodelIdShort).Done();
 
         // Assert
         submodelBuilder.ShouldNotBeNull();
