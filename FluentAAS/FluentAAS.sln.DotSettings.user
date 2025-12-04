@@ -22,7 +22,11 @@
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ff116a2f_002Deb03_002D44c5_002Db171_002D6be6e5b5c884/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="FluentAasEndToEndTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAASTests.Integration.DigitalNameplateTests.CanCreateDigitalNameplateWithFluentApi&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+  &lt;Or&gt;
+    &lt;ProjectFile&gt;2848C010-808F-4E22-A7E9-11C27833B660/f:FluentAasEndToEndTests.cs&lt;/ProjectFile&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;xUnit::2FEB1646-49AD-479E-8148-47F632F81EB3::net9.0::FluentAAS.Builder.Tests.LangStringSetBuilderTests&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::2FEB1646-49AD-479E-8148-47F632F81EB3::net9.0::FluentAAS.Builder.Tests.ShellBuilderTests&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
