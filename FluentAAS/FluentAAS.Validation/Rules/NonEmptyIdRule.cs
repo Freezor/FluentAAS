@@ -23,7 +23,7 @@ public sealed class NonEmptyIdRule : IValidationRule
         // Validate Asset Administration Shells
         if (environment.AssetAdministrationShells is not null)
         {
-            for (int i = 0; i < environment.AssetAdministrationShells.Count; i++)
+            for (var i = 0; i < environment.AssetAdministrationShells.Count; i++)
             {
                 var shell = environment.AssetAdministrationShells[i];
 

@@ -7,7 +7,7 @@ public sealed class SubmodelBuilder
 {
     private readonly ShellBuilder           _parentShell;
     private readonly Submodel               _submodel;
-    private readonly List<ISubmodelElement> _elements = new();
+    private readonly List<ISubmodelElement> _elements = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubmodelBuilder"/> class.

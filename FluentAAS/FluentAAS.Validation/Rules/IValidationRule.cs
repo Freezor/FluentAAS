@@ -10,7 +10,7 @@ public interface IValidationRule
     /// <summary>
     /// Evaluates the AAS environment and returns all validation results produced by this rule.
     /// </summary>
-    /// <param name="env">
+    /// <param name="environment">
     /// The AAS environment adapter providing access to the AAS <see cref="Environment"/>
     /// to be validated.
     /// </param>
@@ -18,5 +18,5 @@ public interface IValidationRule
     /// A sequence of <see cref="ValidationResult"/> entries representing warnings,
     /// informational messages, or errors discovered during evaluation.
     /// </returns>
-    IEnumerable<ValidationResult> Evaluate(IEnvironment env);
+    IEnumerable<ValidationResult> Evaluate(IEnvironment environment);
 }

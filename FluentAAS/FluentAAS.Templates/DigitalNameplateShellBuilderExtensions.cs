@@ -27,10 +27,7 @@ public static class DigitalNameplateShellBuilderExtensions
         string            id,
         string            idShort = "DigitalNameplate")
     {
-        if (shellBuilder is null)
-        {
-            throw new ArgumentNullException(nameof(shellBuilder));
-        }
+        ArgumentNullException.ThrowIfNull(shellBuilder);
 
         if (string.IsNullOrWhiteSpace(id))
         {

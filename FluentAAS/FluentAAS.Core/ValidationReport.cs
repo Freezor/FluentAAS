@@ -26,10 +26,7 @@ public sealed class ValidationReport
     /// </exception>
     public ValidationReport(IEnumerable<ValidationResult> results)
     {
-        if (results is null)
-        {
-            throw new ArgumentNullException(nameof(results));
-        }
+        ArgumentNullException.ThrowIfNull(results);
 
         Results = results.ToList().AsReadOnly();
     }

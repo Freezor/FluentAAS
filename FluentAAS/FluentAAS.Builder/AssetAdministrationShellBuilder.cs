@@ -7,7 +7,7 @@ public sealed class AssetAdministrationShellBuilder
 {
     private readonly string            _id;
     private          AssetInformation? _assetInformation;
-    private readonly List<IReference>  _submodelReferences = new();
+    private readonly List<IReference>  _submodelReferences = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AssetAdministrationShellBuilder"/> class.

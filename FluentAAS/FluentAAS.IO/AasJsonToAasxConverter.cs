@@ -16,7 +16,8 @@ public static class AasJsonToAasxConverter
     /// <param name="aasxOutputPath">
     /// File system path where the resulting .aasx package will be written.
     /// </param>
-    public static void Convert(string aasJson, string aasxOutputPath)
+    /// <param name="specificationUri"></param>
+    public static void Convert(string aasJson, string aasxOutputPath, string specificationUri)
     {
         if (string.IsNullOrWhiteSpace(aasJson))
         {
@@ -53,7 +54,7 @@ public static class AasJsonToAasxConverter
         using var pkg = packaging.Create(aasxOutputPath);
 
         // 5) Add the JSON spec part with a canonical relative URI
-        var specUri = new Uri("/aasx/shells/env.json", UriKind.Relative);
+        var specUri = new Uri(specificationUri, UriKind.Relative);
         var specPart = pkg.PutPart(
             specUri,
             "application/json",

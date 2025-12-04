@@ -35,10 +35,7 @@ public sealed class ValidationService : IValidationService
     /// </exception>
     public ValidationReport Validate(IEnvironment environment)
     {
-        if (environment is null)
-        {
-            throw new ArgumentNullException(nameof(environment));
-        }
+        ArgumentNullException.ThrowIfNull(environment);
 
         var results = new List<ValidationResult>();
 

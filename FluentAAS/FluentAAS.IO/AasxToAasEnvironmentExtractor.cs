@@ -31,11 +31,11 @@ public static class AasxToAasEnvironmentExtractor
 
         var packaging = new Packaging();
 
-        using var pkgOrErr = packaging.OpenRead(aasxPath);
-        var       pkg      = pkgOrErr.Must();
+        using var packageOrException = packaging.OpenRead(aasxPath);
+        var       packageRead      = packageOrException.Must();
 
         // 1) Find the JSON spec part
-        var specsByContentType = pkg.SpecsByContentType();
+        var specsByContentType = packageRead.SpecsByContentType();
 
         // Prefer application/json if present, but fall back to text/json like in example.
         string[] preferredContentTypes =
@@ -46,9 +46,9 @@ public static class AasxToAasEnvironmentExtractor
 
         byte[]? specContent = null;
 
-        foreach (var ct in preferredContentTypes)
+        foreach (var contentType in preferredContentTypes)
         {
-            if (!specsByContentType.TryGetValue(ct, out var specs) || specs.Count == 0)
+            if (!specsByContentType.TryGetValue(contentType, out var specs) || specs.Count == 0)
             {
                 continue;
             }

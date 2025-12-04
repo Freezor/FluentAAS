@@ -179,7 +179,7 @@ public sealed class DigitalNameplateBuilder
             missing.Add("SerialNumber");
         }
 
-        if (missing.Any())
+        if (missing.Count != 0)
         {
             throw new InvalidOperationException(
                                                 "Digital Nameplate is incomplete. Missing mandatory fields: " +
@@ -239,11 +239,11 @@ public sealed class DigitalNameplateBuilder
         IReadOnlyDictionary<string, string> values)
     {
         builder.AddMultiLanguageProperty(
-                                         idShort, ml =>
+                                         idShort, langStringSetBuilder =>
                                                   {
                                                       foreach (var (language, text) in values)
                                                       {
-                                                          ml.Add(language, text);
+                                                          langStringSetBuilder.Add(language, text);
                                                       }
                                                   });
 

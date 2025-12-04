@@ -42,7 +42,7 @@ public class DigitalNameplateTests
 
         // Create AASX package
         const string aasxPath = "./test.aasx";
-        environment.ToAasx(aasxPath);
+        environment.ToAasx(aasxPath, "/spec/uri/env.json");
         var extractedAasEnvironment = AasxToAasEnvironmentExtractor.ExtractEnvironment(aasxPath);
 
         File.Delete(aasxPath);

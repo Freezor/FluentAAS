@@ -1,139 +1,118 @@
 namespace FluentAAS.Builder;
 
 /// <summary>
-/// Provides a fluent API to configure an <see cref="AssetAdministrationShell"/>
-/// within an <see cref="Environment"/>.
+///     Provides a fluent API to configure an <see cref="AssetAdministrationShell" />
+///     within an <see cref="Environment" />.
 /// </summary>
 public sealed class ShellBuilder
 {
-    private readonly EnvironmentBuilder _parent;
-    private readonly AssetAdministrationShell _shell;
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="ShellBuilder"/> class.
+    ///     Initializes a new instance of the <see cref="ShellBuilder" /> class.
     /// </summary>
-    /// <param name="parent">The parent <see cref="EnvironmentBuilder"/>.</param>
-    /// <param name="shell">The <see cref="AssetAdministrationShell"/> being configured.</param>
+    /// <param name="parent">The parent <see cref="EnvironmentBuilder" />.</param>
+    /// <param name="shell">The <see cref="AssetAdministrationShell" /> being configured.</param>
     /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="parent"/> or <paramref name="shell"/> is <c>null</c>.
+    ///     Thrown when <paramref name="parent" /> or <paramref name="shell" /> is <c>null</c>.
     /// </exception>
     internal ShellBuilder(EnvironmentBuilder parent, AssetAdministrationShell shell)
     {
-        _parent = parent ?? throw new ArgumentNullException(nameof(parent));
-        _shell = shell ?? throw new ArgumentNullException(nameof(shell));
+        Parent = parent ?? throw new ArgumentNullException(nameof(parent));
+        Shell  = shell ?? throw new ArgumentNullException(nameof(shell));
     }
 
+    private AssetAdministrationShell Shell { get; }
+
+    private EnvironmentBuilder Parent { get; }
+
     /// <summary>
-    /// Sets the global asset identifier of the underlying asset.
+    ///     Sets the global asset identifier of the underlying asset.
     /// </summary>
     /// <param name="globalAssetId">The global asset identifier to assign.</param>
-    /// <returns>The current <see cref="ShellBuilder"/> for fluent chaining.</returns>
+    /// <returns>The current <see cref="ShellBuilder" /> for fluent chaining.</returns>
     /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="globalAssetId"/> is null, empty, or whitespace.
+    ///     Thrown when <paramref name="globalAssetId" /> is null, empty, or whitespace.
     /// </exception>
     public ShellBuilder WithGlobalAssetId(string globalAssetId)
     {
-        if (string.IsNullOrWhiteSpace(globalAssetId))
-        {
-            throw new ArgumentException("Global asset id must not be empty.", nameof(globalAssetId));
-        }
+        if (string.IsNullOrWhiteSpace(globalAssetId)) throw new ArgumentException("Global asset id must not be empty.", nameof(globalAssetId));
 
-        if (_shell.AssetInformation is null)
-        {
-            throw new InvalidOperationException("AssetInformation must be initialized before setting the global asset id.");
-        }
+        if (Shell.AssetInformation is null) throw new InvalidOperationException("AssetInformation must be initialized before setting the global asset id.");
 
-        _shell.AssetInformation.GlobalAssetId = globalAssetId;
+        Shell.AssetInformation.GlobalAssetId = globalAssetId;
         return this;
     }
 
     /// <summary>
-    /// Adds a specific asset identifier to the underlying asset information.
+    ///     Adds a specific asset identifier to the underlying asset information.
     /// </summary>
     /// <param name="key">The key or name of the specific identifier.</param>
     /// <param name="value">The value of the specific identifier.</param>
     /// <param name="nameSpace">The namespace of the specific identifier.</param>
-    /// <returns>The current <see cref="ShellBuilder"/> for fluent chaining.</returns>
+    /// <returns>The current <see cref="ShellBuilder" /> for fluent chaining.</returns>
     /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="key"/>, <paramref name="value"/>, or <paramref name="nameSpace"/> is null, empty, or whitespace.
+    ///     Thrown when <paramref name="key" />, <paramref name="value" />, or <paramref name="nameSpace" /> is null, empty, or whitespace.
     /// </exception>
     public ShellBuilder WithSpecificAssetId(string key, string value, string nameSpace)
     {
-        if (string.IsNullOrWhiteSpace(key))
-        {
-            throw new ArgumentException("Specific asset id key must not be empty.", nameof(key));
-        }
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Specific asset id key must not be empty.", nameof(key));
 
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Specific asset id value must not be empty.", nameof(value));
-        }
+        if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Specific asset id value must not be empty.", nameof(value));
 
-        if (string.IsNullOrWhiteSpace(nameSpace))
-        {
-            throw new ArgumentException("Specific asset id namespace must not be empty.", nameof(nameSpace));
-        }
+        if (string.IsNullOrWhiteSpace(nameSpace)) throw new ArgumentException("Specific asset id namespace must not be empty.", nameof(nameSpace));
 
-        if (_shell.AssetInformation is null)
-        {
-            throw new InvalidOperationException("AssetInformation must be initialized before adding specific asset ids.");
-        }
+        if (Shell.AssetInformation is null) throw new InvalidOperationException("AssetInformation must be initialized before adding specific asset ids.");
 
-        _shell.AssetInformation.SpecificAssetIds ??= new List<ISpecificAssetId>();
+        Shell.AssetInformation.SpecificAssetIds ??= new List<ISpecificAssetId>();
 
         // Use constructor parameters instead of a non-existent ExternalSubjectId property.
         // NameSpace is the correct property name for the meta-model field "nameSpace".
         var externalSubjectRef = new Reference(
-            ReferenceTypes.ExternalReference,
-            new List<IKey>());
+                                               ReferenceTypes.ExternalReference,
+                                               []);
 
-        _shell.AssetInformation.SpecificAssetIds.Add(
-                                                     new SpecificAssetId(
-                                                                         name: key,
-                                                                         value: value,
-                                                                         externalSubjectId: externalSubjectRef));
+        Shell.AssetInformation.SpecificAssetIds.Add(
+                                                    new SpecificAssetId(
+                                                                        key,
+                                                                        value,
+                                                                        externalSubjectId: externalSubjectRef));
 
         return this;
     }
 
     /// <summary>
-    /// Adds a reference to an existing <see cref="Submodel"/> to the shell.
+    ///     Adds a reference to an existing <see cref="Submodel" /> to the shell.
     /// </summary>
     /// <param name="submodel">The submodel to reference.</param>
     /// <param name="idType">
-    /// The <see cref="KeyTypes"/> used for the submodel reference. Defaults to <see cref="KeyTypes.Submodel"/>.
+    ///     The <see cref="KeyTypes" /> used for the submodel reference. Defaults to <see cref="KeyTypes.Submodel" />.
     /// </param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel" /> is <c>null</c>.</exception>
     public void AddSubmodelReference(Submodel submodel, KeyTypes idType = KeyTypes.Submodel)
     {
-        if (submodel is null)
-        {
-            throw new ArgumentNullException(nameof(submodel));
-        }
+        if (submodel is null) throw new ArgumentNullException(nameof(submodel));
 
-        _shell.Submodels ??= new List<IReference>();
+        Shell.Submodels ??= [];
 
-        _shell.Submodels.Add(
-            new Reference(
-                ReferenceTypes.ModelReference,
-                new List<IKey>
-                {
-                    new Key(
-                        type: idType,
-                        value: submodel.Id)
-                }));
+        Shell.Submodels.Add(
+                            new Reference(
+                                          ReferenceTypes.ModelReference,
+                                          [
+                                              new Key(
+                                                      idType,
+                                                      submodel.Id)
+                                          ]));
 
-        _parent.AddSubmodelInternal(submodel);
+        Parent.AddSubmodelInternal(submodel);
     }
 
     /// <summary>
-    /// Creates and associates a new <see cref="Submodel"/> via a <see cref="SubmodelBuilderWithShell"/>.
+    ///     Creates and associates a new <see cref="Submodel" /> via a <see cref="SubmodelBuilderWithShell" />.
     /// </summary>
     /// <param name="id">The identifier of the new submodel.</param>
     /// <param name="idShort">The short identifier of the new submodel.</param>
     /// <returns>
-    /// A <see cref="SubmodelBuilderWithShell"/> to further configure the submodel
-    /// while remaining attached to this shell and environment.
+    ///     A <see cref="SubmodelBuilderWithShell" /> to further configure the submodel
+    ///     while remaining attached to this shell and environment.
     /// </returns>
     public SubmodelBuilderWithShell AddSubmodel(string id, string idShort)
     {
@@ -141,16 +120,12 @@ public sealed class ShellBuilder
     }
 
     /// <summary>
-    /// Completes configuration of this shell and returns to the parent <see cref="EnvironmentBuilder"/>.
+    ///     Completes configuration of this shell and returns to the parent <see cref="EnvironmentBuilder" />.
     /// </summary>
-    /// <returns>The parent <see cref="EnvironmentBuilder"/>.</returns>
+    /// <returns>The parent <see cref="EnvironmentBuilder" />.</returns>
     public EnvironmentBuilder Done()
     {
-        _parent.AddShellInternal(_shell);
-        return _parent;
+        Parent.AddShellInternal(Shell);
+        return Parent;
     }
-
-    internal AssetAdministrationShell Shell => _shell;
-
-    internal EnvironmentBuilder Parent => _parent;
 }
