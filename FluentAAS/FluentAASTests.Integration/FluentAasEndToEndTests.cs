@@ -32,9 +32,13 @@ public class DigitalNameplateTests
                                             .Done()
                                             .Build();
 
+        // Create De/Serializing environment
         var json               = AasJsonSerializer.ToJson(environment);
         var createdEnvironment = AasJsonSerializer.FromJson(json);
 
+        // Create AASX package
+        environment.ToAasx("./test.aasx");
+        
         // Assert
         environment.ShouldNotBeNull();
         environment.AssetAdministrationShells.ShouldHaveSingleItem();
