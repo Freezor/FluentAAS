@@ -1,5 +1,6 @@
 ﻿using FluentAAS.Builder;
 using FluentAas.IO;
+using FluentAAS.IO;
 using FluentAAS.Templates;
 using Shouldly;
 
@@ -37,7 +38,11 @@ public class DigitalNameplateTests
         var createdEnvironment = AasJsonSerializer.FromJson(json);
 
         // Create AASX package
-        environment.ToAasx("./test.aasx");
+        const string aasxPath = "./test.aasx";
+        environment.ToAasx(aasxPath);
+        var extractedAasEnvironment = AasxToAasEnvironmentExtractor.ExtractEnvironment(aasxPath);
+        
+        File.Delete(aasxPath);
         
         // Assert
         environment.ShouldNotBeNull();
@@ -53,6 +58,8 @@ public class DigitalNameplateTests
         submodel.SubmodelElements!.Count.ShouldBe(3);
 
         createdEnvironment.ShouldBeEquivalentTo(environment, "Serializing and Deserializing the same object should result in identical objects");
+        
+        extractedAasEnvironment.ShouldBeEquivalentTo(environment, "Packaging to .aasx and reading from the same object should result in identical objects");
     }
 
     /// <summary>
