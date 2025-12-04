@@ -1,8 +1,10 @@
-﻿using FluentAAS.Builder;
+﻿using AasCore.Aas3_0;
+using FluentAAS.Builder;
 using FluentAas.IO;
 using FluentAAS.IO;
 using FluentAAS.Templates;
 using Shouldly;
+using File = System.IO.File;
 
 namespace FluentAASTests.Integration;
 
@@ -15,6 +17,7 @@ public class DigitalNameplateTests
     /// <summary>
     /// Verifies that a Digital Nameplate submodel can be created and attached
     /// to an Asset Administration Shell using the fluent API.
+    /// Every piece of content configured via the builder is asserted.
     /// </summary>
     [Fact]
     public void CanCreateDigitalNameplateWithFluentApi()
@@ -41,24 +44,51 @@ public class DigitalNameplateTests
         const string aasxPath = "./test.aasx";
         environment.ToAasx(aasxPath);
         var extractedAasEnvironment = AasxToAasEnvironmentExtractor.ExtractEnvironment(aasxPath);
-        
+
         File.Delete(aasxPath);
-        
-        // Assert
+
+        // Assert: environment basics
         environment.ShouldNotBeNull();
         environment.AssetAdministrationShells.ShouldHaveSingleItem();
         environment.Submodels.ShouldHaveSingleItem();
 
+        // Assert: shell and asset info
         var shell = environment.AssetAdministrationShells!.First();
         shell.IdShort.ShouldBe("MyShell");
         shell.AssetInformation.GlobalAssetId.ShouldBe("urn:asset:example:my-asset");
 
+        // Assert: submodel basics
         var submodel = environment.Submodels!.First();
         submodel.IdShort.ShouldBe("DigitalNameplate");
         submodel.SubmodelElements!.Count.ShouldBe(3);
 
-        createdEnvironment.ShouldBeEquivalentTo(environment, "Serializing and Deserializing the same object should result in identical objects");
-        
+        // Assert: Digital Nameplate content
+        var manuName = GetMultiLanguageProperty(submodel, "ManufacturerName");
+        manuName.ShouldNotBeNull("ManufacturerName should be present");
+        manuName.Value!.First(l => l.Language == "de").Text
+                .ShouldBe("Muster AG");
+        manuName.Value!.First(l => l.Language == "en").Text
+                .ShouldBe("Sample Corp");
+
+        // Manufacturer product designation (multi-language)
+        var manuProdDesig = GetMultiLanguageProperty(submodel, "ManufacturerProductDesignation");
+        manuProdDesig.ShouldNotBeNull("ManufacturerProductDesignation should be present");
+        manuProdDesig.Value!.First(l => l.Language == "de").Text
+                     .ShouldBe("Super-Antriebseinheit XS");
+        manuProdDesig.Value!.First(l => l.Language == "en").Text
+                     .ShouldBe("Super Drive Unit XS");
+
+        // Serial number (string property)
+        var serialNumber = GetProperty(submodel, "SerialNumber");
+        serialNumber.ShouldNotBeNull("SerialNumber should be present");
+        serialNumber.Value.ShouldBe("SN-000123");
+
+        // Assert: round-trip JSON de/serialization
+        createdEnvironment.ShouldBeEquivalentTo(
+                                                environment,
+                                                "Serializing and Deserializing the same object should result in identical objects");
+
+        // Assert: round-trip AASX de/serialization
         extractedAasEnvironment.ShouldBeEquivalentTo(environment, "Packaging to .aasx and reading from the same object should result in identical objects");
     }
 
@@ -83,4 +113,14 @@ public class DigitalNameplateTests
         exception.Message.ShouldContain("ManufacturerProductDesignation");
         exception.Message.ShouldContain("SerialNumber");
     }
+
+    private static Property? GetProperty(ISubmodel submodel, string idShort)
+        => submodel.SubmodelElements!
+                   .OfType<Property>()
+                   .FirstOrDefault(p => p.IdShort == idShort);
+
+    private static MultiLanguageProperty? GetMultiLanguageProperty(ISubmodel submodel, string idShort)
+        => submodel.SubmodelElements!
+                   .OfType<MultiLanguageProperty>()
+                   .FirstOrDefault(p => p.IdShort == idShort);
 }
