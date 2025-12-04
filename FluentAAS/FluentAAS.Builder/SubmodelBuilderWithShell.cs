@@ -1,18 +1,19 @@
 namespace FluentAAS.Builder;
 
 /// <summary>
-/// Provides a fluent API for constructing and configuring an AAS <see cref="Submodel"/>.
+/// Provides a fluent API for constructing and configuring a <see cref="Submodel"/>
+/// that is directly associated with a parent <see cref="ShellBuilder"/>.
 /// </summary>
-public sealed class SubmodelBuilder
+public sealed class SubmodelBuilderWithShell
 {
     private readonly ShellBuilder           _parentShell;
     private readonly Submodel               _submodel;
-    private readonly List<ISubmodelElement> _elements = new();
+    private readonly List<ISubmodelElement> _elements = [];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SubmodelBuilder"/> class.
+    /// Initializes a new instance of the <see cref="SubmodelBuilderWithShell"/> class.
     /// </summary>
-    /// <param name="parentShell">The parent <see cref="ShellBuilder"/> this submodel belongs to.</param>
+    /// <param name="parentShell">The parent <see cref="ShellBuilder"/> to which the submodel will be attached.</param>
     /// <param name="id">The identifier of the submodel.</param>
     /// <param name="idShort">The short identifier of the submodel.</param>
     /// <exception cref="ArgumentNullException">
@@ -21,7 +22,7 @@ public sealed class SubmodelBuilder
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.
     /// </exception>
-    public SubmodelBuilder(ShellBuilder parentShell, string id, string idShort)
+    internal SubmodelBuilderWithShell(ShellBuilder parentShell, string id, string idShort)
     {
         _parentShell = parentShell ?? throw new ArgumentNullException(nameof(parentShell));
 
@@ -46,9 +47,9 @@ public sealed class SubmodelBuilder
     /// Sets the semantic identifier for the submodel.
     /// </summary>
     /// <param name="semanticId">The semantic reference of the submodel.</param>
-    /// <returns>The current <see cref="SubmodelBuilder"/> for fluent chaining.</returns>
+    /// <returns>The current <see cref="SubmodelBuilderWithShell"/> for fluent chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="semanticId"/> is <c>null</c>.</exception>
-    public SubmodelBuilder WithSemanticId(IReference semanticId)
+    public SubmodelBuilderWithShell WithSemanticId(IReference semanticId)
     {
         ArgumentNullException.ThrowIfNull(semanticId);
         _submodel.SemanticId = semanticId;
@@ -63,11 +64,11 @@ public sealed class SubmodelBuilder
     /// <param name="valueType">
     /// The data type of the property. Defaults to <see cref="DataTypeDefXsd.String"/>.
     /// </param>
-    /// <returns>The current <see cref="SubmodelBuilder"/> for fluent chaining.</returns>
+    /// <returns>The current <see cref="SubmodelBuilderWithShell"/> for fluent chaining.</returns>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="idShort"/> or <paramref name="value"/> is null, empty, or whitespace.
     /// </exception>
-    public SubmodelBuilder AddProperty(
+    public SubmodelBuilderWithShell AddProperty(
         string         idShort,
         string         value,
         DataTypeDefXsd valueType = DataTypeDefXsd.String)
@@ -101,14 +102,14 @@ public sealed class SubmodelBuilder
     /// A configuration action that receives a <see cref="LangStringSetBuilder"/> used
     /// to add localized text values.
     /// </param>
-    /// <returns>The current <see cref="SubmodelBuilder"/> for fluent chaining.</returns>
+    /// <returns>The current <see cref="SubmodelBuilderWithShell"/> for fluent chaining.</returns>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="idShort"/> is null, empty, or whitespace.
     /// </exception>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="configure"/> is <c>null</c>.
     /// </exception>
-    public SubmodelBuilder AddMultiLanguageProperty(
+    public SubmodelBuilderWithShell AddMultiLanguageProperty(
         string                       idShort,
         Action<LangStringSetBuilder> configure)
     {
@@ -130,9 +131,9 @@ public sealed class SubmodelBuilder
     /// Adds an arbitrary <see cref="ISubmodelElement"/> instance to the submodel.
     /// </summary>
     /// <param name="element">The submodel element to add.</param>
-    /// <returns>The current <see cref="SubmodelBuilder"/> for fluent chaining.</returns>
+    /// <returns>The current <see cref="SubmodelBuilderWithShell"/> for fluent chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="element"/> is <c>null</c>.</exception>
-    public SubmodelBuilder AddElement(ISubmodelElement element)
+    public SubmodelBuilderWithShell AddElement(ISubmodelElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
         _elements.Add(element);
@@ -155,5 +156,5 @@ public sealed class SubmodelBuilder
     /// without attaching it to the parent shell.
     /// </summary>
     /// <returns>The constructed <see cref="Submodel"/>.</returns>
-    public Submodel BuildSubmodel() => _submodel;
+    internal Submodel BuildSubmodel() => _submodel;
 }

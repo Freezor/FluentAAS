@@ -1,4 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ASpecificAssetId_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2025_002E1_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Ffec08ab503bf468b8757ca92a0eb3844fea00_003F3b_003Fc74f19a3_003FSpecificAssetId_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=12d3fb4b_002Dfe35_002D4d20_002D9c5d_002D62d483522c7c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FluentAasEndToEndTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAasTests.Integration.FluentAasEndToEndTests&lt;/TestId&gt;
@@ -6,7 +7,7 @@
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=33984424_002Db7d8_002D4c15_002Dbdf3_002D966a2495982d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="FluentAasEndToEndTests #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAasTests.Integration.FluentAasEndToEndTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::2848C010-808F-4E22-A7E9-11C27833B660::net9.0::FluentAASTests.Integration.DigitalNameplateTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fab312dd_002D887f_002D4428_002D9aca_002D26b4edafe62b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FluentAasEndToEndTests #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

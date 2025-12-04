@@ -1,107 +1,69 @@
-﻿using AasCore.Aas3_0;
-using FluentAas.Builder;
-using FluentAas.Core;
-using FluentAas.IO;
-using FluentAas.Validation;
-using FluentAas.Validation.Rules;
+﻿using FluentAAS.Builder;
+using FluentAAS.Templates;
 using Shouldly;
 
-namespace FluentAasTests.Integration;
+namespace FluentAASTests.Integration;
 
-public class FluentAasEndToEndTests
+/// <summary>
+/// Contains integration tests for building a Digital Nameplate submodel
+/// using the fluent FluentAAS builder API.
+/// </summary>
+public class DigitalNameplateTests
 {
+    /// <summary>
+    /// Verifies that a Digital Nameplate submodel can be created and attached
+    /// to an Asset Administration Shell using the fluent API.
+    /// </summary>
     [Fact]
-    public void Build_Validate_Serialize_And_Deserialize_Environment()
+    public void CanCreateDigitalNameplateWithFluentApi()
     {
-        // 1) Build a submodel
-        var submodel = SubmodelBuilder.Create("urn:submodel:demo")
-                                      .AddProperty("ManufacturerName", "ACME Corp")
-                                      .AddProperty("ModelNumber", "X-123")
-                                      .Build();
+        // Arrange & Act
+        var environment = EnvironmentBuilder.Create()
+            .AddShell("urn:aas:example:my-shell", "MyShell")
+            .WithGlobalAssetId("urn:asset:example:my-asset")
+            .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
+                .WithManufacturerName("de", "Muster AG")
+                .WithManufacturerName("en", "Sample Corp")
+                .WithManufacturerProductDesignation("de", "Super-Antriebseinheit XS")
+                .WithManufacturerProductDesignation("en", "Super Drive Unit XS")
+                .WithSerialNumber("SN-000123")
+                .Build()
+            .Done()
+            .Build();
 
-        // 2) Build AAS with asset info and submodel reference
-        var assetInfo = new AssetInformation(
-                                             assetKind: AssetKind.Instance,
-                                             globalAssetId: "urn:asset:123"
-                                            );
+        // Assert
+        environment.ShouldNotBeNull();
+        environment.AssetAdministrationShells.ShouldHaveSingleItem();
+        environment.Submodels.ShouldHaveSingleItem();
 
-        var submodelRef = new Reference(
-                                        type: ReferenceTypes.ModelReference,
-                                        keys: new List<IKey>(
-                                                             new List<Key>
-                                                             {
-                                                                 new(
-                                                                     type: KeyTypes.Submodel,
-                                                                     value: submodel.Id
-                                                                    )
-                                                             })
-                                       );
+        var shell = environment.AssetAdministrationShells!.First();
+        shell.IdShort.ShouldBe("MyShell");
+        shell.AssetInformation.GlobalAssetId.ShouldBe("urn:asset:example:my-asset");
 
-        var shell = AssetAdministrationShellBuilder
-                    .Create("urn:aas:demo")
-                    .WithAssetInformation(assetInfo)
-                    .AddSubmodelReference(submodelRef)
-                    .Build();
+        var submodel = environment.Submodels!.First();
+        submodel.IdShort.ShouldBe("DigitalNameplate");
+        submodel.SubmodelElements!.Count.ShouldBe(3);
+    }
 
-        // 3) Build environment via fluent DSL
-        var envAdapter = AasFluent.CreateEnvironment()
-                                  .AddShell(shell)
-                                  .AddSubmodel(submodel)
-                                  .Build();
+    /// <summary>
+    /// Verifies that the <see cref="DigitalNameplateBuilder"/> throws an
+    /// <see cref="InvalidOperationException"/> when required fields are missing.
+    /// </summary>
+    [Fact]
+    public void DigitalNameplateBuilder_ThrowsOnMissingRequiredFields()
+    {
+        // Arrange
+        var builder = EnvironmentBuilder.Create()
+            .AddShell("urn:aas:example:my-shell", "MyShell")
+            .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
+                .WithManufacturerName("de", "Muster AG");
 
-        // 4) Validate
-        var validationService = new ValidationService(
-                                                      new IValidationRule[]
-                                                      {
-                                                          new NonEmptyIdRule(),
-                                                          new UniqueIdRule()
-                                                      });
+        // Act
+        var exception = Should.Throw<InvalidOperationException>(() => builder.Build());
 
-        var report = validationService.Validate(envAdapter);
-
-        // ASSERT: validation succeeded
-        report.ShouldNotBeNull();
-        report.HasErrors.ShouldBeFalse();
-        report.Results.ShouldAllBe(r => r.Level != ValidationLevel.Error);
-
-        // 5) Serialize
-        var json = AasJsonSerializer.ToJson(envAdapter);
-
-        // ASSERT: JSON looks sane
-        json.ShouldNotBeNullOrWhiteSpace();
-        json.ShouldContain("urn:aas:demo");
-        json.ShouldContain("urn:submodel:demo");
-        json.ShouldContain("ACME Corp");
-
-        // 6) Deserialize back
-        var deserialized = AasJsonSerializer.FromJson(json);
-
-        // ASSERT: roundtrip preserved core structure
-        deserialized.ShouldNotBeNull();
-        deserialized.Environment.ShouldNotBeNull();
-
-        var shells = deserialized.Environment.AssetAdministrationShells;
-        shells.ShouldNotBeNull();
-        shells!.Count.ShouldBe(1);
-        shells.Single().Id.ShouldBe(shell.Id);
-
-        var submodels = deserialized.Environment.Submodels;
-        submodels.ShouldNotBeNull();
-        submodels!.Count.ShouldBe(1);
-
-        var roundtrippedSubmodel = submodels.Single();
-        roundtrippedSubmodel.Id.ShouldBe(submodel.Id);
-        roundtrippedSubmodel.SubmodelElements.ShouldNotBeNull();
-        roundtrippedSubmodel.SubmodelElements!.Count.ShouldBe(2);
-
-        var manufacturerProp = roundtrippedSubmodel.SubmodelElements
-                                                   .OfType<Property>()
-                                                   .Single(p => p.IdShort == "ManufacturerName");
-        manufacturerProp.Value.ShouldBe("ACME Corp");
-
-        var modelNumberProp = roundtrippedSubmodel.SubmodelElements
-                                                  .OfType<Property>()
-                                                  .Single(p => p.IdShort == "ModelNumber");
-        modelNumberProp.Value.ShouldBe("X-123");
+        // Assert
+        exception.Message.ShouldContain("Digital Nameplate");
+        exception.Message.ShouldContain("ManufacturerProductDesignation");
+        exception.Message.ShouldContain("SerialNumber");
     }
 }
