@@ -30,7 +30,7 @@ public static class RefFactory
                              keys:
                              [
                                  new Key(
-                                         type: KeyTypes.ConceptDescription,
+                                         type: KeyTypes.GlobalReference,
                                          value: conceptId)
                              ]);
     }
