@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAas.Core.Tests", "Flu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAas.IO.Tests", "FluentAas.IO.Tests\FluentAas.IO.Tests.csproj", "{EDDA08D2-ED13-46F7-BBF3-6C3A2CCEA6BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAAS.Templates.Tests", "FluentAAS.Templates.Tests\FluentAAS.Templates.Tests.csproj", "{4A8A7EE8-8451-41D0-AC81-D45E0F890C4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{EDDA08D2-ED13-46F7-BBF3-6C3A2CCEA6BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDDA08D2-ED13-46F7-BBF3-6C3A2CCEA6BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDDA08D2-ED13-46F7-BBF3-6C3A2CCEA6BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A8A7EE8-8451-41D0-AC81-D45E0F890C4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A8A7EE8-8451-41D0-AC81-D45E0F890C4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A8A7EE8-8451-41D0-AC81-D45E0F890C4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A8A7EE8-8451-41D0-AC81-D45E0F890C4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

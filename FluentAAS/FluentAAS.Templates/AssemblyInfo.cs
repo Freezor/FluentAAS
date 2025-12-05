@@ -1,4 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("FluentAAS.Builder.Tests")]
 [assembly: InternalsVisibleTo("FluentAAS.Templates.Tests")]
