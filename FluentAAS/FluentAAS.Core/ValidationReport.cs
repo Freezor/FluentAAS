@@ -10,7 +10,7 @@ public sealed class ValidationReport
     /// <summary>
     /// Gets the list of validation results included in this report.
     /// </summary>
-    public IReadOnlyList<ValidationResult> Results { get; }
+    private IReadOnlyList<ValidationResult> Results { get; }
 
     /// <summary>
     /// Indicates whether the validation report contains at least one error-level result.
