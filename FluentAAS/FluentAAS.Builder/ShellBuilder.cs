@@ -22,7 +22,7 @@ public sealed class ShellBuilder
         Shell  = shell ?? throw new ArgumentNullException(nameof(shell));
     }
 
-    private AssetAdministrationShell Shell { get; }
+    internal AssetAdministrationShell Shell { get; }
 
     private AasBuilder Parent { get; }
 
