@@ -71,12 +71,12 @@ public class SubmodelBuilderTests
     {
         // Arrange
         var (_, sut) = CreateBuilder();
-        var idShort   = _fixture.Create<string>();
-        var value     = _fixture.Create<string>();
-        var valueType = DataTypeDefXsd.String;
+        var                  idShort   = _fixture.Create<string>();
+        var                  value     = _fixture.Create<string>();
+        const DataTypeDefXsd valueType = DataTypeDefXsd.String;
 
         // Act
-        var returned = sut.AddProperty(idShort!, value!, valueType);
+        var returned = sut.AddProperty(idShort!, value!);
         var submodel = sut.BuildSubmodel();
 
         // Assert
@@ -97,9 +97,9 @@ public class SubmodelBuilderTests
     {
         // Arrange
         var (_, sut) = CreateBuilder();
-        var idShort   = _fixture.Create<string>();
-        var value     = _fixture.Create<string>();
-        var valueType = DataTypeDefXsd.Integer;
+        var                  idShort   = _fixture.Create<string>();
+        var                  value     = _fixture.Create<string>();
+        const DataTypeDefXsd valueType = DataTypeDefXsd.Integer;
 
         // Act
         sut.AddProperty(idShort!, value!, valueType);
