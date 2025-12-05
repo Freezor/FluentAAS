@@ -61,6 +61,8 @@ public sealed class AasBuilder
                         Submodels = []
                     };
 
+        AddShellInternal(shell);
+
         return new ShellBuilder(this, shell);
     }
 
@@ -72,8 +74,7 @@ public sealed class AasBuilder
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
     public AasBuilder AddExistingSubmodel(Submodel submodel)
     {
-        ArgumentNullException.ThrowIfNull(submodel);
-        _submodels.Add(submodel);
+        AddSubmodelInternal(submodel);
         return this;
     }
 
@@ -86,6 +87,7 @@ public sealed class AasBuilder
     /// </returns>
     public Environment Build()
     {
+        // Return a fresh Environment each time, with copies of the internal lists
         return new Environment
                {
                    AssetAdministrationShells = _shells.ToList(),
@@ -102,7 +104,11 @@ public sealed class AasBuilder
     internal void AddShellInternal(AssetAdministrationShell shell)
     {
         ArgumentNullException.ThrowIfNull(shell);
-        _shells.Add(shell);
+
+        if (!_shells.Contains(shell))
+        {
+            _shells.Add(shell);
+        }
     }
 
     /// <summary>
@@ -114,6 +120,10 @@ public sealed class AasBuilder
     internal void AddSubmodelInternal(Submodel submodel)
     {
         ArgumentNullException.ThrowIfNull(submodel);
-        _submodels.Add(submodel);
+
+        if (!_submodels.Contains(submodel))
+        {
+            _submodels.Add(submodel);
+        }
     }
 }
