@@ -11,7 +11,7 @@ namespace FluentAAS.Templates.Tests.DigitalNameplate;
 /// </summary>
 public class DigitalNameplateBuilderTests
 {
-    private static (ShellBuilder shellBuilder, DigitalNameplateBuilder sut, Func<IEnvironment> buildEnvironment)
+    private static (IShellBuilder shellBuilder, DigitalNameplateBuilder sut, Func<IEnvironment> buildEnvironment)
         CreateBuilder(string? id = null, string? idShort = null)
     {
         var envBuilder  = AasBuilder.Create();

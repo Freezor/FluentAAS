@@ -9,7 +9,7 @@ public class SubmodelBuilderTests
 {
     private readonly Fixture _fixture = new();
 
-    private (ShellBuilder shellBuilder, SubmodelBuilderWithShell submodelBuilder) CreateBuilder(
+    private (IShellBuilder shellBuilder, SubmodelBuilderWithShell submodelBuilder) CreateBuilder(
         string? id      = null,
         string? idShort = null)
     {

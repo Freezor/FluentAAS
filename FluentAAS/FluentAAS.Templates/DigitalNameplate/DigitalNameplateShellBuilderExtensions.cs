@@ -23,7 +23,7 @@ public static class DigitalNameplateShellBuilderExtensions
     /// Thrown when <paramref name="id"/> is null, empty, or whitespace.
     /// </exception>
     public static DigitalNameplateBuilder AddDigitalNameplate(
-        this ShellBuilder shellBuilder,
+        this IShellBuilder shellBuilder,
         string            id,
         string            idShort = "DigitalNameplate")
     {

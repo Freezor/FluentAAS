@@ -5,7 +5,7 @@ namespace FluentAAS.Builder.SubModel;
 /// </summary>
 public sealed class SubmodelBuilder
 {
-    private readonly ShellBuilder           _parentShell;
+    private readonly IShellBuilder           _parentShell;
     private readonly Submodel               _submodel;
     private readonly List<ISubmodelElement> _elements = [];
 
@@ -21,7 +21,7 @@ public sealed class SubmodelBuilder
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.
     /// </exception>
-    public SubmodelBuilder(ShellBuilder parentShell, string id, string idShort)
+    public SubmodelBuilder(IShellBuilder parentShell, string id, string idShort)
     {
         _parentShell = parentShell ?? throw new ArgumentNullException(nameof(parentShell));
 
@@ -144,7 +144,7 @@ public sealed class SubmodelBuilder
     /// and returns the parent <see cref="ShellBuilder"/>.
     /// </summary>
     /// <returns>The parent <see cref="ShellBuilder"/>.</returns>
-    public ShellBuilder Done()
+    public IShellBuilder Done()
     {
         _parentShell.AddSubmodelReference(_submodel);
         return _parentShell;

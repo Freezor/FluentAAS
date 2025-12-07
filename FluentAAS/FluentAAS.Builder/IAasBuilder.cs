@@ -18,7 +18,7 @@ public interface IAasBuilder
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.
     /// </exception>
-    ShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance);
+    IShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance);
 
     /// <summary>
     /// Adds an existing <see cref="Submodel"/> to the environment.

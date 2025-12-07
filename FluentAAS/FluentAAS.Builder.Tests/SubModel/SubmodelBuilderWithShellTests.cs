@@ -13,7 +13,7 @@ public class SubmodelBuilderWithShellTests
     /// Creates a REAL ShellBuilder similar to your *working* SubmodelBuilderTests.
     /// NO mocking, NO EnvironmentBuilder.
     /// </summary>
-    private (ShellBuilder shellBuilder, SubmodelBuilderWithShell sut) CreateBuilder(
+    private (IShellBuilder shellBuilder, SubmodelBuilderWithShell sut) CreateBuilder(
         string? id      = null,
         string? idShort = null)
     {

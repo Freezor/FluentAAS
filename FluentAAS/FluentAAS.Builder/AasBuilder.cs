@@ -41,7 +41,7 @@ public sealed class AasBuilder : IAasBuilder
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.
     /// </exception>
-    public ShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance)
+    public IShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance)
     {
         if (string.IsNullOrWhiteSpace(id))
         {

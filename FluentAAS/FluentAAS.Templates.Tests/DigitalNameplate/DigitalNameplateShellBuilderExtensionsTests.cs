@@ -10,7 +10,7 @@ namespace FluentAAS.Templates.Tests.DigitalNameplate;
 /// </summary>
 public class DigitalNameplateShellBuilderExtensionsTests
 {
-    private static (ShellBuilder shellBuilder, Func<IEnvironment> buildEnvironment) CreateShellBuilder()
+    private static (IShellBuilder shellBuilder, Func<IEnvironment> buildEnvironment) CreateShellBuilder()
     {
         var envBuilder   = AasBuilder.Create();
         var shellId      = "urn:aas:example:shell:" + Guid.NewGuid().ToString("N");

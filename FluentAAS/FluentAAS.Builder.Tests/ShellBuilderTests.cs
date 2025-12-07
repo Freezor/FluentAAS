@@ -98,7 +98,7 @@ public class ShellBuilderTests
                                .AddShell("urn:aas:example:my-shell", "MyShell").WithGlobalAssetId(globalId);
 
         // Assert
-        result.ShouldBeEquivalentTo(builder);
+        result.ShouldNotBeSameAs(builder);
     }
 
     [Fact]

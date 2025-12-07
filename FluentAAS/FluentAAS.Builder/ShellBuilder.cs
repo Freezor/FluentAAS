@@ -6,7 +6,7 @@ namespace FluentAAS.Builder;
 ///     Provides a fluent API to configure an <see cref="AssetAdministrationShell" />
 ///     within an <see cref="Environment" />.
 /// </summary>
-public sealed class ShellBuilder
+public sealed class ShellBuilder : IShellBuilder
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="ShellBuilder" /> class.
@@ -22,9 +22,9 @@ public sealed class ShellBuilder
         Shell  = shell ?? throw new ArgumentNullException(nameof(shell));
     }
 
-    internal AssetAdministrationShell Shell { get; }
+    public AssetAdministrationShell Shell { get; }
 
-    private AasBuilder Parent { get; }
+    public AasBuilder Parent { get; }
 
     /// <summary>
     ///     Sets the global asset identifier of the underlying asset.

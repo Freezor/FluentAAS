@@ -11,7 +11,7 @@ namespace FluentAAS.Templates.DigitalNameplate;
 /// </summary>
 public sealed class DigitalNameplateBuilder
 {
-    private readonly ShellBuilder _shellBuilder;
+    private readonly IShellBuilder _shellBuilder;
 
     private string _id;
     private string _idShort;
@@ -58,7 +58,7 @@ public sealed class DigitalNameplateBuilder
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is empty or whitespace.
     /// </exception>
-    internal DigitalNameplateBuilder(ShellBuilder shellBuilder, string id, string idShort)
+    internal DigitalNameplateBuilder(IShellBuilder shellBuilder, string id, string idShort)
     {
         _shellBuilder = shellBuilder ?? throw new ArgumentNullException(nameof(shellBuilder));
 
@@ -499,7 +499,7 @@ public sealed class DigitalNameplateBuilder
     /// Thrown when mandatory fields (manufacturer name, product designation, or serial number)
     /// have not been provided.
     /// </exception>
-    public ShellBuilder Build()
+    public IShellBuilder Build()
     {
         var missing = new List<string>();
 
