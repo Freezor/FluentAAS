@@ -17,6 +17,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
