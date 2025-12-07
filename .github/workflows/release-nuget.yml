@@ -45,26 +45,11 @@ jobs:
       # Restore using the solution
       - name: Restore
         run: dotnet restore "${{ steps.solution.outputs.SOLUTION_PATH }}"
-
-      # Build solution in Release
-      - name: Build
-        run: dotnet build "${{ steps.solution.outputs.SOLUTION_PATH }}" --configuration Release --no-restore
-
-      # Run ALL tests in the solution
-      - name: Test
-        run: dotnet test "${{ steps.solution.outputs.SOLUTION_PATH }}" --configuration Release --no-build --verbosity normal
-      - name: Pack FluentAAS Builder
-        run: dotnet pack src/FluentAAS/FluentAAS.Builder/FluentAAS.Builder.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
-
-      - name: Pack FluentAAS Core
-        run: dotnet pack src/FluentAAS/FluentAAS.Core/FluentAAS.Core.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
-
-      - name: Pack FluentAAS IO
-        run: dotnet pack src/FluentAAS/FluentAAS.IO/FluentAAS.IO.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
-
-      - name: Pack FluentAAS Templates
-        run: dotnet pack src/FluentAAS/FluentAAS.Templates/FluentAAS.Templates.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
-
+      
+      # Pack all packable projects in the solution into ./artifacts with unified version
+      - name: Pack all NuGet projects
+        run: dotnet pack "./FluentAAS/FluentAAS.sln" -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
+      
       # Publish NuGet packages to nuget.org
       - name: Publish to NuGet
         run: dotnet nuget push "./artifacts/*.nupkg" \
