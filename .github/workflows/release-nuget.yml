@@ -3,8 +3,8 @@ name: Build & Publish NuGet
 on:
   push:
     branches:
-      - release       # run when pushing to the release branch
-  workflow_dispatch:   # optional manual trigger
+      - release
+  workflow_dispatch:
 
 jobs:
   build-pack-push:
@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}   # allows pushing tags
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -45,24 +47,45 @@ jobs:
       # Restore using the solution
       - name: Restore
         run: dotnet restore "${{ steps.solution.outputs.SOLUTION_PATH }}"
-      
-      # Pack all packable projects in the solution into ./artifacts with unified version
+
+      # Pack all packable projects into ./artifacts with unified version
       - name: Pack all NuGet projects
         run: dotnet pack "./FluentAAS/FluentAAS.sln" -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
-      
+
       # Publish NuGet packages to nuget.org
       - name: Publish to NuGet
         run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-      
-      # Build changelog / release notes automatically using release-changelog-builder
+
+      # Create a new Git tag for this version
+      - name: Create and push Git tag
+        run: |
+          TAG="v${{ steps.version.outputs.FULL_VERSION }}"
+          echo "Creating git tag: $TAG"
+          git tag $TAG
+          git push origin $TAG
+
+      # Check if there are any tags yet (first release => no tags)
+      - name: Check for existing tags
+        id: check_tags
+        run: |
+          if git tag --list | grep . > /dev/null; then
+            echo "has_tags=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_tags=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Build changelog / release notes automatically (only if we have tags)
       - name: Build Changelog
+        if: steps.check_tags.outputs.has_tags == 'true'
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v6
+        with:
+          fetchReleaseInformation: true
+          failOnError: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          fetchReleaseInformation: "true"
 
-      # Upload artifacts to the workflow run (extra manual download option)
+      # Upload artifacts to the workflow run
       - name: Upload NuGet Artifacts
         uses: actions/upload-artifact@v5
         with:
@@ -75,7 +98,7 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.FULL_VERSION }}
           name: FluentAAS v${{ steps.version.outputs.FULL_VERSION }}
-          body: ${{ steps.build_changelog.outputs.changelog }}
+          body: ${{ steps.build_changelog.outputs.changelog || 'Initial release of FluentAAS.' }}
           files: ./artifacts/*.nupkg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
