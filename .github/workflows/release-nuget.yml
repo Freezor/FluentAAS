@@ -54,16 +54,16 @@ jobs:
       - name: Test
         run: dotnet test "${{ steps.solution.outputs.SOLUTION_PATH }}" --configuration Release --no-build --verbosity normal
       - name: Pack FluentAAS Builder
-        run: dotnet pack src/FluentAAS.Builder/FluentAAS.Builder.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
+        run: dotnet pack src/FluentAAS/FluentAAS.Builder/FluentAAS.Builder.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
 
       - name: Pack FluentAAS Core
-        run: dotnet pack src/FluentAAS.Core/FluentAAS.Core.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
+        run: dotnet pack src/FluentAAS/FluentAAS.Core/FluentAAS.Core.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
 
       - name: Pack FluentAAS IO
-        run: dotnet pack src/FluentAAS.IO/FluentAAS.IO.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
+        run: dotnet pack src/FluentAAS/FluentAAS.IO/FluentAAS.IO.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
 
       - name: Pack FluentAAS Templates
-        run: dotnet pack src/FluentAAS.Templates/FluentAAS.Templates.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
+        run: dotnet pack src/FluentAAS/FluentAAS.Templates/FluentAAS.Templates.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
 
       # Publish NuGet packages to nuget.org
       - name: Publish to NuGet
