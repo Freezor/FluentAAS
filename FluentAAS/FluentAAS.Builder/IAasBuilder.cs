@@ -26,7 +26,7 @@ public interface IAasBuilder
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="AasBuilder"/> instance for fluent chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
-    AasBuilder AddExistingSubmodel(Submodel submodel);
+    IAasBuilder AddExistingSubmodel(Submodel submodel);
 
     /// <summary>
     /// Builds and returns the configured <see cref="Environment"/> instance.

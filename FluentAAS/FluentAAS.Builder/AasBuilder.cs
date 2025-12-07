@@ -72,7 +72,7 @@ public sealed class AasBuilder : IAasBuilder
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="AasBuilder"/> instance for fluent chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
-    public AasBuilder AddExistingSubmodel(Submodel submodel)
+    public IAasBuilder AddExistingSubmodel(Submodel submodel)
     {
         AddSubmodelInternal(submodel);
         return this;
