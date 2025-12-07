@@ -52,11 +52,8 @@ jobs:
       
       # Publish NuGet packages to nuget.org
       - name: Publish to NuGet
-        run: dotnet nuget push "./artifacts/*.nupkg" \
-          --api-key ${{ secrets.NUGET_API_KEY }} \
-          --source https://api.nuget.org/v3/index.json \
-          --skip-duplicate
-
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+      
       # Build changelog / release notes automatically using release-changelog-builder
       - name: Build Changelog
         id: build_changelog
