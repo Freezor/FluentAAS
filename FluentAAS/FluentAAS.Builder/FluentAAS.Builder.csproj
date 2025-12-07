@@ -8,6 +8,16 @@
         <WarningsAsErrors>CS1591</WarningsAsErrors>
         <NoWarn>CS1591</NoWarn>
         <Nullable>enable</Nullable>
+        <PackageId>FluentAAS.Builder</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>Oliver Fries</Authors>
+        <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
+        <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>
+        <PackageProjectUrl>https://github.com/Freezor/FluentAAS</PackageProjectUrl>
+        <RepositoryUrl>hhttps://github.com/Freezor/FluentAAS.git</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryType>git</RepositoryType>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
