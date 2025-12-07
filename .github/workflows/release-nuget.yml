@@ -30,16 +30,29 @@ jobs:
           echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_OUTPUT
           echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
 
-      # Restore & build solution
+      # Find solution file dynamically (first .sln we encounter)
+      - name: Locate solution file
+        id: solution
+        run: |
+          SOLUTION=$(find . -maxdepth 5 -name "*.sln" | head -n 1)
+          if [ -z "$SOLUTION" ]; then
+            echo "❌ No solution file (*.sln) found in the repo."
+            exit 1
+          fi
+          echo "Found solution: $SOLUTION"
+          echo "SOLUTION_PATH=$SOLUTION" >> $GITHUB_OUTPUT
+
+      # Restore using the solution
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore "${{ steps.solution.outputs.SOLUTION_PATH }}"
 
+      # Build solution in Release
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build "${{ steps.solution.outputs.SOLUTION_PATH }}" --configuration Release --no-restore
 
-      # Run ALL test projects
+      # Run ALL tests in the solution
       - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal
+        run: dotnet test "${{ steps.solution.outputs.SOLUTION_PATH }}" --configuration Release --no-build --verbosity normal
 
       # Pack all relevant projects into ./artifacts with unified version
       - name: Pack FluentAAS Builder
