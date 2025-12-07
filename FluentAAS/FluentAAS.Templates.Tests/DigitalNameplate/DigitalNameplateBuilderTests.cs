@@ -2,7 +2,6 @@ using AasCore.Aas3_0;
 using FluentAAS.Builder;
 using FluentAAS.Templates.DigitalNameplate;
 using Shouldly;
-using Environment = AasCore.Aas3_0.Environment;
 using static FluentAAS.Templates.DigitalNameplate.DigitalNameplateSemantics;
 
 namespace FluentAAS.Templates.Tests.DigitalNameplate;
@@ -12,7 +11,7 @@ namespace FluentAAS.Templates.Tests.DigitalNameplate;
 /// </summary>
 public class DigitalNameplateBuilderTests
 {
-    private static (ShellBuilder shellBuilder, DigitalNameplateBuilder sut, Func<Environment> buildEnvironment)
+    private static (ShellBuilder shellBuilder, DigitalNameplateBuilder sut, Func<IEnvironment> buildEnvironment)
         CreateBuilder(string? id = null, string? idShort = null)
     {
         var envBuilder  = AasBuilder.Create();

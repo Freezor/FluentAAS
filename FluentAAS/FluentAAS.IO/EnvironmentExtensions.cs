@@ -10,7 +10,7 @@ public static class EnvironmentExtensions
     /// <param name="environment">The AAS environment to package.</param>
     /// <param name="outputPath">The file system path where the .aasx package shall be written.</param>
     /// <param name="specificationUri"></param>
-    public static void ToAasx(this Environment environment, string outputPath, string specificationUri)
+    public static void ToAasx(this IEnvironment environment, string outputPath, string specificationUri)
     {
         ArgumentNullException.ThrowIfNull(environment);
 

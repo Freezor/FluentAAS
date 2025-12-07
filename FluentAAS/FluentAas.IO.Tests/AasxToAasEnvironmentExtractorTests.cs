@@ -14,7 +14,7 @@ namespace FluentAas.IO.Tests;
 /// </summary>
 public class AasxToAasEnvironmentExtractorTests
 {
-    private static Environment CreateSampleEnvironment()
+    private static IEnvironment CreateSampleEnvironment()
     {
         var environment = AasBuilder.Create()
                                     .AddShell("urn:aas:example:my-shell", "MyShell")

@@ -4,7 +4,7 @@ namespace FluentAAS.Builder;
 /// Provides a fluent API for constructing an AAS <see cref="Environment"/> 
 /// with asset administration shells and submodels.
 /// </summary>
-public sealed class AasBuilder
+public sealed class AasBuilder : IAasBuilder
 {
     private readonly List<IAssetAdministrationShell> _shells    = [];
     private readonly List<ISubmodel>                 _submodels = [];
@@ -85,7 +85,7 @@ public sealed class AasBuilder
     /// A new <see cref="Environment"/> containing the configured asset administration
     /// shells and submodels.
     /// </returns>
-    public Environment Build()
+    public IEnvironment Build()
     {
         // Return a fresh Environment each time, with copies of the internal lists
         return new Environment
@@ -101,7 +101,7 @@ public sealed class AasBuilder
     /// </summary>
     /// <param name="shell">The shell instance to add.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="shell"/> is null.</exception>
-    internal void AddShellInternal(AssetAdministrationShell shell)
+    public void AddShellInternal(AssetAdministrationShell shell)
     {
         ArgumentNullException.ThrowIfNull(shell);
 
@@ -117,7 +117,7 @@ public sealed class AasBuilder
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
-    internal void AddSubmodelInternal(Submodel submodel)
+    public void AddSubmodelInternal(Submodel submodel)
     {
         ArgumentNullException.ThrowIfNull(submodel);
 

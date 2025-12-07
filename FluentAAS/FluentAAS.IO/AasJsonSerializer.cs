@@ -23,7 +23,7 @@ public static class AasJsonSerializer
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="environment"/> is <c>null</c>.
     /// </exception>
-    public static string ToJson(Environment environment)
+    public static string ToJson(IEnvironment environment)
     {
         ArgumentNullException.ThrowIfNull(environment);
 
