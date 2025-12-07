@@ -61,11 +61,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           fetchReleaseInformation: "true"
-          failOnError: "true"
 
       # Upload artifacts to the workflow run (extra manual download option)
       - name: Upload NuGet Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: nuget-packages-${{ steps.version.outputs.FULL_VERSION }}
           path: ./artifacts/*.nupkg
