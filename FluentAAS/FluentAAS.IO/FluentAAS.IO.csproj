@@ -9,7 +9,6 @@
         <WarningsAsErrors>CS1591</WarningsAsErrors>
         <NoWarn>CS1591</NoWarn>
         <PackageId>FluentAAS.IO</PackageId>
-        <Version>0.1.0</Version>
         <Authors>Oliver Fries</Authors>
         <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
         <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>

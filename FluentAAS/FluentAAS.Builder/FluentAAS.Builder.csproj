@@ -9,7 +9,6 @@
         <NoWarn>CS1591</NoWarn>
         <Nullable>enable</Nullable>
         <PackageId>FluentAAS.Builder</PackageId>
-        <Version>0.1.0</Version>
         <Authors>Oliver Fries</Authors>
         <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
         <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>
