@@ -1,0 +1,49 @@
+
+name: Build & Publish NuGet
+
+on:
+  push:
+    tags:
+      - 'v*'         
+  workflow_dispatch:   
+
+jobs:
+  build-pack-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+      # Pack all relevant projects
+      - name: Pack FluentAAS Builder
+        run: dotnet pack src/FluentAas.Builder/FluentAas.Builder.csproj -c Release -o ./artifacts
+        
+      - name: Pack FluentAAS Core
+        run: dotnet pack src/FluentAas.Core/FluentAas.Core.csproj -c Release -o ./artifacts
+
+      - name: Pack FluentAAS IO
+        run: dotnet pack src/FluentAas.IO/FluentAas.IO.csproj -c Release -o ./artifacts
+
+      - name: Pack FluentAAS Templates
+        run: dotnet pack src/FluentAas.Templates/FluentAas.Templates.csproj -c Release -o ./artifacts
+
+      - name: Publish to NuGet
+        run: dotnet nuget push "./artifacts/*.nupkg" \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --source https://api.nuget.org/v3/index.json \
+          --skip-duplicate
