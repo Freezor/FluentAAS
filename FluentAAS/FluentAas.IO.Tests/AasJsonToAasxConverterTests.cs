@@ -84,8 +84,8 @@ public class AasJsonToAasxConverterTests
     public void Convert_ShouldThrowJsonException_WhenJsonIsMalformed()
     {
         // Arrange
-        var invalidJson = "{ this is not valid JSON }";
-        var outputPath  = CreateTempAasxPath();
+        const string invalidJson = "{ this is not valid JSON }";
+        var          outputPath  = CreateTempAasxPath();
 
         // Act
         var ex = Should.Throw<System.Text.Json.JsonException>(() => AasJsonToAasxConverter.Convert(invalidJson, outputPath, "aasx/spec.json"));
@@ -98,8 +98,8 @@ public class AasJsonToAasxConverterTests
     public void Convert_ShouldThrowInvalidOperationException_WhenJsonIsValidButNotAasEnvironment()
     {
         // Arrange
-        var notEnvJson = """{ "foo": "bar" }""";
-        var outputPath = CreateTempAasxPath();
+        const string notEnvJson = """{ "foo": "bar" }""";
+        var          outputPath = CreateTempAasxPath();
 
         // Act
         var ex = Should.Throw<InvalidOperationException>(() => AasJsonToAasxConverter.Convert(notEnvJson, outputPath, "aasx/spec.json"));

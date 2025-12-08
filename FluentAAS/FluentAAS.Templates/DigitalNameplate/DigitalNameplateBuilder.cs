@@ -813,13 +813,8 @@ public sealed class DigitalNameplateBuilder
     /// <returns>
     /// The initialized collection of <see cref="ISubmodelElement"/> instances.
     /// </returns>
-    private static IList<ISubmodelElement> EnsureSubmodelElements(Submodel submodel)
+    private static List<ISubmodelElement> EnsureSubmodelElements(Submodel submodel)
     {
-        if (submodel.SubmodelElements is null)
-        {
-            submodel.SubmodelElements = new List<ISubmodelElement>();
-        }
-
-        return submodel.SubmodelElements;
+        return submodel.SubmodelElements ?? (submodel.SubmodelElements = []);
     }
 }

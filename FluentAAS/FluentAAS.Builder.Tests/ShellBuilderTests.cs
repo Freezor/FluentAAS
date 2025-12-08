@@ -41,7 +41,7 @@ public class ShellBuilderTests
                                                  category: null,
                                                  description: null,
                                                  administration: null,
-                                                 assetInformation: null,
+                                                 assetInformation: null!,
                                                  submodels: null,
                                                  derivedFrom: null,
                                                  extensions: null,
@@ -90,7 +90,7 @@ public class ShellBuilderTests
     public void WithGlobalAssetId_WithValidId_ShouldSetGlobalAssetIdAndReturnBuilder()
     {
         // Arrange
-        var (_, shell, builder) = CreateBuilder();
+        var (_, _, builder) = CreateBuilder();
         var globalId = $"global-{Guid.NewGuid():N}";
 
         // Act
@@ -144,7 +144,7 @@ public class ShellBuilderTests
         var nameSpace = "ns-" + Guid.NewGuid().ToString("N")[..8];
 
         // Act
-        var result = builder.WithSpecificAssetId(key, value, nameSpace).Done();
+        builder.WithSpecificAssetId(key, value, nameSpace).Done();
 
         // Assert
         //result.ShouldBeEquivalentTo(builder);
