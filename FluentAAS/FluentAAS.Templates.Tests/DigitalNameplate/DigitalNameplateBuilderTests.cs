@@ -232,9 +232,6 @@ public class DigitalNameplateBuilderTests
 
         var submodel = env.Submodels!.Single();
 
-        Property GetProp(string idShort) =>
-            submodel.SubmodelElements!.OfType<Property>().Single(p => p.IdShort == idShort);
-
         // UriOfTheProduct
         var uriProp = GetProp("UriOfTheProduct");
         uriProp.Value.ShouldBe("https://example.com/product");
@@ -269,6 +266,10 @@ public class DigitalNameplateBuilderTests
 
         GetProp("UniqueFacilityIdentifier").Value.ShouldBe("FAC-001");
         GetProp("UniqueFacilityIdentifier").SemanticId!.Keys.Single().Value.ShouldBe(UniqueFacilityIdentifier);
+        return;
+
+        Property GetProp(string idShort) =>
+            submodel.SubmodelElements!.OfType<Property>().Single(p => p.IdShort == idShort);
     }
 
     [Fact]
@@ -288,9 +289,6 @@ public class DigitalNameplateBuilderTests
         var env = buildEnv();
         var submodel = env.Submodels!.Single();
 
-        MultiLanguageProperty GetMl(string idShort) =>
-            submodel.SubmodelElements!.OfType<MultiLanguageProperty>().Single(p => p.IdShort == idShort);
-
         var root = GetMl("ManufacturerProductRoot");
         root.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Root-X");
         root.SemanticId!.Keys.Single().Value.ShouldBe(ManufacturerProductRoot);
@@ -298,6 +296,10 @@ public class DigitalNameplateBuilderTests
         var fam = GetMl("ManufacturerProductFamily");
         fam.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Family-Y");
         fam.SemanticId!.Keys.Single().Value.ShouldBe(ManufacturerProductFamily);
+        return;
+
+        MultiLanguageProperty GetMl(string idShort) =>
+            submodel.SubmodelElements!.OfType<MultiLanguageProperty>().Single(p => p.IdShort == idShort);
     }
 
     [Fact]

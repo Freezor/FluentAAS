@@ -288,7 +288,7 @@ public class SubmodelBuilderWithShellTests
     [Fact]
     public void FluentConfiguration_ShouldAllowFullChaining()
     {
-        var (shell, sut) = CreateBuilder();
+        var (_, sut) = CreateBuilder();
 
         var sem = new Reference(
                                 ReferenceTypes.ExternalReference,

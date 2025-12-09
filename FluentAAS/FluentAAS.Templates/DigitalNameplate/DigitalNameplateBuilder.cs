@@ -501,266 +501,263 @@ public sealed class DigitalNameplateBuilder
     /// </exception>
     public IShellBuilder Build()
     {
+        ValidateMandatoryFields();
+
+        var submodelBuilder = CreateSubmodelBuilder();
+        var submodel        = submodelBuilder.BuildSubmodel();
+
+        AddMandatoryCoreElements(submodelBuilder, submodel);
+        AddOptionalScalarElements(submodelBuilder, submodel);
+        AddComplexElements(submodel);
+
+        _shellBuilder.AddSubmodelReference(submodel);
+
+        return _shellBuilder;
+    }
+
+    /// <summary>
+    /// Validates that all mandatory fields are present before building.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when mandatory fields are missing.
+    /// </exception>
+    private void ValidateMandatoryFields()
+    {
         var missing = new List<string>();
 
         if (_manufacturerName.Count == 0)
         {
-            missing.Add("ManufacturerName");
+            missing.Add(DigitalNameplateIdentifiers.ManufacturerNameIdShort);
         }
 
         if (_manufacturerProductDesignation.Count == 0)
         {
-            missing.Add("ManufacturerProductDesignation");
+            missing.Add(DigitalNameplateIdentifiers.ManufacturerProductDesignationIdShort);
         }
 
         if (string.IsNullOrWhiteSpace(_serialNumber))
         {
-            missing.Add("SerialNumber");
+            missing.Add(DigitalNameplateIdentifiers.SerialNumberIdShort);
         }
 
-        if (missing.Count != 0)
+        if (missing.Count == 0)
         {
-            throw new InvalidOperationException(
-                                                "Digital Nameplate is incomplete. Missing mandatory fields: " +
-                                                string.Join(", ", missing));
+            return;
         }
 
-        // Use the generic submodel builder
-        var submodelBuilder = new SubmodelBuilder(_shellBuilder, _id, _idShort)
+        throw new InvalidOperationException(
+                                            "Digital Nameplate is incomplete. Missing mandatory fields: " +
+                                            string.Join(", ", missing));
+    }
+
+    /// <summary>
+    /// Creates and preconfigures the underlying submodel builder.
+    /// </summary>
+    private SubmodelBuilder CreateSubmodelBuilder()
+    {
+        return new SubmodelBuilder(_shellBuilder, _id, _idShort)
             .WithSemanticId(RefFactory.GlobalConceptDescription(SubmodelDigitalNameplate));
+    }
 
-        var submodel = submodelBuilder.BuildSubmodel();
-
-        // UriOfTheProduct
-        if (!string.IsNullOrWhiteSpace(_uriOfTheProduct))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "UriOfTheProduct",
-                                    _uriOfTheProduct!,
-                                    RefFactory.GlobalConceptDescription(UriOfTheProduct));
-        }
-
-        // ManufacturerName
+    /// <summary>
+    /// Adds the mandatory core elements (multi-language and serial number).
+    /// </summary>
+    private void AddMandatoryCoreElements(SubmodelBuilder submodelBuilder, Submodel submodel)
+    {
         AddMultiLanguagePropertyWithSemantic(
                                              submodelBuilder,
-                                             submodel,
-                                             "ManufacturerName",
+                                             submodel, DigitalNameplateIdentifiers.ManufacturerNameIdShort,
                                              RefFactory.GlobalConceptDescription(ManufacturerName),
                                              _manufacturerName);
 
-        // ManufacturerProductDesignation
         AddMultiLanguagePropertyWithSemantic(
                                              submodelBuilder,
-                                             submodel,
-                                             "ManufacturerProductDesignation",
+                                             submodel, DigitalNameplateIdentifiers.ManufacturerProductDesignationIdShort,
                                              RefFactory.GlobalConceptDescription(ManufacturerProductDesignation),
                                              _manufacturerProductDesignation);
 
-        // ManufacturerProductRoot
-        if (_manufacturerProductRoot.Count > 0)
-        {
-            AddMultiLanguagePropertyWithSemantic(
-                                                 submodelBuilder,
-                                                 submodel,
-                                                 "ManufacturerProductRoot",
-                                                 RefFactory.GlobalConceptDescription(ManufacturerProductRoot),
-                                                 _manufacturerProductRoot);
-        }
-
-        // ManufacturerProductFamily
-        if (_manufacturerProductFamily.Count > 0)
-        {
-            AddMultiLanguagePropertyWithSemantic(
-                                                 submodelBuilder,
-                                                 submodel,
-                                                 "ManufacturerProductFamily",
-                                                 RefFactory.GlobalConceptDescription(ManufacturerProductFamily),
-                                                 _manufacturerProductFamily);
-        }
-
-        // ManufacturerProductType
-        if (!string.IsNullOrWhiteSpace(_manufacturerProductType))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "ManufacturerProductType",
-                                    _manufacturerProductType!,
-                                    RefFactory.GlobalConceptDescription(ManufacturerProductType));
-        }
-
-        // OrderCodeOfManufacturer
-        if (!string.IsNullOrWhiteSpace(_orderCodeOfManufacturer))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "OrderCodeOfManufacturer",
-                                    _orderCodeOfManufacturer!,
-                                    RefFactory.GlobalConceptDescription(OrderCodeOfManufacturer));
-        }
-
-        // ProductArticleNumberOfManufacturer
-        if (!string.IsNullOrWhiteSpace(_productArticleNumberOfManufacturer))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "ProductArticleNumberOfManufacturer",
-                                    _productArticleNumberOfManufacturer!,
-                                    RefFactory.GlobalConceptDescription(ProductArticleNumberOfManufacturer));
-        }
-
-        // SerialNumber
         AddPropertyWithSemantic(
                                 submodelBuilder,
-                                submodel,
-                                "SerialNumber",
+                                submodel, DigitalNameplateIdentifiers.SerialNumberIdShort,
                                 _serialNumber!,
                                 RefFactory.GlobalConceptDescription(SerialNumber));
+    }
 
-        // YearOfConstruction
-        if (!string.IsNullOrWhiteSpace(_yearOfConstruction))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "YearOfConstruction",
-                                    _yearOfConstruction!,
-                                    RefFactory.GlobalConceptDescription(YearOfConstruction));
-        }
+    /// <summary>
+    /// Adds all optional simple / scalar elements if they have been configured.
+    /// </summary>
+    private void AddOptionalScalarElements(SubmodelBuilder submodelBuilder, Submodel submodel)
+    {
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.UriOfTheProductIdShort,
+                                        _uriOfTheProduct,
+                                        RefFactory.GlobalConceptDescription(UriOfTheProduct));
 
-        // DateOfManufacture
-        if (!string.IsNullOrWhiteSpace(_dateOfManufactureIso))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "DateOfManufacture",
-                                    _dateOfManufactureIso!,
-                                    RefFactory.GlobalConceptDescription(DateOfManufacture));
-        }
+        AddOptionalMultiLanguagePropertyWithSemantic(
+                                                     submodelBuilder,
+                                                     submodel, DigitalNameplateIdentifiers.ManufacturerProductRootIdShort,
+                                                     RefFactory.GlobalConceptDescription(ManufacturerProductRoot),
+                                                     _manufacturerProductRoot);
 
-        // HardwareVersion
-        if (!string.IsNullOrWhiteSpace(_hardwareVersion))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "HardwareVersion",
-                                    _hardwareVersion!,
-                                    RefFactory.GlobalConceptDescription(HardwareVersion));
-        }
+        AddOptionalMultiLanguagePropertyWithSemantic(
+                                                     submodelBuilder,
+                                                     submodel, DigitalNameplateIdentifiers.ManufacturerProductFamilyIdShort,
+                                                     RefFactory.GlobalConceptDescription(ManufacturerProductFamily),
+                                                     _manufacturerProductFamily);
 
-        // FirmwareVersion
-        if (!string.IsNullOrWhiteSpace(_firmwareVersion))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "FirmwareVersion",
-                                    _firmwareVersion!,
-                                    RefFactory.GlobalConceptDescription(FirmwareVersion));
-        }
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.ManufacturerProductTypeIdShort,
+                                        _manufacturerProductType,
+                                        RefFactory.GlobalConceptDescription(ManufacturerProductType));
 
-        // SoftwareVersion
-        if (!string.IsNullOrWhiteSpace(_softwareVersion))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "SoftwareVersion",
-                                    _softwareVersion!,
-                                    RefFactory.GlobalConceptDescription(SoftwareVersion));
-        }
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.OrderCodeOfManufacturerIdShort,
+                                        _orderCodeOfManufacturer,
+                                        RefFactory.GlobalConceptDescription(OrderCodeOfManufacturer));
 
-        // CountryOfOrigin
-        if (!string.IsNullOrWhiteSpace(_countryOfOrigin))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "CountryOfOrigin",
-                                    _countryOfOrigin!,
-                                    RefFactory.GlobalConceptDescription(CountryOfOrigin));
-        }
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.ProductArticleNumberOfManufacturerIdShort,
+                                        _productArticleNumberOfManufacturer,
+                                        RefFactory.GlobalConceptDescription(ProductArticleNumberOfManufacturer));
 
-        // UniqueFacilityIdentifier
-        if (!string.IsNullOrWhiteSpace(_uniqueFacilityIdentifier))
-        {
-            AddPropertyWithSemantic(
-                                    submodelBuilder,
-                                    submodel,
-                                    "UniqueFacilityIdentifier",
-                                    _uniqueFacilityIdentifier!,
-                                    RefFactory.GlobalConceptDescription(UniqueFacilityIdentifier));
-        }
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.YearOfConstructionIdShort,
+                                        _yearOfConstruction,
+                                        RefFactory.GlobalConceptDescription(YearOfConstruction));
 
-        // Complex elements (attached directly to the submodel)
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.DateOfManufactureIdShort,
+                                        _dateOfManufactureIso,
+                                        RefFactory.GlobalConceptDescription(DateOfManufacture));
 
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.HardwareVersionIdShort,
+                                        _hardwareVersion,
+                                        RefFactory.GlobalConceptDescription(HardwareVersion));
+
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.FirmwareVersionIdShort,
+                                        _firmwareVersion,
+                                        RefFactory.GlobalConceptDescription(FirmwareVersion));
+
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.SoftwareVersionIdShort,
+                                        _softwareVersion,
+                                        RefFactory.GlobalConceptDescription(SoftwareVersion));
+
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.CountryOfOriginIdShort,
+                                        _countryOfOrigin,
+                                        RefFactory.GlobalConceptDescription(CountryOfOrigin));
+
+        AddOptionalPropertyWithSemantic(
+                                        submodelBuilder,
+                                        submodel, DigitalNameplateIdentifiers.UniqueFacilityIdentifierIdShort,
+                                        _uniqueFacilityIdentifier,
+                                        RefFactory.GlobalConceptDescription(UniqueFacilityIdentifier));
+    }
+
+    /// <summary>
+    /// Adds complex submodel elements (collections, lists, files) if present.
+    /// </summary>
+    private void AddComplexElements(Submodel submodel)
+    {
         var elements = EnsureSubmodelElements(submodel);
 
-        if (_addressInformation is not null)
-        {
-            if (string.IsNullOrWhiteSpace(_addressInformation.IdShort))
-            {
-                _addressInformation.IdShort = "AddressInformation";
-            }
+        AddComplexElementIfPresent(
+                                   elements,
+                                   _addressInformation, DigitalNameplateIdentifiers.AddressInformationIdShort,
+                                   RefFactory.GlobalConceptDescription(AddressInformation));
 
-            _addressInformation.SemanticId ??= RefFactory.GlobalConceptDescription(AddressInformation);
-            elements.Add(_addressInformation);
+        AddComplexElementIfPresent(
+                                   elements,
+                                   _companyLogo, DigitalNameplateIdentifiers.CompanyLogoIdShort,
+                                   RefFactory.GlobalConceptDescription(CompanyLogo));
+
+        AddComplexElementIfPresent(
+                                   elements,
+                                   _markings, DigitalNameplateIdentifiers.MarkingsIdShort,
+                                   RefFactory.GlobalConceptDescription(Markings));
+
+        AddComplexElementIfPresent(
+                                   elements,
+                                   _assetSpecificProperties, DigitalNameplateIdentifiers.AssetSpecificPropertiesIdShort,
+                                   RefFactory.GlobalConceptDescription(AssetSpecificProperties));
+    }
+
+    /// <summary>
+    /// Adds a multi-language property if any values are present.
+    /// </summary>
+    private static void AddOptionalMultiLanguagePropertyWithSemantic(
+        SubmodelBuilder                     builder,
+        Submodel                            submodel,
+        string                              idShort,
+        IReference                          semanticId,
+        Dictionary<string, string> values)
+    {
+        if (values.Count == 0)
+        {
+            return;
         }
 
-        if (_companyLogo is not null)
-        {
-            if (string.IsNullOrWhiteSpace(_companyLogo.IdShort))
-            {
-                _companyLogo.IdShort = "CompanyLogo";
-            }
+        AddMultiLanguagePropertyWithSemantic(builder, submodel, idShort, semanticId, values);
+    }
 
-            _companyLogo.SemanticId ??= RefFactory.GlobalConceptDescription(CompanyLogo);
-            elements.Add(_companyLogo);
+    /// <summary>
+    /// Adds a simple property if a non-empty value is present.
+    /// </summary>
+    private static void AddOptionalPropertyWithSemantic(
+        SubmodelBuilder builder,
+        Submodel        submodel,
+        string          idShort,
+        string?         value,
+        IReference      semanticId)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return;
         }
 
-        if (_markings is not null)
-        {
-            if (string.IsNullOrWhiteSpace(_markings.IdShort))
-            {
-                _markings.IdShort = "Markings";
-            }
+        AddPropertyWithSemantic(builder, submodel, idShort, value, semanticId);
+    }
 
-            _markings.SemanticId ??= RefFactory.GlobalConceptDescription(Markings);
-            elements.Add(_markings);
+    /// <summary>
+    /// Adds a complex submodel element if it is not null, ensuring idShort and semanticId.
+    /// </summary>
+    private static void AddComplexElementIfPresent(
+        List<ISubmodelElement> elements,
+        ISubmodelElement?      element,
+        string                 defaultIdShort,
+        IReference             semanticId)
+    {
+        if (element is null)
+        {
+            return;
         }
 
-        if (_assetSpecificProperties is not null)
+        if (string.IsNullOrWhiteSpace(element.IdShort))
         {
-            if (string.IsNullOrWhiteSpace(_assetSpecificProperties.IdShort))
-            {
-                _assetSpecificProperties.IdShort = "AssetSpecificProperties";
-            }
-
-            _assetSpecificProperties.SemanticId ??= RefFactory.GlobalConceptDescription(AssetSpecificProperties);
-            elements.Add(_assetSpecificProperties);
+            element.IdShort = defaultIdShort;
         }
 
-        // Attach the submodel to the shell
-        _shellBuilder.AddSubmodelReference(submodel);
+        element.SemanticId ??= semanticId;
 
-        // Return to the shell API
-        return _shellBuilder;
+        elements.Add(element);
     }
 
     /// <summary>
     /// Adds a multi-language property to the submodel and assigns its semantic identifier.
     /// </summary>
-    /// <param name="builder">The submodel builder used to add the property.</param>
-    /// <param name="submodel">The submodel instance containing the elements.</param>
-    /// <param name="idShort">The idShort of the multi-language property.</param>
-    /// <param name="semanticId">The semantic reference to assign.</param>
-    /// <param name="values">The language-to-text mapping.</param>
     private static void AddMultiLanguagePropertyWithSemantic(
         SubmodelBuilder                     builder,
         Submodel                            submodel,
@@ -785,11 +782,6 @@ public sealed class DigitalNameplateBuilder
     /// <summary>
     /// Adds a simple property to the submodel and assigns its semantic identifier.
     /// </summary>
-    /// <param name="builder">The submodel builder used to add the property.</param>
-    /// <param name="submodel">The submodel instance containing the elements.</param>
-    /// <param name="idShort">The idShort of the property.</param>
-    /// <param name="value">The property value.</param>
-    /// <param name="semanticId">The semantic reference to assign.</param>
     private static void AddPropertyWithSemantic(
         SubmodelBuilder builder,
         Submodel        submodel,
@@ -809,17 +801,8 @@ public sealed class DigitalNameplateBuilder
     /// Ensures that the <see cref="Submodel.SubmodelElements"/> list is initialized
     /// and returns it.
     /// </summary>
-    /// <param name="submodel">The submodel instance.</param>
-    /// <returns>
-    /// The initialized collection of <see cref="ISubmodelElement"/> instances.
-    /// </returns>
-    private static IList<ISubmodelElement> EnsureSubmodelElements(Submodel submodel)
+    private static List<ISubmodelElement> EnsureSubmodelElements(Submodel submodel)
     {
-        if (submodel.SubmodelElements is null)
-        {
-            submodel.SubmodelElements = new List<ISubmodelElement>();
-        }
-
-        return submodel.SubmodelElements;
+        return submodel.SubmodelElements ?? (submodel.SubmodelElements = []);
     }
 }

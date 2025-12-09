@@ -7,6 +7,12 @@ namespace FluentAAS.IO;
 
 public static class AasJsonToAasxConverter
 {
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        WriteIndented = true,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+
     /// <summary>
     /// Convert an AAS JSON Environment (provided as a string) to a .aasx package.
     /// </summary>
@@ -40,11 +46,7 @@ public static class AasJsonToAasxConverter
 
         var serializedJson = JsonSerializer.Serialize(
             jsonObject,
-            new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            });
+            SerializerOptions);
 
         var specContent = Encoding.UTF8.GetBytes(serializedJson);
 

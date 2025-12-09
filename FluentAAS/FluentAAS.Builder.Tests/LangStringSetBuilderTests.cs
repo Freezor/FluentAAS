@@ -154,9 +154,9 @@ public class LangStringSetBuilderTests
     public void Add_WithValidLanguageAndText_ShouldAddLangStringTextType()
     {
         // Arrange
-        var builder  = new LangStringSetBuilder("myId");
-        var language = "en";
-        var text     = "Hello";
+        var          builder  = new LangStringSetBuilder("myId");
+        const string language = "en";
+        const string text     = "Hello";
 
         // Act
         var resultBuilder = builder.Add(language, text);
