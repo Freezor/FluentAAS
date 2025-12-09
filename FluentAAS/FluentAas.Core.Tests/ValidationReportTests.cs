@@ -104,19 +104,20 @@ public sealed class ValidationReportTests
         // Enumerable, das nur einmal enumeriert werden sollte
         var enumerationCount = 0;
 
-        IEnumerable<ValidationResult> Deferred()
-        {
-            enumerationCount++;
-            yield return CreateResult(ValidationLevel.Warning);
-            yield return CreateResult(ValidationLevel.Warning);
-        }
-
         // Act
         var report = new ValidationReport(Deferred());
 
         // Assert
         enumerationCount.ShouldBe(1);
         report.HasErrors.ShouldBeFalse();
+        return;
+
+        IEnumerable<ValidationResult> Deferred()
+        {
+            enumerationCount++;
+            yield return CreateResult(ValidationLevel.Warning);
+            yield return CreateResult(ValidationLevel.Warning);
+        }
     }
 
     [Fact]

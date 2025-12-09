@@ -19,7 +19,8 @@ public sealed class ValidationService : IValidationService
     /// </exception>
     public ValidationService(IEnumerable<IValidationRule> rules)
     {
-        _rules = rules?.ToList() ?? throw new ArgumentNullException(nameof(rules));
+        ArgumentNullException.ThrowIfNull(rules);
+        _rules = rules.ToList();
     }
 
     /// <summary>

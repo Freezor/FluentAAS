@@ -29,7 +29,7 @@ public sealed class UniqueIdRule : IValidationRule
             for (var i = 0; i < environment.AssetAdministrationShells.Count; i++)
             {
                 var shell = environment.AssetAdministrationShells[i];
-                var id = shell.Id ?? string.Empty;
+                var id = shell.Id;
 
                 if (!seen.Add(id))
                 {
@@ -48,7 +48,7 @@ public sealed class UniqueIdRule : IValidationRule
             for (var i = 0; i < environment.Submodels.Count; i++)
             {
                 var submodel = environment.Submodels[i];
-                var id       = submodel.Id ?? string.Empty;
+                var id       = submodel.Id;
 
                 if (!seen.Add(id))
                 {

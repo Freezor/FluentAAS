@@ -89,7 +89,7 @@ public class AasJsonSerializerTests
     public void FromJson_ShouldThrowInvalidOperationException_WhenJsonIsMalformed()
     {
         // Arrange
-        var invalidJson = "{ this is not valid JSON }";
+        const string invalidJson = "{ this is not valid JSON }";
 
         // Act
         var ex = Should.Throw<InvalidOperationException>(() => AasJsonSerializer.FromJson(invalidJson));
@@ -102,7 +102,7 @@ public class AasJsonSerializerTests
     public void FromJson_ShouldThrowInvalidOperationException_WhenJsonIsValidButNotAasEnvironment()
     {
         // Arrange
-        var notEnvJson = """{ "foo": "bar" }""";
+        const string notEnvJson = """{ "foo": "bar" }""";
 
         // Act
         var ex = Should.Throw<InvalidOperationException>(() => AasJsonSerializer.FromJson(notEnvJson));

@@ -1,4 +1,3 @@
-using System.Linq;
 using AasCore.Aas3_0;
 using AutoFixture;
 using Shouldly;
@@ -9,7 +8,7 @@ public class AasBuilderTests
 {
     private readonly Fixture _fixture = new();
 
-    private static AasBuilder CreateSut() => new AasBuilder();
+    private static AasBuilder CreateSut() => new();
 
     [Fact]
     public void Constructor_ShouldInitializeEmptyEnvironmentState()

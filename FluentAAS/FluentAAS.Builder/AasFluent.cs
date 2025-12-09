@@ -13,6 +13,5 @@ public static class AasFluent
     /// <returns>
     /// A new <see cref="AasBuilder"/> for configuring an AAS environment.
     /// </returns>
-    public static AasBuilder CreateEnvironment() =>
-        new AasBuilder();
+    public static AasBuilder CreateEnvironment() => new();
 }
