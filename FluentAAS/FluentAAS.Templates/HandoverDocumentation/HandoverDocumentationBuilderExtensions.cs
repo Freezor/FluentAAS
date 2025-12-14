@@ -25,7 +25,7 @@ public static class HandoverDocumentationBuilderExtensions
         where TRootBuilder : ISubmodelCollector
     {
         if (rootBuilder is null) throw new ArgumentNullException(nameof(rootBuilder));
-        if (configureSubmodel is null) throw new ArgumentNullException(nameof(configureSubmodel));
+        ArgumentNullException.ThrowIfNull(configureSubmodel);
 
         var smBuilder = new HandoverDocumentationSubmodelBuilder(submodelId);
         configureSubmodel(smBuilder);

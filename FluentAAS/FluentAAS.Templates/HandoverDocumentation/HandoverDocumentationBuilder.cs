@@ -51,7 +51,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
     public HandoverDocumentationSubmodelBuilder AddDocument(
         Action<HandoverDocumentBuilder> configure)
     {
-        if (configure is null) throw new ArgumentNullException(nameof(configure));
+        ArgumentNullException.ThrowIfNull(configure);
 
         var builder = new HandoverDocumentBuilder();
         configure(builder);

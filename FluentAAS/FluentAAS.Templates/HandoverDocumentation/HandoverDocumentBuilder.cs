@@ -7,7 +7,7 @@ namespace FluentAAS.Templates.HandoverDocumentation;
 public sealed class HandoverDocumentBuilder
 {
     private readonly HandoverDocument _document = new();
-    private readonly List<HandoverDocumentFile> _files = new();
+    private readonly List<HandoverDocumentFile> _files = [];
 
     public HandoverDocumentBuilder WithDocumentId(string documentId)
     {
