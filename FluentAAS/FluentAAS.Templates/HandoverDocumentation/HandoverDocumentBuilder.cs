@@ -1,6 +1,4 @@
 
-using FluentAAS.Core.HandoverDocumentation;
-
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 /// <summary>
@@ -75,7 +73,7 @@ public sealed class HandoverDocumentBuilder
     /// Add a file reference to the document.
     /// </summary>
     /// <param name="path">
-    /// AAS File.value – typically a relative or absolute path, URI, etc.
+    /// AAS File.Value – typically a relative or absolute path, URI, etc.
     /// </param>
     /// <param name="fileName">
     /// Optional. If omitted, the file name can be derived from the path.
@@ -93,8 +91,7 @@ public sealed class HandoverDocumentBuilder
 
         var file = new HandoverDocumentFile
         {
-            Path = path,
-            FileName = fileName ?? System.IO.Path.GetFileName(path),
+            Path     = path,
             MimeType = mimeType
         };
 
@@ -129,9 +126,5 @@ public sealed class HandoverDocumentBuilder
             throw new InvalidOperationException(
                 "A handover document must define at least one file (AddFile).");
         }
-
-        // Additional validations can be added here:
-        // - check allowed MIME types (according to template)
-        // - check lifecycle stage is set, if template requires it
     }
 }

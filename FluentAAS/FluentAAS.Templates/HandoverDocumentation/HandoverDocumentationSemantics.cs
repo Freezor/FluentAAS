@@ -16,48 +16,48 @@ public static class HandoverDocumentationSemantics
 
     // === Root element idShorts =================================================
 
-    public const string IdShort_Documents = "Documents";
-    public const string IdShort_HandoverInformation = "HandoverInformation";
+    public const string IdShortDocuments = "Documents";
+    public const string IdShortHandoverInformation = "HandoverInformation";
 
     // === Document-level idShorts ===============================================
 
-    public const string IdShort_DocumentCollection = "Document"; // each instance
-    public const string IdShort_DocumentId = "DocumentId";
-    public const string IdShort_DocumentTitle = "Title";
-    public const string IdShort_DocumentDescription = "Description";
-    public const string IdShort_DocumentLifecycleStage = "LifecycleStage";
-    public const string IdShort_DocumentClass = "DocumentClass";
-    public const string IdShort_DocumentFormat = "DocumentFormat";
-    public const string IdShort_DocumentLanguage = "Language";
-    public const string IdShort_DocumentRevision = "Revision";
-    public const string IdShort_DocumentDate = "Date";
-    public const string IdShort_DocumentFile = "File";
+    public const string IdShortDocumentCollection = "Document"; // each instance
+    public const string IdShortDocumentId = "DocumentId";
+    public const string IdShortDocumentTitle = "Title";
+    public const string IdShortDocumentDescription = "Description";
+    public const string IdShortDocumentLifecycleStage = "LifecycleStage";
+    public const string IdShortDocumentClass = "DocumentClass";
+    public const string IdShortDocumentFormat = "DocumentFormat";
+    public const string IdShortDocumentLanguage = "Language";
+    public const string IdShortDocumentRevision = "Revision";
+    public const string IdShortDocumentDate = "Date";
+    public const string IdShortDocumentFile = "File";
 
     // === Semantic IDs (examples; fill from template PDF) =======================
 
-    public const string SemanticId_Documents =
+    public const string SemanticIdDocuments =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:Documents";
-    public const string SemanticId_Document =
+    public const string SemanticIdDocument =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:Document";
-    public const string SemanticId_DocumentId =
+    public const string SemanticIdDocumentId =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:DocumentId";
-    public const string SemanticId_DocumentTitle =
+    public const string SemanticIdDocumentTitle =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:Title";
-    public const string SemanticId_DocumentDescription =
+    public const string SemanticIdDocumentDescription =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:Description";
-    public const string SemanticId_DocumentLifecycleStage =
+    public const string SemanticIdDocumentLifecycleStage =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:LifecycleStage";
-    public const string SemanticId_DocumentClass =
+    public const string SemanticIdDocumentClass =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:DocumentClass";
-    public const string SemanticId_DocumentFormat =
+    public const string SemanticIdDocumentFormat =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:DocumentFormat";
-    public const string SemanticId_DocumentLanguage =
+    public const string SemanticIdDocumentLanguage =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:Language";
-    public const string SemanticId_DocumentRevision =
+    public const string SemanticIdDocumentRevision =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:Revision";
-    public const string SemanticId_DocumentDate =
+    public const string SemanticIdDocumentDate =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:Date";
-    public const string SemanticId_DocumentFile =
+    public const string SemanticIdDocumentFile =
         "urn:idta:02004:2:0:submodel:HandoverDocumentation:File";
 
     // === Enums =================================================================

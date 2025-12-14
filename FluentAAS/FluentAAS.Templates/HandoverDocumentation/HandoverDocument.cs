@@ -1,5 +1,3 @@
-using FluentAAS.Core.HandoverDocumentation;
-
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 /// <summary>
@@ -20,188 +18,176 @@ public sealed class HandoverDocument
     /// <summary>
     /// File entries attached to the document (at least one is usually required by the template).
     /// </summary>
-    public List<HandoverDocumentFile> Files { get; } = new();
+    public List<HandoverDocumentFile> Files { get; } = [];
 
-    internal Aas.SubmodelElementCollection ToSubmodelElementCollection()
+    internal SubmodelElementCollection ToSubmodelElementCollection()
     {
-        var elements = new List<Aas.ISubmodelElement>();
+        var elements = new List<ISubmodelElement>();
 
         if (DocumentId is not null)
         {
             elements.Add(
                          new Property(
-                                      idShort: HandoverDocumentationSemantics.IdShort_DocumentId,
+                                      idShort: HandoverDocumentationSemantics.IdShortDocumentId,
                                       category: null,
-                                      semanticId: new Aas.Reference(
+                                      semanticId: new Reference(
                                                                     ReferenceTypes.ExternalReference,
                                                                     [
                                                                         new Key(
                                                                                 KeyTypes.GlobalReference,
-                                                                                HandoverDocumentationSemantics.SemanticId_DocumentId)
+                                                                                HandoverDocumentationSemantics.SemanticIdDocumentId)
                                                                     ]),
-                                      valueType: Aas.DataTypeDefXsd.String,
+                                      valueType: DataTypeDefXsd.String,
                                       value: DocumentId));
         }
 
         if (Title is not null)
         {
             elements.Add(
-                         new Aas.MultiLanguageProperty(
-                                                       idShort: HandoverDocumentationSemantics.IdShort_DocumentTitle,
+                         new MultiLanguageProperty(
+                                                       idShort: HandoverDocumentationSemantics.IdShortDocumentTitle,
                                                        category: null,
-                                                       semanticId: new Aas.Reference(
-                                                                                     Aas.ReferenceTypes.ExternalReference,
-                                                                                     new List<IKey>()
-                                                                                     {
-                                                                                         new Aas.Key(
-                                                                                                     Aas.KeyTypes.GlobalReference,
-                                                                                                     HandoverDocumentationSemantics.SemanticId_DocumentTitle)
-                                                                                     }),
-                                                       value: new List<ILangStringTextType>() {new Aas.LangStringTextType(Language ?? "en", Title)}));
+                                                       semanticId: new Reference(
+                                                                                     ReferenceTypes.ExternalReference,
+                                                                                     [
+                                                                                         new Key(
+                                                                                                 KeyTypes.GlobalReference,
+                                                                                                 HandoverDocumentationSemantics.SemanticIdDocumentTitle)
+                                                                                     ]),
+                                                       value: [new LangStringTextType(Language ?? "en", Title)]));
         }
 
         if (Description is not null)
         {
             elements.Add(
-                         new Aas.MultiLanguageProperty(
-                                                       idShort: HandoverDocumentationSemantics.IdShort_DocumentDescription,
+                         new MultiLanguageProperty(
+                                                       idShort: HandoverDocumentationSemantics.IdShortDocumentDescription,
                                                        category: null,
-                                                       semanticId: new Aas.Reference(
-                                                                                     Aas.ReferenceTypes.ExternalReference,
-                                                                                     new List<IKey>()
-                                                                                     {
-                                                                                         new Aas.Key(
-                                                                                                     Aas.KeyTypes.GlobalReference,
-                                                                                                     HandoverDocumentationSemantics.SemanticId_DocumentDescription)
-                                                                                     }),
-                                                       value: new List<ILangStringTextType>() {new Aas.LangStringTextType(Language ?? "en", Description)}));
+                                                       semanticId: new Reference(
+                                                                                     ReferenceTypes.ExternalReference,
+                                                                                     [
+                                                                                         new Key(
+                                                                                                 KeyTypes.GlobalReference,
+                                                                                                 HandoverDocumentationSemantics.SemanticIdDocumentDescription)
+                                                                                     ]),
+                                                       value: [new LangStringTextType(Language ?? "en", Description)]));
         }
 
         if (LifecycleStage.HasValue)
         {
             elements.Add(
-                         new Aas.Property(
-                                          idShort: HandoverDocumentationSemantics.IdShort_DocumentLifecycleStage,
+                         new Property(
+                                          idShort: HandoverDocumentationSemantics.IdShortDocumentLifecycleStage,
                                           category: null,
-                                          semanticId: new Aas.Reference(
-                                                                        Aas.ReferenceTypes.ExternalReference,
-                                                                        new List<IKey>()
-                                                                        {
-                                                                            new Aas.Key(
-                                                                                        Aas.KeyTypes.GlobalReference,
-                                                                                        HandoverDocumentationSemantics.SemanticId_DocumentLifecycleStage)
-                                                                        }),
-                                          valueType: Aas.DataTypeDefXsd.String,
+                                          semanticId: new Reference(
+                                                                        ReferenceTypes.ExternalReference,
+                                                                        [
+                                                                            new Key(
+                                                                                    KeyTypes.GlobalReference,
+                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentLifecycleStage)
+                                                                        ]),
+                                          valueType: DataTypeDefXsd.String,
                                           value: LifecycleStage.Value.ToString()));
         }
 
         if (DocumentClass.HasValue)
         {
             elements.Add(
-                         new Aas.Property(
-                                          idShort: HandoverDocumentationSemantics.IdShort_DocumentClass,
+                         new Property(
+                                          idShort: HandoverDocumentationSemantics.IdShortDocumentClass,
                                           category: null,
-                                          semanticId: new Aas.Reference(
-                                                                        Aas.ReferenceTypes.ExternalReference,
-                                                                        new List<IKey>()
-                                                                        {
-                                                                            new Aas.Key(
-                                                                                        Aas.KeyTypes.GlobalReference,
-                                                                                        HandoverDocumentationSemantics.SemanticId_DocumentClass)
-                                                                        }),
-                                          valueType: Aas.DataTypeDefXsd.String,
+                                          semanticId: new Reference(
+                                                                        ReferenceTypes.ExternalReference,
+                                                                        [
+                                                                            new Key(
+                                                                                    KeyTypes.GlobalReference,
+                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentClass)
+                                                                        ]),
+                                          valueType: DataTypeDefXsd.String,
                                           value: DocumentClass.Value.ToString()));
         }
 
         if (Format.HasValue)
         {
             elements.Add(
-                         new Aas.Property(
-                                          idShort: HandoverDocumentationSemantics.IdShort_DocumentFormat,
+                         new Property(
+                                          idShort: HandoverDocumentationSemantics.IdShortDocumentFormat,
                                           category: null,
-                                          semanticId: new Aas.Reference(
-                                                                        Aas.ReferenceTypes.ExternalReference,
-                                                                        new List<IKey>()
-                                                                        {
-                                                                            new Aas.Key(
-                                                                                        Aas.KeyTypes.GlobalReference,
-                                                                                        HandoverDocumentationSemantics.SemanticId_DocumentFormat)
-                                                                        }),
-                                          valueType: Aas.DataTypeDefXsd.String,
+                                          semanticId: new Reference(
+                                                                        ReferenceTypes.ExternalReference,
+                                                                        [
+                                                                            new Key(
+                                                                                    KeyTypes.GlobalReference,
+                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentFormat)
+                                                                        ]),
+                                          valueType: DataTypeDefXsd.String,
                                           value: Format.Value.ToString()));
         }
 
         if (Language is not null)
         {
             elements.Add(
-                         new Aas.Property(
-                                          idShort: HandoverDocumentationSemantics.IdShort_DocumentLanguage,
+                         new Property(
+                                          idShort: HandoverDocumentationSemantics.IdShortDocumentLanguage,
                                           category: null,
-                                          semanticId: new Aas.Reference(
-                                                                        Aas.ReferenceTypes.ExternalReference,
-                                                                        new List<IKey>()
-                                                                        {
-                                                                            new Aas.Key(
-                                                                                        Aas.KeyTypes.GlobalReference,
-                                                                                        HandoverDocumentationSemantics.SemanticId_DocumentLanguage)
-                                                                        }),
-                                          valueType: Aas.DataTypeDefXsd.String,
+                                          semanticId: new Reference(
+                                                                        ReferenceTypes.ExternalReference,
+                                                                        [
+                                                                            new Key(
+                                                                                    KeyTypes.GlobalReference,
+                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentLanguage)
+                                                                        ]),
+                                          valueType: DataTypeDefXsd.String,
                                           value: Language));
         }
 
         if (Revision is not null)
         {
             elements.Add(
-                         new Aas.Property(
-                                          idShort: HandoverDocumentationSemantics.IdShort_DocumentRevision,
+                         new Property(
+                                          idShort: HandoverDocumentationSemantics.IdShortDocumentRevision,
                                           category: null,
-                                          semanticId: new Aas.Reference(
-                                                                        Aas.ReferenceTypes.ExternalReference,
-                                                                        new List<IKey>()
-                                                                        {
-                                                                            new Aas.Key(
-                                                                                        Aas.KeyTypes.GlobalReference,
-                                                                                        HandoverDocumentationSemantics.SemanticId_DocumentRevision)
-                                                                        }),
-                                          valueType: Aas.DataTypeDefXsd.String,
+                                          semanticId: new Reference(
+                                                                        ReferenceTypes.ExternalReference,
+                                                                        [
+                                                                            new Key(
+                                                                                    KeyTypes.GlobalReference,
+                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentRevision)
+                                                                        ]),
+                                          valueType: DataTypeDefXsd.String,
                                           value: Revision));
         }
 
         if (Date.HasValue)
         {
             elements.Add(
-                         new Aas.Property(
-                                          idShort: HandoverDocumentationSemantics.IdShort_DocumentDate,
+                         new Property(
+                                          idShort: HandoverDocumentationSemantics.IdShortDocumentDate,
                                           category: null,
-                                          semanticId: new Aas.Reference(
-                                                                        Aas.ReferenceTypes.ExternalReference,
-                                                                        new List<IKey>()
-                                                                        {
-                                                                            new Aas.Key(
-                                                                                        Aas.KeyTypes.GlobalReference,
-                                                                                        HandoverDocumentationSemantics.SemanticId_DocumentDate)
-                                                                        }),
-                                          valueType: Aas.DataTypeDefXsd.DateTime,
+                                          semanticId: new Reference(
+                                                                        ReferenceTypes.ExternalReference,
+                                                                        [
+                                                                            new Key(
+                                                                                    KeyTypes.GlobalReference,
+                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentDate)
+                                                                        ]),
+                                          valueType: DataTypeDefXsd.DateTime,
                                           value: Date.Value.UtcDateTime.ToString("o")));
         }
 
-        foreach (var file in Files)
-        {
-            elements.Add(file.ToFileElement());
-        }
+        elements.AddRange(Files.Select(file => file.ToFileElement()));
 
-        return new Aas.SubmodelElementCollection(
-                                                 idShort: HandoverDocumentationSemantics.IdShort_DocumentCollection,
-                                                 category: null,
-                                                 description: null,
-                                                 semanticId: new Aas.Reference(
-                                                                               Aas.ReferenceTypes.ExternalReference,
-                                                                               new List<IKey>()
-                                                                               {
-                                                                                   new Aas.Key(
-                                                                                               Aas.KeyTypes.GlobalReference,
-                                                                                               HandoverDocumentationSemantics.SemanticId_Document)
-                                                                               }),
-                                                 value: new List<ISubmodelElement>(elements.ToArray()));
+        return new SubmodelElementCollection(
+                                             idShort: HandoverDocumentationSemantics.IdShortDocumentCollection,
+                                             category: null,
+                                             description: null,
+                                             semanticId: new Reference(
+                                                                       ReferenceTypes.ExternalReference,
+                                                                       [
+                                                                           new Key(
+                                                                                   KeyTypes.GlobalReference,
+                                                                                   HandoverDocumentationSemantics.SemanticIdDocument)
+                                                                       ]),
+                                             value: [..elements.ToArray()]);
     }
 }

@@ -1,7 +1,4 @@
-using System;
-using FluentAAS.Templates.HandoverDocumentation;
-
-namespace FluentAAS.Core.HandoverDocumentation;
+namespace FluentAAS.Templates.HandoverDocumentation;
 
 public static class HandoverDocumentationBuilderExtensions
 {
@@ -47,5 +44,5 @@ public static class HandoverDocumentationBuilderExtensions
 /// </summary>
 public interface ISubmodelCollector
 {
-    void AddSubmodel(AasCore.Aas3_0.Submodel submodel);
+    void AddSubmodel(Submodel submodel);
 }

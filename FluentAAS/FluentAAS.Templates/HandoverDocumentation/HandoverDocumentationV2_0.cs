@@ -8,9 +8,9 @@ public sealed class HandoverDocumentationV20
     /// <summary>
     /// Underlying AAS submodel instance.
     /// </summary>
-    public Aas.Submodel Submodel { get; }
+    public Submodel Submodel { get; }
 
-    internal HandoverDocumentationV20(Aas.Submodel submodel)
+    internal HandoverDocumentationV20(Submodel submodel)
     {
         Submodel = submodel;
     }

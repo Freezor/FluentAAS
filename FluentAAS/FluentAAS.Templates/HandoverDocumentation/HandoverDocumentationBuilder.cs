@@ -1,5 +1,3 @@
-using FluentAAS.Core.HandoverDocumentation;
-
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 /// <summary>
@@ -9,7 +7,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
 {
     private readonly string _id;
     private readonly string? _idShort;
-    private readonly List<HandoverDocument> _documents = new();
+    private readonly List<HandoverDocument> _documents = [];
 
     private string? _category;
     private string? _descriptionLanguage;
@@ -72,38 +70,33 @@ public sealed class HandoverDocumentationSubmodelBuilder
     {
         Validate();
 
-        var semanticId = new Aas.Reference(
-            Aas.ReferenceTypes.ExternalReference,
-            [new Aas.Key(Aas.KeyTypes.GlobalReference, HandoverDocumentationSemantics.SubmodelSemanticId)]);
+        var semanticId = new Reference(
+            ReferenceTypes.ExternalReference,
+            [new Key(KeyTypes.GlobalReference, HandoverDocumentationSemantics.SubmodelSemanticId)]);
 
-        List<ILangStringTextType>? description = _descriptionText is not null && _descriptionLanguage is not null
-                                                     ?
-                                                     [
-                                                         new LangStringTextType(_descriptionLanguage, _descriptionText)
-                                                     ]
-                                                     : [];
+        List<ILangStringTextType> description = _descriptionText is not null && _descriptionLanguage is not null
+                                                    ?
+                                                    [
+                                                        new LangStringTextType(_descriptionLanguage, _descriptionText)
+                                                    ]
+                                                    : [];
 
-        var submodelElements = new List<Aas.ISubmodelElement>();
+        var submodelElements = new List<ISubmodelElement>();
 
         // Documents collection
-        var documentCollections = new List<Aas.ISubmodelElement>();
-        foreach (var doc in _documents)
-        {
-            documentCollections.Add(doc.ToSubmodelElementCollection());
-        }
 
-        var documentsCollection = new Aas.SubmodelElementCollection(
-            idShort: HandoverDocumentationSemantics.IdShort_Documents,
-            category: null,
-            description: null,
-            semanticId: new Aas.Reference(
-                ReferenceTypes.ExternalReference,
-                [
-                    new Aas.Key(
-                                Aas.KeyTypes.GlobalReference,
-                                HandoverDocumentationSemantics.SemanticId_Documents)
-                ]),
-            value: [..documentCollections.ToArray()]);
+        var documentsCollection = new SubmodelElementCollection(
+                                                                    idShort: HandoverDocumentationSemantics.IdShortDocuments,
+                                                                    category: null,
+                                                                    description: null,
+                                                                    semanticId: new Reference(
+                                                                                                  ReferenceTypes.ExternalReference,
+                                                                                                  [
+                                                                                                      new Key(
+                                                                                                                  KeyTypes.GlobalReference,
+                                                                                                                  HandoverDocumentationSemantics.SemanticIdDocuments)
+                                                                                                  ]),
+                                                                    value: [.._documents.Select(doc => doc.ToSubmodelElementCollection()).Cast<ISubmodelElement>().ToArray()]);
 
         submodelElements.Add(documentsCollection);
 
@@ -113,7 +106,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
             category: _category,
             description: description,
             semanticId: semanticId,
-            kind: Aas.ModellingKind.Instance,
+            kind: ModellingKind.Instance,
             qualifiers: null,
             administration: null,
             submodelElements: [..submodelElements.ToArray()]);
@@ -128,8 +121,5 @@ public sealed class HandoverDocumentationSubmodelBuilder
             throw new InvalidOperationException(
                 "Handover Documentation submodel must contain at least one document.");
         }
-
-        // Additional template-level validation rules can go here.
-        // For example, check uniqueness of DocumentId, etc.
     }
 }

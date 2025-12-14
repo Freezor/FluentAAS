@@ -5,21 +5,20 @@ namespace FluentAAS.Templates.HandoverDocumentation;
 /// </summary>
 public sealed class HandoverDocumentFile
 {
-    public string FileName { get; set; } = string.Empty;
-    public string MimeType { get; set; } = "application/octet-stream";
-    public string Path     { get; set; } = string.Empty;
+    public string MimeType { get; init; } = "application/octet-stream";
+    public string Path     { get; init; } = string.Empty;
 
     internal Aas.File ToFileElement()
     {
         return new Aas.File(
-                            idShort: HandoverDocumentationSemantics.IdShort_DocumentFile,
+                            idShort: HandoverDocumentationSemantics.IdShortDocumentFile,
                             category: null,
-                            semanticId: new Aas.Reference(
-                                                          Aas.ReferenceTypes.ExternalReference,
+                            semanticId: new Reference(
+                                                          ReferenceTypes.ExternalReference,
                                                           [
-                                                              new Aas.Key(
-                                                                          Aas.KeyTypes.GlobalReference,
-                                                                          HandoverDocumentationSemantics.SemanticId_DocumentFile)
+                                                              new Key(
+                                                                          KeyTypes.GlobalReference,
+                                                                          HandoverDocumentationSemantics.SemanticIdDocumentFile)
                                                           ]),
                             contentType: MimeType,
                             value: Path);
