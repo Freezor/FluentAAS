@@ -74,17 +74,14 @@ public sealed class HandoverDocumentationSubmodelBuilder
 
         var semanticId = new Aas.Reference(
             Aas.ReferenceTypes.ExternalReference,
-            new[]
-            {
-                new Aas.Key(Aas.KeyTypes.GlobalReference, SubmodelSemanticId)
-            });
+            [new Aas.Key(Aas.KeyTypes.GlobalReference, HandoverDocumentationSemantics.SubmodelSemanticId)]);
 
-        var description = _descriptionText is not null && _descriptionLanguage is not null
-            ? new[]
-            {
-                new Aas.LangStringTextType(_descriptionLanguage, _descriptionText)
-            }
-            : Array.Empty<Aas.LangStringTextType>();
+        List<ILangStringTextType>? description = _descriptionText is not null && _descriptionLanguage is not null
+                                                     ?
+                                                     [
+                                                         new LangStringTextType(_descriptionLanguage, _descriptionText)
+                                                     ]
+                                                     : [];
 
         var submodelElements = new List<Aas.ISubmodelElement>();
 
@@ -96,23 +93,21 @@ public sealed class HandoverDocumentationSubmodelBuilder
         }
 
         var documentsCollection = new Aas.SubmodelElementCollection(
-            idShort: IdShort_Documents,
+            idShort: HandoverDocumentationSemantics.IdShort_Documents,
             category: null,
             description: null,
-            kind: null,
             semanticId: new Aas.Reference(
-                Aas.ReferenceTypes.ExternalReference,
-                new[]
-                {
+                ReferenceTypes.ExternalReference,
+                [
                     new Aas.Key(
-                        Aas.KeyTypes.GlobalReference,
-                        SemanticId_Documents)
-                }),
-            value: documentCollections.ToArray());
+                                Aas.KeyTypes.GlobalReference,
+                                HandoverDocumentationSemantics.SemanticId_Documents)
+                ]),
+            value: [..documentCollections.ToArray()]);
 
         submodelElements.Add(documentsCollection);
 
-        var submodel = new Aas.Submodel(
+        var submodel = new Submodel(
             id: _id,
             idShort: _idShort,
             category: _category,
@@ -121,7 +116,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
             kind: Aas.ModellingKind.Instance,
             qualifiers: null,
             administration: null,
-            submodelElements: submodelElements.ToArray());
+            submodelElements: [..submodelElements.ToArray()]);
 
         return new HandoverDocumentationV20(submodel);
     }
