@@ -16,14 +16,9 @@
         <RepositoryUrl>hhttps://github.com/Freezor/FluentAAS.git</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryType>git</RepositoryType>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AasCore.Aas3.Package" Version="1.0.2"/>
