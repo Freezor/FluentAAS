@@ -11,8 +11,7 @@ public static class HandoverDocumentationSemantics
     /// <summary>
     /// Submodel semantic ID for "Handover Documentation" (IDTA 02004-2-0).
     /// </summary>
-    public const string SubmodelSemanticId =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation"; // TODO: verify with spec
+    public const string SubmodelSemanticId = "0173-1#01-AHF578#003";
 
     // === Root element idShorts =================================================
 
@@ -36,29 +35,19 @@ public static class HandoverDocumentationSemantics
     // === Semantic IDs (examples; fill from template PDF) =======================
 
     public const string SemanticIdDocuments =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:Documents";
+        "0173-1#02-ABI500#003";
     public const string SemanticIdDocument =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:Document";
+        "0173-1#02-ABI501#003";
     public const string SemanticIdDocumentId =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:DocumentId";
+        "0173-1#02-ABI501#003/0173-1#01-AHF580#003";
     public const string SemanticIdDocumentTitle =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:Title";
+        "0173-1#02-ABG940#003";
     public const string SemanticIdDocumentDescription =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:Description";
-    public const string SemanticIdDocumentLifecycleStage =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:LifecycleStage";
+        "0173-1#02-AAN466#004";
     public const string SemanticIdDocumentClass =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:DocumentClass";
-    public const string SemanticIdDocumentFormat =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:DocumentFormat";
+        "0173-1#02-ABI502#003/0173-1#01-AHF581#003";
     public const string SemanticIdDocumentLanguage =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:Language";
-    public const string SemanticIdDocumentRevision =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:Revision";
-    public const string SemanticIdDocumentDate =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:Date";
-    public const string SemanticIdDocumentFile =
-        "urn:idta:02004:2:0:submodel:HandoverDocumentation:File";
+        "0173-1#02-ABI500#003";
 
     // === Enums =================================================================
 

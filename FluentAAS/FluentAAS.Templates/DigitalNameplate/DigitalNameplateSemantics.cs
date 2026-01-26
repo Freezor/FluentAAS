@@ -7,6 +7,11 @@ namespace FluentAAS.Templates.DigitalNameplate;
 public static class DigitalNameplateSemantics
 {
     /// <summary>
+    /// Submodel semantic ID for "Digital Nameplate".
+    /// </summary>
+    public const string SubmodelSemanticId = "0112/2///61987#ABN590#002";
+    
+    /// <summary>
     /// Semantic identifier for the Digital Nameplate submodel itself.
     /// </summary>
     public const string SubmodelDigitalNameplate =
