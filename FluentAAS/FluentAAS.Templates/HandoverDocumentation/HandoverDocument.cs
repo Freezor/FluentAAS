@@ -5,189 +5,113 @@ namespace FluentAAS.Templates.HandoverDocumentation;
 /// </summary>
 public sealed class HandoverDocument
 {
-    public string?                                                DocumentId     { get; set; }
-    public string?                                                Title          { get; set; }
-    public string?                                                Description    { get; set; }
-    public HandoverDocumentationSemantics.HandoverLifecycleStage? LifecycleStage { get; set; }
-    public HandoverDocumentationSemantics.HandoverDocumentClass?  DocumentClass  { get; set; }
-    public HandoverDocumentationSemantics.HandoverDocumentFormat? Format         { get; set; }
-    public string?                                                Language       { get; set; }
-    public string?                                                Revision       { get; set; }
-    public DateTimeOffset?                                        Date           { get; set; }
+    public List<HandoverDocumentId>             DocumentIds             { get; } = new();
+    public List<HandoverDocumentClassification> DocumentClassifications { get; } = new();
+    public List<HandoverDocumentVersion>        DocumentVersions        { get; } = new();
 
-    /// <summary>
-    /// File entries attached to the document (at least one is usually required by the template).
-    /// </summary>
-    public List<HandoverDocumentFile> Files { get; } = [];
+    // Optional: DocumentedEntities (not implemented here as typed items; keep future extension point)
+    // public List<ReferenceElement> DocumentedEntities { get; } = new();
 
-    internal SubmodelElementCollection ToSubmodelElementCollection()
+    internal SubmodelElementCollection ToDocumentCollection()
     {
-        var elements = new List<ISubmodelElement>();
-
-        if (DocumentId is not null)
-        {
-            elements.Add(
-                         new Property(
-                                      idShort: HandoverDocumentationSemantics.IdShortDocumentId,
-                                      category: null,
-                                      semanticId: new Reference(
-                                                                    ReferenceTypes.ExternalReference,
-                                                                    [
-                                                                        new Key(
-                                                                                KeyTypes.GlobalReference,
-                                                                                HandoverDocumentationSemantics.SemanticIdDocumentId)
-                                                                    ]),
-                                      valueType: DataTypeDefXsd.String,
-                                      value: DocumentId));
-        }
-
-        if (Title is not null)
-        {
-            elements.Add(
-                         new MultiLanguageProperty(
-                                                       idShort: HandoverDocumentationSemantics.IdShortDocumentTitle,
-                                                       category: null,
-                                                       semanticId: new Reference(
-                                                                                     ReferenceTypes.ExternalReference,
-                                                                                     [
-                                                                                         new Key(
-                                                                                                 KeyTypes.GlobalReference,
-                                                                                                 HandoverDocumentationSemantics.SemanticIdDocumentTitle)
-                                                                                     ]),
-                                                       value: [new LangStringTextType(Language ?? "en", Title)]));
-        }
-
-        if (Description is not null)
-        {
-            elements.Add(
-                         new MultiLanguageProperty(
-                                                       idShort: HandoverDocumentationSemantics.IdShortDocumentDescription,
-                                                       category: null,
-                                                       semanticId: new Reference(
-                                                                                     ReferenceTypes.ExternalReference,
-                                                                                     [
-                                                                                         new Key(
-                                                                                                 KeyTypes.GlobalReference,
-                                                                                                 HandoverDocumentationSemantics.SemanticIdDocumentDescription)
-                                                                                     ]),
-                                                       value: [new LangStringTextType(Language ?? "en", Description)]));
-        }
-
-        if (LifecycleStage.HasValue)
-        {
-            elements.Add(
-                         new Property(
-                                          idShort: HandoverDocumentationSemantics.IdShortDocumentLifecycleStage,
-                                          category: null,
-                                          semanticId: new Reference(
-                                                                        ReferenceTypes.ExternalReference,
-                                                                        [
-                                                                            new Key(
-                                                                                    KeyTypes.GlobalReference,
-                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentLifecycleStage)
-                                                                        ]),
-                                          valueType: DataTypeDefXsd.String,
-                                          value: LifecycleStage.Value.ToString()));
-        }
-
-        if (DocumentClass.HasValue)
-        {
-            elements.Add(
-                         new Property(
-                                          idShort: HandoverDocumentationSemantics.IdShortDocumentClass,
-                                          category: null,
-                                          semanticId: new Reference(
-                                                                        ReferenceTypes.ExternalReference,
-                                                                        [
-                                                                            new Key(
-                                                                                    KeyTypes.GlobalReference,
-                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentClass)
-                                                                        ]),
-                                          valueType: DataTypeDefXsd.String,
-                                          value: DocumentClass.Value.ToString()));
-        }
-
-        if (Format.HasValue)
-        {
-            elements.Add(
-                         new Property(
-                                          idShort: HandoverDocumentationSemantics.IdShortDocumentFormat,
-                                          category: null,
-                                          semanticId: new Reference(
-                                                                        ReferenceTypes.ExternalReference,
-                                                                        [
-                                                                            new Key(
-                                                                                    KeyTypes.GlobalReference,
-                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentFormat)
-                                                                        ]),
-                                          valueType: DataTypeDefXsd.String,
-                                          value: Format.Value.ToString()));
-        }
-
-        if (Language is not null)
-        {
-            elements.Add(
-                         new Property(
-                                          idShort: HandoverDocumentationSemantics.IdShortDocumentLanguage,
-                                          category: null,
-                                          semanticId: new Reference(
-                                                                        ReferenceTypes.ExternalReference,
-                                                                        [
-                                                                            new Key(
-                                                                                    KeyTypes.GlobalReference,
-                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentLanguage)
-                                                                        ]),
-                                          valueType: DataTypeDefXsd.String,
-                                          value: Language));
-        }
-
-        if (Revision is not null)
-        {
-            elements.Add(
-                         new Property(
-                                          idShort: HandoverDocumentationSemantics.IdShortDocumentRevision,
-                                          category: null,
-                                          semanticId: new Reference(
-                                                                        ReferenceTypes.ExternalReference,
-                                                                        [
-                                                                            new Key(
-                                                                                    KeyTypes.GlobalReference,
-                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentRevision)
-                                                                        ]),
-                                          valueType: DataTypeDefXsd.String,
-                                          value: Revision));
-        }
-
-        if (Date.HasValue)
-        {
-            elements.Add(
-                         new Property(
-                                          idShort: HandoverDocumentationSemantics.IdShortDocumentDate,
-                                          category: null,
-                                          semanticId: new Reference(
-                                                                        ReferenceTypes.ExternalReference,
-                                                                        [
-                                                                            new Key(
-                                                                                    KeyTypes.GlobalReference,
-                                                                                    HandoverDocumentationSemantics.SemanticIdDocumentDate)
-                                                                        ]),
-                                          valueType: DataTypeDefXsd.DateTime,
-                                          value: Date.Value.UtcDateTime.ToString("o")));
-        }
-
-        elements.AddRange(Files.Select(file => file.ToFileElement()));
+        var children = new List<ISubmodelElement>
+                       {
+                           ToDocumentIdsList(),
+                           ToDocumentClassificationsList(),
+                           ToDocumentVersionsList(),
+                       };
 
         return new SubmodelElementCollection(
-                                             idShort: HandoverDocumentationSemantics.IdShortDocumentCollection,
+                                             idShort: "Document", // Note: list element idShort is "Document" in many templates; keep stable.
                                              category: null,
                                              description: null,
-                                             semanticId: new Reference(
-                                                                       ReferenceTypes.ExternalReference,
-                                                                       [
-                                                                           new Key(
-                                                                                   KeyTypes.GlobalReference,
-                                                                                   HandoverDocumentationSemantics.SemanticIdDocument)
-                                                                       ]),
-                                             value: [..elements.ToArray()]);
+                                             semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocument),
+                                             value: children.ToArray()
+                                            );
+    }
+
+    internal void ValidateTemplateRequirements()
+    {
+        if (DocumentIds.Count < 1)
+            throw new InvalidOperationException("Each Document must contain at least one DocumentId (DocumentIds list).");
+
+        if (DocumentClassifications.Count < 1)
+            throw new InvalidOperationException("Each Document must contain at least one DocumentClassification (DocumentClassifications list).");
+
+        if (DocumentVersions.Count < 1)
+            throw new InvalidOperationException("Each Document must contain at least one DocumentVersion (DocumentVersions list).");
+
+        // Enforce: VDI 2770 Blatt 1:2020 classification is mandatory
+        if (!DocumentClassifications.Any(c => string.Equals(c.ClassificationSystem, HandoverDocumentationSemantics.Vdi2770ClassificationSystemName, StringComparison.Ordinal)))
+        {
+            throw new InvalidOperationException(
+                                                $"Each Document must include a classification with ClassificationSystem='{HandoverDocumentationSemantics.Vdi2770ClassificationSystemName}'.");
+        }
+
+        foreach (var v in DocumentVersions)
+            v.ValidateTemplateRequirements();
+    }
+
+    private SubmodelElementList ToDocumentIdsList()
+    {
+        return NewList(
+                       idShort: HandoverDocumentationSemantics.IdShortDocumentIds,
+                       semanticId: HandoverDocumentationSemantics.SemanticIdDocumentIds,
+                       listElementSemanticId: HandoverDocumentationSemantics.SemanticIdDocumentId,
+                       value: DocumentIds.Select(d => d.ToCollection()).Cast<ISubmodelElement>().ToList(),
+                       orderRelevant: false,
+                       typeValueListElement: AasSubmodelElements.SubmodelElementCollection
+                      );
+    }
+
+    private SubmodelElementList ToDocumentClassificationsList()
+    {
+        return NewList(
+                       idShort: HandoverDocumentationSemantics.IdShortDocumentClassifications,
+                       semanticId: HandoverDocumentationSemantics.SemanticIdDocumentClassifications,
+                       listElementSemanticId: HandoverDocumentationSemantics.SemanticIdDocumentClassification,
+                       value: DocumentClassifications.Select(c => c.ToCollection()).Cast<ISubmodelElement>().ToList(),
+                       orderRelevant: false,
+                       typeValueListElement: AasSubmodelElements.SubmodelElementCollection
+                      );
+    }
+
+    private SubmodelElementList ToDocumentVersionsList()
+    {
+        return NewList(
+                       idShort: HandoverDocumentationSemantics.IdShortDocumentVersions,
+                       semanticId: HandoverDocumentationSemantics.SemanticIdDocumentVersions,
+                       listElementSemanticId: HandoverDocumentationSemantics.SemanticIdDocumentVersion,
+                       value: DocumentVersions.Select(v => v.ToCollection()).Cast<ISubmodelElement>().ToList(),
+                       orderRelevant: false,
+                       typeValueListElement: AasSubmodelElements.SubmodelElementCollection
+                      );
+    }
+
+    // Helpers
+    private static Reference Ref(string semanticId) =>
+        new Reference(ReferenceTypes.ExternalReference, new[] {new Key(KeyTypes.GlobalReference, semanticId)});
+
+    private static SubmodelElementList NewList(
+        string                 idShort,
+        string                 semanticId,
+        string                 listElementSemanticId,
+        List<ISubmodelElement> value,
+        bool                   orderRelevant,
+        AasSubmodelElements    typeValueListElement)
+    {
+        var list = new SubmodelElementList(
+                                           idShort: idShort,
+                                           category: null,
+                                           description: null,
+                                           semanticId: Ref(semanticId),
+                                           value: value.ToArray()
+                                          );
+
+        list.OrderRelevant         = orderRelevant;
+        list.SemanticIdListElement = Ref(listElementSemanticId);
+        list.TypeValueListElement  = typeValueListElement;
+
+        return list;
     }
 }

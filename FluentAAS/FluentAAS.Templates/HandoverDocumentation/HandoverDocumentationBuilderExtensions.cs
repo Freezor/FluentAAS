@@ -19,8 +19,8 @@ public static class HandoverDocumentationBuilderExtensions
     /// </code>
     /// </summary>
     public static TRootBuilder AddHandoverDocumentation<TRootBuilder>(
-        this TRootBuilder rootBuilder,
-        string submodelId,
+        this TRootBuilder                            rootBuilder,
+        string                                       submodelId,
         Action<HandoverDocumentationSubmodelBuilder> configureSubmodel)
         where TRootBuilder : ISubmodelCollector
     {
@@ -31,18 +31,8 @@ public static class HandoverDocumentationBuilderExtensions
         configureSubmodel(smBuilder);
 
         var typedSubmodel = smBuilder.Build();
-
         rootBuilder.AddSubmodel(typedSubmodel.Submodel);
 
         return rootBuilder;
     }
-}
-
-/// <summary>
-/// Contract for root builders that can collect submodels.
-/// Adjust to match your actual root builder abstraction.
-/// </summary>
-public interface ISubmodelCollector
-{
-    void AddSubmodel(Submodel submodel);
 }
