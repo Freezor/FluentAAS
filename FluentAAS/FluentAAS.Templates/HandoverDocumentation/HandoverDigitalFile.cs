@@ -26,5 +26,5 @@ public class HandoverDigitalFile
     }
 
     private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, new[] {new Key(KeyTypes.GlobalReference, semanticId)});
+        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
 }

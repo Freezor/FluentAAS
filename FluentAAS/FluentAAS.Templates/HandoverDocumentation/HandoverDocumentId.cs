@@ -44,7 +44,7 @@ public class HandoverDocumentId
                                              category: null,
                                              description: null,
                                              semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentId),
-                                             value: elements.ToArray()
+                                             value: [..elements.ToArray()]
                                             );
     }
 
@@ -58,5 +58,5 @@ public class HandoverDocumentId
     }
 
     private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, new[] {new Key(KeyTypes.GlobalReference, semanticId)});
+        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
 }

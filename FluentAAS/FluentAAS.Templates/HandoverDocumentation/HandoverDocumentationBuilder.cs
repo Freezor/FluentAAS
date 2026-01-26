@@ -6,15 +6,15 @@ namespace FluentAAS.Templates.HandoverDocumentation;
 public sealed class HandoverDocumentationSubmodelBuilder
 {
     private readonly string _id;
-    private          string _idShort = HandoverDocumentationSemantics.SubmodelIdShort;
+    private readonly string _idShort = HandoverDocumentationSemantics.SubmodelIdShort;
 
     private          string?                  _category;
-    private readonly List<LangStringTextType> _description = new();
+    private readonly List<LangStringTextType> _description = [];
 
-    private readonly List<HandoverDocument> _documents = new();
+    private readonly List<HandoverDocument> _documents = [];
 
     // Optional root list (Entities)
-    private readonly List<IReferable> _entities = new(); // Placeholder type. Replace with your entity type if you model it.
+    private readonly List<IReferable> _entities = []; // Placeholder type. Replace with your entity type if you model it.
 
     public HandoverDocumentationSubmodelBuilder(string id, string? idShort = null)
     {
@@ -113,11 +113,8 @@ public sealed class HandoverDocumentationSubmodelBuilder
             doc.ValidateTemplateRequirements();
     }
 
-    // -------------------------
-    // Helpers
-    // -------------------------
     private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, new[] {new Key(KeyTypes.GlobalReference, semanticId)});
+        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
 
     private static SubmodelElementList NewList(
         string                 idShort,

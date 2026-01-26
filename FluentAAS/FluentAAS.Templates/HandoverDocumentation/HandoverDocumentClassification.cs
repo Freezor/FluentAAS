@@ -22,7 +22,7 @@ public class HandoverDocumentClassification
                                                      idShort: HandoverDocumentationSemantics.IdShortClassName,
                                                      category: null,
                                                      semanticId: Ref(HandoverDocumentationSemantics.SemanticIdClassName),
-                                                     value: new[] {new LangStringTextType(ClassNameLanguage, ClassName)}
+                                                     value: [new LangStringTextType(ClassNameLanguage, ClassName)]
                                                     ),
                            new Property(
                                         idShort: HandoverDocumentationSemantics.IdShortClassificationSystem,
@@ -38,7 +38,7 @@ public class HandoverDocumentClassification
                                              category: null,
                                              description: null,
                                              semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentClassification),
-                                             value: elements.ToArray()
+                                             value: [..elements.ToArray()]
                                             );
     }
 
@@ -55,5 +55,5 @@ public class HandoverDocumentClassification
     }
 
     private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, new[] {new Key(KeyTypes.GlobalReference, semanticId)});
+        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
 }

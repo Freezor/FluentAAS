@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 public class HandoverDocumentVersion
@@ -41,13 +43,13 @@ public class HandoverDocumentVersion
                                                      idShort: HandoverDocumentationSemantics.IdShortTitle,
                                                      category: null,
                                                      semanticId: Ref(HandoverDocumentationSemantics.SemanticIdTitle),
-                                                     value: new[] {new LangStringTextType(TitleLanguage, Title)}
+                                                     value: new List<ILangStringTextType>([new LangStringTextType(TitleLanguage, Title)])
                                                     ),
                            new MultiLanguageProperty(
                                                      idShort: HandoverDocumentationSemantics.IdShortDescription,
                                                      category: null,
                                                      semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDescription),
-                                                     value: new[] {new LangStringTextType(DescriptionLanguage, Description)}
+                                                     value: new List<ILangStringTextType>([new LangStringTextType(DescriptionLanguage, Description)])
                                                     ),
                            new Property(
                                         idShort: HandoverDocumentationSemantics.IdShortStatusSetDate,
@@ -87,7 +89,7 @@ public class HandoverDocumentVersion
                                                    idShort: HandoverDocumentationSemantics.IdShortSubtitle,
                                                    category: null,
                                                    semanticId: Ref(HandoverDocumentationSemantics.SemanticIdSubtitle),
-                                                   value: new[] {new LangStringTextType(SubtitleLanguage ?? TitleLanguage, Subtitle!)}
+                                                   value: [new LangStringTextType(SubtitleLanguage ?? TitleLanguage, Subtitle!)]
                                                   )
                         );
         }
@@ -100,7 +102,7 @@ public class HandoverDocumentVersion
                                                    idShort: HandoverDocumentationSemantics.IdShortKeyWords,
                                                    category: null,
                                                    semanticId: Ref(HandoverDocumentationSemantics.SemanticIdKeyWords),
-                                                   value: KeyWords.Select(k => new LangStringTextType(k.Language, k.Keyword)).ToArray()
+                                                   value: [..KeyWords.Select(k => new LangStringTextType(k.Language, k.Keyword)).ToArray()]
                                                   )
                         );
         }
@@ -118,7 +120,7 @@ public class HandoverDocumentVersion
                                              category: null,
                                              description: null,
                                              semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentVersion),
-                                             value: elements.ToArray()
+                                             value: [..elements.ToArray()]
                                             );
     }
 
@@ -175,7 +177,7 @@ public class HandoverDocumentVersion
 
         list.OrderRelevant = false;
         // For list-of-primitive-properties, some SDKs allow semanticIdListElement. If yours requires it, set it.
-        // list.SemanticIdListElement = Ref(...); // Not specified as a separate semanticId in the PDF; keep null.
+        // list.SemanticIdListElement = ToSemanticReference(...); // Not specified as a separate semanticId in the PDF; keep null.
         list.TypeValueListElement = AasSubmodelElements.Property;
 
         return list;
@@ -184,7 +186,7 @@ public class HandoverDocumentVersion
     private SubmodelElementList ToDigitalFilesList()
     {
         var fileElements = DigitalFiles
-                           .Select(f => (ISubmodelElement) f.ToFileElement(
+                           .Select(ISubmodelElement (f) => f.ToFileElement(
                                                                            idShort: HandoverDocumentationSemantics.IdShortDigitalFiles + "_File",
                                                                            semanticId: null // list handles semanticIdListElement if your SDK supports it
                                                                           ))
@@ -208,5 +210,5 @@ public class HandoverDocumentVersion
     }
 
     private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, new[] {new Key(KeyTypes.GlobalReference, semanticId)});
+        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
 }

@@ -1,3 +1,5 @@
+using FluentAAS.Core;
+
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 /// <summary>
@@ -26,7 +28,7 @@ public sealed class HandoverDocument
                                              category: null,
                                              description: null,
                                              semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocument),
-                                             value: children.ToArray()
+                                             value: [..children.ToArray()]
                                             );
     }
 
@@ -90,7 +92,7 @@ public sealed class HandoverDocument
 
     // Helpers
     private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, new[] {new Key(KeyTypes.GlobalReference, semanticId)});
+        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
 
     private static SubmodelElementList NewList(
         string                 idShort,
@@ -100,13 +102,13 @@ public sealed class HandoverDocument
         bool                   orderRelevant,
         AasSubmodelElements    typeValueListElement)
     {
-        var list = new SubmodelElementList(
-                                           idShort: idShort,
-                                           category: null,
-                                           description: null,
-                                           semanticId: Ref(semanticId),
-                                           value: value.ToArray()
-                                          );
+        var list =  new SubmodelElementList(
+                                                idShort: idShort,
+                                                category: null,
+                                                description: null,
+                                                semanticId: semanticId.ToSemanticReference(),
+                                                value: value
+                                               );
 
         list.OrderRelevant         = orderRelevant;
         list.SemanticIdListElement = Ref(listElementSemanticId);
