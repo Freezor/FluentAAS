@@ -1,172 +1,241 @@
-# FluentAAS – Fluent C# Library for the Asset Administration Shell (AAS)
+# FluentAAS – Fluent C# Library for the Asset Administration Shell
 
-**License:** MIT  
-**NuGet:** _coming soon_  
-**Status:** Active development  
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/FluentAAS.Builder.svg)](https://www.nuget.org/packages/FluentAAS.Builder/)
+[![Downloads](https://img.shields.io/nuget/dt/FluentAAS.Builder.svg)](https://www.nuget.org/packages/FluentAAS.Builder/)
+[![.NET](https://img.shields.io/badge/.NET-9.0%2B-512BD4)]()
 
-FluentAAS is a modular **Fluent API** for creating, validating, serializing, and packaging **Asset Administration Shell (AAS 3.0)** models in C#.  
-It serves as a developer-friendly abstraction over the official AAS Core meta-model, enabling both flexible generic modeling *and* highly structured, specification-compliant **supported submodel templates**.
+Building AAS models in C# shouldn't require reading 500 pages of specs first.
 
----
-
-# Key Features
-
-### Fluent Builder API  
-Create Asset Administration Shells, Submodels, and Submodel Elements using a clean, expressive DSL.
-
-### Immutable AAS Model  
-All AAS graph elements are immutable C# records, ideal for TDD and snapshot tests.
-
-### Full AAS Validation  
-Includes a standalone `IValidationService` with detailed validation reports.
-
-### JSON / AASX Serialization  
-Serialize and deserialize environments using `FluentAAS.IO`.
-
-### Supported Submodel Templates  
-Includes prebuilt builders for frequently used AAS Submodels such as:
-
-- **Digital Nameplate V2_0**  
-- …more templates coming soon
-
-These templates ensure developers produce specification-compliant submodels with minimal effort.
-
----
-
-# 📦 Project Structure
-
-| Package                  | Responsibility                                        |
-|--------------------------|-------------------------------------------------------|
-| **FluentAAS.Core**       | Immutable AAS meta-model types                        |
-| **FluentAAS.Builder**    | Fluent builders for AAS entities + submodel templates |
-| **FluentAAS.Validation** | Rule-based meta-model validation                      |
-| **FluentAAS.IO**         | JSON + AASX serialization/deserialization helpers     |
-
----
-
-# Getting Started
-
-## Installation
-
-```bash
-dotnet add package FluentAAS
-````
-
-(If not yet available, clone the repository and reference the projects directly.)
-
----
-
-# How to Build AAS Models with FluentAAS
-
-FluentAAS offers **two different ways** to build submodels:
-
----
-
-# 1. Using Supported Submodel Templates
-
-*(Recommended when your submodel is covered by an official spec)*
-
-These builders:
-
-* enforce required fields
-* automatically apply semantic IDs
-* ensure correct AAS element hierarchy
-* dramatically reduce boilerplate
-
-### Example: Building a Digital Nameplate Submodel (V2.0)
-
-Based on your integration test:
+FluentAAS gives you a fluent API that feels like writing normal C# code – while handling the complexity of AAS 3.0 compliance under the hood.
 
 ```csharp
 var environment = AasBuilder.Create()
-    .AddShell("urn:aas:example:my-shell", "MyShell")
-    .WithGlobalAssetId("urn:asset:example:my-asset")
-    .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
-        .WithManufacturerName("de", "Muster AG")
-        .WithManufacturerName("en", "Sample Corp")
-        .WithManufacturerProductDesignation("de", "Super-Antriebseinheit XS")
-        .WithManufacturerProductDesignation("en", "Super Drive Unit XS")
-        .WithSerialNumber("SN-000123")
-        .Build()    // finish the Digital Nameplate
-    .Done()        // return to shell builder
-    .Build();      // finish AAS environment
-```
-
-### Serialize / Deserialize
-
-```csharp
-string json = AasJsonSerializer.ToJson(environment);
-var env2 = AasJsonSerializer.FromJson(json);
-```
-
-### Export to AASX
-
-```csharp
-environment.ToAasx("./example.aasx", "/aas/env.json");
-```
-
-This is the **easiest and safest** way to build complex spec-conformant submodels.
-
----
-
-# 2. Using the Generic Submodel Builder
-
-*(Recommended when no official FluentAAS template exists yet)*
-
-Use this when creating:
-
-* your own custom submodels
-* unofficial AAS extensions
-* submodels not yet added to `FluentAAS.Templates`
-
-### Example: Creating a Custom Submodel
-
-```csharp
-var environment = AasBuilder.Create()
-    .AddShell("urn:aas:example:my-shell", "MyShell")
-    .WithGlobalAssetId("urn:asset:example:my-asset")
-    .AddSubmodel("urn:aas:example:generic-submodel:1", "GenericSubmodel")
-        .WithSemanticId(new Reference(
-            ReferenceTypes.ExternalReference,
-            [
-                new Key(KeyTypes.Submodel, "urn:aas:example:generic-submodel:semantic-id")
-            ]))
-        .AddMultiLanguageProperty(
-            "GenericMultiLanguageProperty",
-            ls => ls.Add("en", "Example value")
-                    .Add("de", "Beispielwert"))
-        .AddElement("GenericProperty", "example value")
+    .AddShell("urn:aas:my-machine", "CNC-Machine-2000")
+    .WithGlobalAssetId("urn:asset:serial-001")
+    .AddDigitalNameplate("urn:submodel:nameplate")
+        .WithManufacturerName("en", "Acme Manufacturing Ltd.")
+        .WithSerialNumber("SN-2024-00142")
+        .Build()
     .Done()
     .Build();
 ```
 
-This approach gives you **full control**, mirroring the raw AAS 3.0 capabilities.
+That's it. A valid, IDTA-compliant AAS model. Ready to export.
 
 ---
 
-# Supported Submodels vs Generic Submodels
+## The Problem
 
-| Type                                | When to Use                                                         | Advantages                                                 |
-|-------------------------------------|---------------------------------------------------------------------|------------------------------------------------------------|
-| **Supported Submodels (Templates)** | You need official AAS-compliant submodels (e.g., Digital Nameplate) | Automatic semantic IDs, required field checks, cleaner API |
-| **Generic Submodels**               | Custom extensions, early drafts, unsupported specs                  | Total flexibility, full AAS feature surface                |
+If you've ever tried to create AAS models programmatically, you know the pain:
 
-### Philosophy
+- The IDTA specs are hundreds of pages long
+- Most tooling is Java-based (Eclipse BaSyx, AASX Package Explorer)
+- Building JSON/XML structures by hand is error-prone
+- Semantic IDs are easy to get wrong – and you won't know until import fails
 
-FluentAAS lets you:
-
-* **Be productive quickly** when using known AAS submodels
-* **Be fully expressive** when building anything custom
-
-This duality is one of the core design goals of the library.
+I built FluentAAS because I needed something that just works for .NET developers. No ceremony, no boilerplate, no guessing if your model is valid.
 
 ---
 
-# 🤝 Contributing
+## What FluentAAS Does
 
-Pull requests are welcome for:
+**Fluent Builder API**  
+Create shells, submodels, and elements using a clean, chainable syntax. IntelliSense guides you through the API.
 
-* Additional official submodel templates
-* Improved validation rules
-* Useful builder extensions
-* Performance improvements
+**Supported Submodel Templates**  
+Pre-built builders for official IDTA templates (Digital Nameplate, more coming). They enforce required fields and set semantic IDs automatically.
+
+**Immutable Model**  
+All AAS types are C# records. Great for testing, snapshots, and debugging.
+
+**Validation**  
+Catch problems before export. The validation service gives you detailed error reports.
+
+**JSON & AASX Export**  
+Serialize to JSON or package as AASX for import into other tools.
+
+---
+
+## Getting Started
+
+```bash
+dotnet add package FluentAAS
+```
+
+### Basic Example
+
+```csharp
+using FluentAAS;
+
+// Create an AAS environment
+var environment = AasBuilder.Create()
+    .AddShell("urn:aas:example:cnc-machine", "CNC-Mill-2000")
+    .WithGlobalAssetId("urn:asset:example:cnc-001")
+    
+    // Add a Digital Nameplate (IDTA 02006-2-0)
+    .AddDigitalNameplate("urn:submodel:example:nameplate")
+        .WithManufacturerName("en", "Acme Manufacturing Ltd.")
+        .WithManufacturerName("de", "Acme Maschinenbau GmbH")
+        .WithManufacturerProductDesignation("en", "Universal CNC Milling Machine")
+        .WithSerialNumber("SN-2024-00142")
+        .WithYearOfConstruction("2024")
+        .Build()
+    .Done()
+    .Build();
+
+// Export as JSON
+string json = AasJsonSerializer.ToJson(environment);
+
+// Or as AASX package
+environment.ToAasx("./cnc-machine.aasx");
+```
+
+---
+
+## Two Ways to Build Submodels
+
+### 1. Supported Templates (Recommended)
+
+Use these when your submodel matches an official IDTA template. The builder enforces required fields and sets the correct semantic IDs.
+
+```csharp
+.AddDigitalNameplate("urn:submodel:nameplate")
+    .WithManufacturerName("en", "Acme Ltd.")    // required
+    .WithSerialNumber("SN-001")                  // required
+    .WithContactInformation(contact => contact
+        .WithPhone("+49 123 456789")
+        .WithEmail("info@acme.example"))
+    .Build()
+```
+
+**Currently supported:**
+- Digital Nameplate V2.0 (IDTA 02006-2-0)
+
+**Planned:**
+- Handover Documentation
+- Technical Data
+- Digital Product Passport
+
+### 2. Generic Builder
+
+For custom submodels or templates not yet supported:
+
+```csharp
+.AddSubmodel("urn:submodel:custom", "ProductionData")
+    .WithSemanticId(new Reference(
+        ReferenceTypes.ExternalReference,
+        [new Key(KeyTypes.Submodel, "urn:my-company:production-data:1.0")]))
+    .AddProperty("Temperature", "85.5")
+    .AddProperty("SpindleSpeed", "1200")
+    .AddMultiLanguageProperty("Status", ls => ls
+        .Add("en", "Running")
+        .Add("de", "Läuft"))
+    .Build()
+```
+
+You get full control when you need it.
+
+---
+
+## Project Structure
+
+| Package | What it does |
+|---------|--------------|
+| **FluentAAS.Core** | Immutable AAS meta-model types (C# records) |
+| **FluentAAS.Builder** | Fluent builders + submodel templates |
+| **FluentAAS.Validation** | Rule-based validation against AAS 3.0 |
+| **FluentAAS.IO** | JSON serialization, AASX packaging |
+
+---
+
+## Validation
+
+```csharp
+var validator = new AasValidationService();
+var report = validator.Validate(environment);
+
+if (!report.IsValid)
+{
+    foreach (var error in report.Errors)
+    {
+        Console.WriteLine($"{error.Path}: {error.Message}");
+    }
+}
+```
+
+Find issues before your customer does.
+
+---
+
+## Why I Built This
+
+I worked on AAS tooling at Fraunhofer IOSB-INA. The official specs are thorough – but not exactly developer-friendly. Most examples are in Java. The XML/JSON structures are verbose. And when something doesn't work, the error messages rarely help.
+
+FluentAAS is my attempt to make AAS practical for .NET teams. Not a complete replacement for the official tools – but a library that handles the common cases well.
+
+---
+
+## What This Is (and Isn't)
+
+**FluentAAS is:**
+- A library for creating AAS models in C#
+- Focused on developer experience
+- Good for generating Digital Nameplates and similar submodels
+- MIT licensed, use it however you want
+
+**FluentAAS is not:**
+- A full AAS server implementation
+- A replacement for AASX Package Explorer
+- Feature-complete (yet)
+
+I'm building this in the open. If a template you need is missing, let me know – or submit a PR.
+
+---
+
+## Roadmap
+
+| Feature | Status |
+|---------|--------|
+| Digital Nameplate V2.0 | ✅ Done |
+| JSON/AASX Export | ✅ Done |
+| Validation Service | ✅ Done |
+| Handover Documentation | 🔨 In progress |
+| Technical Data | 📋 Planned |
+| Digital Product Passport | 📋 Planned |
+| AAS Registry Integration | 📋 Planned |
+
+---
+
+## Contributing
+
+PRs welcome for:
+
+- New IDTA submodel templates
+- Better validation rules
+- Documentation and examples
+- Bug fixes
+
+If you're unsure whether something fits, open an issue first.
+
+---
+
+## Resources
+
+- [IDTA Submodel Templates](https://industrialdigitaltwin.org/content-hub/submodels) – Official template specs
+- [AASX Package Explorer](https://github.com/admin-shell-io/aasx-package-explorer) – GUI tool for viewing/editing AAS
+- [AAS Specs](https://industrialdigitaltwin.org/content-hub/aasspecifications) – The full specification
+
+---
+
+## License
+
+MIT – free for commercial and open-source use.
+
+---
+
+## Questions?
+
+If you're working on AAS integration and have questions, feel free to reach out on [LinkedIn](https://www.linkedin.com/in/oliver-fries).
+
+I'm also available for consulting on .NET modernization and Industry 4.0 projects – but no pressure. The library stands on its own.
