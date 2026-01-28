@@ -5,61 +5,17 @@ namespace FluentAAS.Templates.HandoverDocumentation;
 ///     All semantic IDs and idShort values MUST be aligned with the official PDF:
 ///     IDTA 02004-2-0_Submodel_Handover Documentation.
 /// </summary>
-public static class HandoverDocumentationSemantics
+public static partial class HandoverDocumentationSemantics
 {
-    /// <summary>
-    ///     Document classes/categories from the template (examples – adjust to spec).
-    /// </summary>
-    public enum HandoverDocumentClass
-    {
-        OperatingManual,
-        MaintenanceManual,
-        SafetyDocument,
-        Certificate,
-        Datasheet,
-        Drawing,
-        Other
-    }
+# region Submodel
 
-    /// <summary>
-    ///     Document formats from the template (examples – adjust to spec).
-    ///     Usually captured as an enumeration of controlled vocab items.
-    /// </summary>
-    public enum HandoverDocumentFormat
-    {
-        Pdf,
-        Docx,
-        Xlsx,
-        Image,
-        Video,
-        Xml,
-        Json,
-        Other
-    }
-    // === Enums =================================================================
-
-    /// <summary>
-    ///     Lifecycle stages from the template (examples – adjust to spec).
-    /// </summary>
-    public enum HandoverLifecycleStage
-    {
-        Engineering,
-        Manufacturing,
-        Commissioning,
-        Operation,
-        Maintenance,
-        Decommissioning
-    }
-
-    // -------------------------
-    // Submodel
-    // -------------------------
     public const string SubmodelIdShort    = "HandoverDocumentation";
     public const string SubmodelSemanticId = "0173-1#01-AHF578#003";
 
-    // -------------------------
-    // Root elements (SubmodelElements)
-    // -------------------------
+#endregion
+
+# region RootElements
+
     public const string IdShortDocuments    = "Documents";
     public const string SemanticIdDocuments = "0173-1#02-ABI500#003";
 
@@ -70,9 +26,10 @@ public static class HandoverDocumentationSemantics
     // Documents list element (Document SMC) semantic id (Table 3)
     public const string SemanticIdDocument = "0173-1#02-ABI500#003/0173-1#01-AHF579#003";
 
-    // -------------------------
-    // Document (SMC) children
-    // -------------------------
+#endregion
+
+#region DocumentSMCchildren
+
     public const string IdShortDocumentIds    = "DocumentIds";
     public const string SemanticIdDocumentIds = "0173-1#02-ABI501#003";
     public const string SemanticIdDocumentId  = "0173-1#02-ABI501#003/0173-1#01-AHF580#003";
@@ -89,9 +46,10 @@ public static class HandoverDocumentationSemantics
     public const string SemanticIdDocumentedEntities = "0173-1#02-ABI504#003";
     public const string SemanticIdDocumentedEntity   = "0173-1#02-ABI504#003/0173-1#01-AHF583#003";
 
-    // -------------------------
-    // DocumentId (SMC) fields (Table 6)
-    // -------------------------
+#endregion
+
+#region DocumentIdFields
+
     public const string IdShortDocumentDomainId    = "DocumentDomainId";
     public const string SemanticIdDocumentDomainId = "0173-1#02-ABH994#003";
 
@@ -101,9 +59,10 @@ public static class HandoverDocumentationSemantics
     public const string IdShortDocumentIsPrimary    = "DocumentIsPrimary";
     public const string SemanticIdDocumentIsPrimary = "0173-1#02-ABH995#003";
 
-    // -------------------------
-    // DocumentClassification (SMC) fields (Table 7)
-    // -------------------------
+#endregion
+
+#region DocumentClassificationFields
+
     public const string IdShortClassId    = "ClassId";
     public const string SemanticIdClassId = "0173-1#02-AAO107#005";
 
@@ -116,9 +75,10 @@ public static class HandoverDocumentationSemantics
     // Mandatory classification system per template guidance
     public const string Vdi2770ClassificationSystemName = "VDI 2770 Blatt 1:2020";
 
-    // -------------------------
-    // DocumentVersion (SMC) fields (Table 8)
-    // -------------------------
+#endregion
+
+#region DocumentVersionFields
+
     public const string IdShortLanguage    = "Language";
     public const string SemanticIdLanguage = "0173-1#02-AAN468#008";
 
@@ -149,9 +109,10 @@ public static class HandoverDocumentationSemantics
     public const string IdShortOrganizationOfficialName    = "OrganizationOfficialName";
     public const string SemanticIdOrganizationOfficialName = "0173-1#02-AAO116#005";
 
-    // -------------------------
-    // Relationships (optional) inside DocumentVersion (Table 8)
-    // -------------------------
+#endregion
+
+#region RelationshipsInsideDocumentVersion
+
     public const string IdShortRefersToEntities    = "RefersToEntities";
     public const string SemanticIdRefersToEntities = "0173-1#02-ABI505#003";
 
@@ -161,14 +122,17 @@ public static class HandoverDocumentationSemantics
     public const string IdShortTranslationOfEntities    = "TranslationOfEntities";
     public const string SemanticIdTranslationOfEntities = "0173-1#02-ABI507#003";
 
-    // -------------------------
-    // Digital files
-    // -------------------------
+#endregion
+
+#region DigitalFiles
+
     public const string IdShortDigitalFiles    = "DigitalFiles";
     public const string SemanticIdDigitalFiles = "0173-1#02-ABK126#002";
 
     public const string IdShortPreviewFile    = "PreviewFile";
     public const string SemanticIdPreviewFile = "0173-1#02-ABK127#002";
+
+#endregion
 
     // Suggested status values
     public static class StatusValues
