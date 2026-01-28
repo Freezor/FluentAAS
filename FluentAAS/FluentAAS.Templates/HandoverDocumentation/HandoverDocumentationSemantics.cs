@@ -133,11 +133,4 @@ public static partial class HandoverDocumentationSemantics
     public const string SemanticIdPreviewFile = "0173-1#02-ABK127#002";
 
 #endregion
-
-    // Suggested status values
-    public static class StatusValues
-    {
-        public const string InReview = "InReview";
-        public const string Released = "Released";
-    }
 }

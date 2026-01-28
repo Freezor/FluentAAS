@@ -18,6 +18,12 @@ public sealed class HandoverDocumentationSubmodelBuilder
 
     private string? _category;
 
+    /// <summary>
+    ///     Initializes a new instance of the HandoverDocumentationSubmodelBuilder with the specified ID and optional IdShort.
+    /// </summary>
+    /// <param name="id">The unique identifier for the submodel.</param>
+    /// <param name="idShort">The optional short identifier for the submodel. If not provided, uses the default from semantics.</param>
+    /// <exception cref="ArgumentNullException">Thrown when id is null.</exception>
     public HandoverDocumentationSubmodelBuilder(string id, string? idShort = null)
     {
         _id = id ?? throw new ArgumentNullException(nameof(id));
@@ -25,12 +31,24 @@ public sealed class HandoverDocumentationSubmodelBuilder
             _idShort = idShort;
     }
 
+    /// <summary>
+    ///     Sets the category for the handover documentation submodel.
+    /// </summary>
+    /// <param name="category">The category to assign to the submodel.</param>
+    /// <returns>The current builder instance for method chaining.</returns>
     public HandoverDocumentationSubmodelBuilder WithCategory(string category)
     {
         _category = category;
         return this;
     }
 
+    /// <summary>
+    ///     Adds a description in the specified language to the handover documentation submodel.
+    /// </summary>
+    /// <param name="language">The language code for the description (e.g., "en", "de").</param>
+    /// <param name="text">The description text in the specified language.</param>
+    /// <returns>The current builder instance for method chaining.</returns>
+    /// <exception cref="ArgumentException">Thrown when language or text is null, empty, or whitespace.</exception>
     public HandoverDocumentationSubmodelBuilder WithDescription(string language, string text)
     {
         if (string.IsNullOrWhiteSpace(language)) throw new ArgumentException("Language must not be empty.", nameof(language));
@@ -40,6 +58,12 @@ public sealed class HandoverDocumentationSubmodelBuilder
         return this;
     }
 
+    /// <summary>
+    ///     Adds a handover document to the submodel using a configuration action to set up the document properties.
+    /// </summary>
+    /// <param name="configure">An action that configures the HandoverDocumentBuilder to define the document structure and content.</param>
+    /// <returns>The current builder instance for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when configure action is null.</exception>
     public HandoverDocumentationSubmodelBuilder AddDocument(Action<HandoverDocumentBuilder> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
@@ -55,6 +79,9 @@ public sealed class HandoverDocumentationSubmodelBuilder
     ///     Optional: add an entity entry to the root "Entities" list.
     ///     This template references VDI 2770 entities; model it properly once you have an entity representation.
     /// </summary>
+    /// <param name="entity">The entity to add to the entities collection.</param>
+    /// <returns>The current builder instance for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when entity is null.</exception>
     public HandoverDocumentationSubmodelBuilder AddEntity(IReferable entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -62,6 +89,11 @@ public sealed class HandoverDocumentationSubmodelBuilder
         return this;
     }
 
+    /// <summary>
+    ///     Constructs and returns the complete HandoverDocumentationV20 submodel with all configured documents, descriptions, and settings.
+    /// </summary>
+    /// <returns>A fully configured HandoverDocumentationV20 submodel instance.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the submodel configuration is invalid or incomplete.</exception>
     public HandoverDocumentationV20 Build()
     {
         Validate();
