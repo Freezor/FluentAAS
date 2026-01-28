@@ -1,13 +1,56 @@
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 /// <summary>
-/// Constants and enumerations for the IDTA 02004-2-0 "Handover Documentation" submodel template.
-/// 
-/// All semantic IDs and idShort values MUST be aligned with the official PDF:
-/// IDTA 02004-2-0_Submodel_Handover Documentation.
+///     Constants and enumerations for the IDTA 02004-2-0 "Handover Documentation" submodel template.
+///     All semantic IDs and idShort values MUST be aligned with the official PDF:
+///     IDTA 02004-2-0_Submodel_Handover Documentation.
 /// </summary>
 public static class HandoverDocumentationSemantics
 {
+    /// <summary>
+    ///     Document classes/categories from the template (examples – adjust to spec).
+    /// </summary>
+    public enum HandoverDocumentClass
+    {
+        OperatingManual,
+        MaintenanceManual,
+        SafetyDocument,
+        Certificate,
+        Datasheet,
+        Drawing,
+        Other
+    }
+
+    /// <summary>
+    ///     Document formats from the template (examples – adjust to spec).
+    ///     Usually captured as an enumeration of controlled vocab items.
+    /// </summary>
+    public enum HandoverDocumentFormat
+    {
+        Pdf,
+        Docx,
+        Xlsx,
+        Image,
+        Video,
+        Xml,
+        Json,
+        Other
+    }
+    // === Enums =================================================================
+
+    /// <summary>
+    ///     Lifecycle stages from the template (examples – adjust to spec).
+    /// </summary>
+    public enum HandoverLifecycleStage
+    {
+        Engineering,
+        Manufacturing,
+        Commissioning,
+        Operation,
+        Maintenance,
+        Decommissioning
+    }
+
     // -------------------------
     // Submodel
     // -------------------------
@@ -132,49 +175,5 @@ public static class HandoverDocumentationSemantics
     {
         public const string InReview = "InReview";
         public const string Released = "Released";
-    }
-    // === Enums =================================================================
-
-    /// <summary>
-    /// Lifecycle stages from the template (examples – adjust to spec).
-    /// </summary>
-    public enum HandoverLifecycleStage
-    {
-        Engineering,
-        Manufacturing,
-        Commissioning,
-        Operation,
-        Maintenance,
-        Decommissioning
-    }
-
-    /// <summary>
-    /// Document classes/categories from the template (examples – adjust to spec).
-    /// </summary>
-    public enum HandoverDocumentClass
-    {
-        OperatingManual,
-        MaintenanceManual,
-        SafetyDocument,
-        Certificate,
-        Datasheet,
-        Drawing,
-        Other
-    }
-
-    /// <summary>
-    /// Document formats from the template (examples – adjust to spec).
-    /// Usually captured as an enumeration of controlled vocab items.
-    /// </summary>
-    public enum HandoverDocumentFormat
-    {
-        Pdf,
-        Docx,
-        Xlsx,
-        Image,
-        Video,
-        Xml,
-        Json,
-        Other
     }
 }

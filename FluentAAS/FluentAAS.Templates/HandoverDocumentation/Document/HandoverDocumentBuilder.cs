@@ -1,7 +1,7 @@
 namespace FluentAAS.Templates.HandoverDocumentation.Document;
 
 /// <summary>
-/// Fluent builder for a single Handover Document item.
+///     Fluent builder for a single Handover Document item.
 /// </summary>
 public sealed class HandoverDocumentBuilder
 {
@@ -9,7 +9,7 @@ public sealed class HandoverDocumentBuilder
     private          HandoverDocumentVersionBuilder? _defaultVersionBuilder;
 
     /// <summary>
-    /// Adds a DocumentId entry (DocumentIds list). The template requires at least one.
+    ///     Adds a DocumentId entry (DocumentIds list). The template requires at least one.
     /// </summary>
     public HandoverDocumentBuilder AddDocumentId(string domainId, string identifier, bool? isPrimary = true)
     {
@@ -25,7 +25,7 @@ public sealed class HandoverDocumentBuilder
     }
 
     /// <summary>
-    /// Convenience: sets/ensures a default DocumentVersion and sets Title there (per template).
+    ///     Convenience: sets/ensures a default DocumentVersion and sets Title there (per template).
     /// </summary>
     public HandoverDocumentBuilder WithTitle(string title, string language = "en")
     {
@@ -76,8 +76,8 @@ public sealed class HandoverDocumentBuilder
     }
 
     /// <summary>
-    /// Adds a classification entry (DocumentClassifications list). At least one is required.
-    /// Ensure you add one with ClassificationSystem = "VDI 2770 Blatt 1:2020".
+    ///     Adds a classification entry (DocumentClassifications list). At least one is required.
+    ///     Ensure you add one with ClassificationSystem = "VDI 2770 Blatt 1:2020".
     /// </summary>
     public HandoverDocumentBuilder AddClassification(
         string classId,
@@ -98,8 +98,8 @@ public sealed class HandoverDocumentBuilder
     }
 
     /// <summary>
-    /// Advanced: add an explicit version with nested configuration.
-    /// (You can use this to add multiple versions.)
+    ///     Advanced: add an explicit version with nested configuration.
+    ///     (You can use this to add multiple versions.)
     /// </summary>
     public HandoverDocumentBuilder AddDocumentVersion(Action<HandoverDocumentVersionBuilder> configure)
     {
@@ -114,7 +114,7 @@ public sealed class HandoverDocumentBuilder
 
     internal HandoverDocument Build()
     {
-        // If user used the default version fluent methods, finalize it
+        // If the user used the default version fluent methods, finalize it
         if (_defaultVersionBuilder is not null && !_doc.DocumentVersions.Any())
             _doc.DocumentVersions.Add(_defaultVersionBuilder.Build());
 

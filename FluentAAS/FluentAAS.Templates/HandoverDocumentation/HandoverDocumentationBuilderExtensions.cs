@@ -3,11 +3,9 @@ namespace FluentAAS.Templates.HandoverDocumentation;
 public static class HandoverDocumentationBuilderExtensions
 {
     /// <summary>
-    /// Add a Handover Documentation submodel using the fluent handover builder.
-    /// 
-    /// Example:
-    /// 
-    /// <code>
+    ///     Add a Handover Documentation submodel using the fluent handover builder.
+    ///     Example:
+    ///     <code>
     /// aasBuilder
     ///     .AddHandoverDocumentation("urn:submodel:handover:123", sm => sm
     ///         .AddDocument(doc => doc

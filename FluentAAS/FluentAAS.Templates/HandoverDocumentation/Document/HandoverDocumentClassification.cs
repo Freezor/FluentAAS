@@ -54,6 +54,8 @@ public class HandoverDocumentClassification
             throw new InvalidOperationException("ClassificationSystem is required in DocumentClassification.");
     }
 
-    private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
+    private static Reference Ref(string semanticId)
+    {
+        return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
+    }
 }

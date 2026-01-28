@@ -27,7 +27,6 @@ public class HandoverDocumentId
                        };
 
         if (DocumentIsPrimary.HasValue)
-        {
             elements.Add(
                          new Property(
                                       idShort: HandoverDocumentationSemantics.IdShortDocumentIsPrimary,
@@ -37,7 +36,6 @@ public class HandoverDocumentId
                                       value: DocumentIsPrimary.Value ? "true" : "false"
                                      )
                         );
-        }
 
         return new SubmodelElementCollection(
                                              idShort: "DocumentId",
@@ -57,6 +55,8 @@ public class HandoverDocumentId
             throw new InvalidOperationException("DocumentIdentifier is required in DocumentId.");
     }
 
-    private static Reference Ref(string semanticId) =>
-        new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
+    private static Reference Ref(string semanticId)
+    {
+        return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
+    }
 }
