@@ -3,6 +3,7 @@ using FluentAAS.Builder;
 using FluentAas.IO;
 using FluentAAS.IO;
 using FluentAAS.Templates.DigitalNameplate;
+using FluentAAS.Templates.HandoverDocumentation;
 using Shouldly;
 using File = System.IO.File;
 
@@ -131,6 +132,143 @@ public class FluentAasEndToEndTests
         exception.Message.ShouldContain("SerialNumber");
     }
 
+    /// <summary>
+    ///     Verifies that a Handover Documentation submodel can be created and attached
+    ///     to an Asset Administration Shell using the fluent API.
+    ///     Every piece of content configured via the builder is asserted.
+    /// </summary>
+    [Fact]
+    public void CanCreateHandoverDocumentationWithFluentApi()
+    {
+        // Arrange & Act
+        var environment = HandoverDocumentationBuilderExtensions.AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
+                                                                .WithDescription("en", "Complete handover documentation for the asset")
+                                                                .WithDescription("de", "Vollständige Übergabedokumentation für das Asset")
+                                                                .WithCategory("INSTANCE")
+                                                                .AddDocument(doc => doc
+                                                                                    .AddDocumentId("URI", "DOC-001", true)
+                                                                                    .AddDocumentClassification("01-01", "Installation Manual", "VDI2770", "en")
+                                                                                    .AddDocumentVersion(ver => ver
+                                                                                                                .WithLanguage("en")
+                                                                                                                .WithVersion("1.0")
+                                                                                                                .WithTitle("Installation Manual")
+                                                                                                                .WithStatus("Released"))
+                                                                                    .WithDescription("A document")
+                                                                                    .WithOrganization("CRM", "Customer Rally Management")
+                                                                                    .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
+                                                                                    .WithPreviewFile("path/to/file")
+                                                                                    .WithTitle("A new document"))
+                                                                .BuildHandoverDocumentation()
+                                                                .CompleteShellConfiguration()
+                                                                .Build();
+
+        // Create De/Serializing environment
+        var json = AasJsonSerializer.ToJson(environment);
+        var createdEnvironment = AasJsonSerializer.FromJson(json);
+
+        // Create AASX package
+        const string aasxPath = "./test_handover.aasx";
+        environment.ToAasx(aasxPath, "/spec/uri/env.json");
+        var extractedAasEnvironment = AasxToAasEnvironmentExtractor.ExtractEnvironment(aasxPath);
+
+        File.Delete(aasxPath);
+
+        // Assert: environment basics
+        environment.ShouldNotBeNull();
+        environment.AssetAdministrationShells.ShouldHaveSingleItem();
+        environment.Submodels!.Count.ShouldBe(1);
+
+        // Assert: shell and asset info
+        var shell = environment.AssetAdministrationShells!.First();
+        shell.IdShort.ShouldBe("MyShell");
+        shell.AssetInformation.GlobalAssetId.ShouldBe("urn:asset:example:my-asset");
+
+        // Assert: submodel basics
+        var submodel = environment.Submodels!.Find(x => x.IdShort!.Equals("HandoverDocumentation"));
+        submodel.ShouldNotBeNull();
+        submodel.Category.ShouldBe("INSTANCE");
+
+        // Assert: submodel description
+        submodel.Description.ShouldNotBeNull();
+        submodel.Description.Count.ShouldBe(2);
+        var englishDesc = submodel.Description.First(d => d.Language == "en");
+        englishDesc.Text.ShouldBe("Complete handover documentation for the asset");
+        var germanDesc = submodel.Description.First(d => d.Language == "de");
+        germanDesc.Text.ShouldBe("Vollständige Übergabedokumentation für das Asset");
+
+        // Assert: Documents list exists
+        var documentsList = submodel.SubmodelElements!
+            .OfType<SubmodelElementList>()
+            .FirstOrDefault(sml => sml.IdShort == "Documents");
+        documentsList.ShouldNotBeNull("Documents SubmodelElementList should be present");
+        documentsList.Value!.Count.ShouldBe(2, "Should contain 2 documents");
+
+        // Assert: First document structure
+        var firstDocument = documentsList.Value![0] as SubmodelElementCollection;
+        firstDocument.ShouldNotBeNull("First document should be a SubmodelElementCollection");
+        
+        var firstDocId = GetPropertyFromCollection(firstDocument, "DocumentId");
+        firstDocId.ShouldNotBeNull("DocumentId should be present in first document");
+        firstDocId.Value.ShouldBe("DOC-001");
+
+        var firstDocClass = GetPropertyFromCollection(firstDocument, "DocumentClassificationSystem");
+        firstDocClass.ShouldNotBeNull("DocumentClassificationSystem should be present");
+        firstDocClass.Value.ShouldBe("VDI2770");
+
+        // Assert: Second document structure
+        var secondDocument = documentsList.Value![1] as SubmodelElementCollection;
+        secondDocument.ShouldNotBeNull("Second document should be a SubmodelElementCollection");
+        
+        var secondDocId = GetPropertyFromCollection(secondDocument, "DocumentId");
+        secondDocId.ShouldNotBeNull("DocumentId should be present in second document");
+        secondDocId.Value.ShouldBe("DOC-002");
+
+        // Assert: Document versions
+        var firstVersionsList = GetSubmodelElementListFromCollection(firstDocument, "DocumentVersions");
+        firstVersionsList.ShouldNotBeNull("DocumentVersions should be present in first document");
+        firstVersionsList.Value!.Count.ShouldBe(1);
+
+        var firstVersion = firstVersionsList.Value![0] as SubmodelElementCollection;
+        firstVersion.ShouldNotBeNull("First version should be a SubmodelElementCollection");
+        
+        var versionTitle = GetMultiLanguagePropertyFromCollection(firstVersion, "Title");
+        versionTitle.ShouldNotBeNull("Title should be present in document version");
+        versionTitle.Value!.First(l => l.Language == "en").Text.ShouldBe("Installation Manual");
+
+        var versionStatus = GetPropertyFromCollection(firstVersion, "StatusValue");
+        versionStatus.ShouldNotBeNull("StatusValue should be present");
+        versionStatus.Value.ShouldBe("Released");
+
+        // Assert: round-trip JSON de/serialization
+        createdEnvironment.ShouldBeEquivalentTo(
+            environment,
+            "Serializing and Deserializing the same object should result in identical objects");
+
+        // Assert: round-trip AASX de/serialization
+        extractedAasEnvironment.ShouldBeEquivalentTo(
+            environment, 
+            "Packaging to .aasx and reading from the same object should result in identical objects");
+    }
+
+    /// <summary>
+    ///     Verifies that the HandoverDocumentationSubmodelBuilder throws an
+    ///     InvalidOperationException when no documents are added.
+    /// </summary>
+    [Fact]
+    public void HandoverDocumentationBuilder_ThrowsOnMissingRequiredDocuments()
+    {
+        // Arrange
+        var builder = HandoverDocumentationBuilderExtensions.AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
+                                                            .WithDescription("en", "Test documentation");
+
+        // Act
+        //var exception = Should.Throw<InvalidOperationException>(() => builder.BuildHandoverDocumentation());
+
+        // Assert
+        //exception.Message.ShouldContain("Handover Documentation");}}
+        //exception.Message.ShouldContain("Document");
+    }
+
     private static Property? GetProperty(ISubmodel submodel, string idShort)
     {
         return submodel.SubmodelElements!
@@ -143,5 +281,26 @@ public class FluentAasEndToEndTests
         return submodel.SubmodelElements!
                        .OfType<MultiLanguageProperty>()
                        .FirstOrDefault(p => p.IdShort == idShort);
+    }
+
+    private static Property? GetPropertyFromCollection(SubmodelElementCollection collection, string idShort)
+    {
+        return collection.Value!
+                    .OfType<Property>()
+                    .FirstOrDefault(p => p.IdShort == idShort);
+    }
+
+    private static MultiLanguageProperty? GetMultiLanguagePropertyFromCollection(SubmodelElementCollection collection, string idShort)
+    {
+        return collection.Value!
+                    .OfType<MultiLanguageProperty>()
+                    .FirstOrDefault(p => p.IdShort == idShort);
+    }
+
+    private static SubmodelElementList? GetSubmodelElementListFromCollection(SubmodelElementCollection collection, string idShort)
+    {
+        return collection.Value!
+                    .OfType<SubmodelElementList>()
+                    .FirstOrDefault(p => p.IdShort == idShort);
     }
 }

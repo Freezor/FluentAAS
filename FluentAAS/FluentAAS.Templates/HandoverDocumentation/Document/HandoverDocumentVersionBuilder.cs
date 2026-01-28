@@ -13,7 +13,7 @@ public class HandoverDocumentVersionBuilder
     /// <param name="language">The language code to add (e.g., "en", "de", "fr").</param>
     /// <returns>The current HandoverDocumentVersionBuilder instance for method chaining.</returns>
     /// <exception cref="ArgumentException">Thrown when language is null, empty, or whitespace.</exception>
-    public HandoverDocumentVersionBuilder AddLanguage(string language)
+    public HandoverDocumentVersionBuilder WithLanguage(string language)
     {
         if (string.IsNullOrWhiteSpace(language)) throw new ArgumentException("Language must not be empty.", nameof(language));
         if (!_handoverDocumentVersion.Languages.Contains(language, StringComparer.OrdinalIgnoreCase))
@@ -44,7 +44,7 @@ public class HandoverDocumentVersionBuilder
     {
         _handoverDocumentVersion.Title         = title ?? throw new ArgumentNullException(nameof(title));
         _handoverDocumentVersion.TitleLanguage = language;
-        AddLanguage(language);
+        WithLanguage(language);
         return this;
     }
 
@@ -59,7 +59,7 @@ public class HandoverDocumentVersionBuilder
     {
         _handoverDocumentVersion.Description         = description ?? throw new ArgumentNullException(nameof(description));
         _handoverDocumentVersion.DescriptionLanguage = language;
-        AddLanguage(language);
+        WithLanguage(language);
         return this;
     }
 
@@ -74,7 +74,7 @@ public class HandoverDocumentVersionBuilder
     {
         _handoverDocumentVersion.Subtitle         = subtitle ?? throw new ArgumentNullException(nameof(subtitle));
         _handoverDocumentVersion.SubtitleLanguage = language;
-        AddLanguage(language);
+        WithLanguage(language);
         return this;
     }
 
@@ -89,7 +89,7 @@ public class HandoverDocumentVersionBuilder
     {
         if (string.IsNullOrWhiteSpace(keyword)) throw new ArgumentException("Keyword must not be empty.", nameof(keyword));
         _handoverDocumentVersion.KeyWords.Add((language, keyword));
-        AddLanguage(language);
+        WithLanguage(language);
         return this;
     }
 

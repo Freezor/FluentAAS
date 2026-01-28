@@ -95,7 +95,7 @@ public sealed class HandoverDocumentBuilder
     /// <returns>The current HandoverDocumentBuilder instance for method chaining.</returns>
     public HandoverDocumentBuilder AddLanguage(string language)
     {
-        EnsureDefaultVersion().AddLanguage(language);
+        EnsureDefaultVersion().WithLanguage(language);
         return this;
     }
 
@@ -133,7 +133,7 @@ public sealed class HandoverDocumentBuilder
     /// <param name="language">The language code for the classification name. Defaults to "en".</param>
     /// <returns>The current HandoverDocumentBuilder instance for method chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when classId, className, or classificationSystem is null.</exception>
-    public HandoverDocumentBuilder AddClassification(
+    public HandoverDocumentBuilder AddDocumentClassification(
         string classId,
         string className,
         string classificationSystem = HandoverDocumentationSemantics.Vdi2770ClassificationSystemName,

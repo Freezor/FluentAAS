@@ -13,22 +13,27 @@ public static class HandoverDocumentationBuilderExtensions
     ///             .WithDocumentId("DOC-001")
     ///             .WithLifecycleStage(HandoverLifecycleStage.Operation)
     ///             .AddFile("manual.pdf", mimeType: "application/pdf")))
-    ///     .BuildDigitalNameplate();
+    ///     .BuildHandoverDocumentation();
     /// </code>
     /// </summary>
-    public static TRootBuilder AddHandoverDocumentation<TRootBuilder>(
-        this TRootBuilder                            rootBuilder,
-        string                                       submodelId,
-        Action<HandoverDocumentationSubmodelBuilder> configureSubmodel)
+    public static HandoverDocumentationSubmodelBuilder AddHandoverDocumentation(string  submodelId,
+                                                                                string? idShort = null)
+    {
+        return new HandoverDocumentationSubmodelBuilder(submodelId, idShort);
+    }
+
+    /// <summary>
+    ///     Builds and adds the configured Handover Documentation submodel to the root builder.
+    /// </summary>
+    public static TRootBuilder BuildHandoverDocumentation<TRootBuilder>(
+        this HandoverDocumentationSubmodelBuilder handoverBuilder,
+        TRootBuilder rootBuilder)
         where TRootBuilder : ISubmodelCollector
     {
+        ArgumentNullException.ThrowIfNull(handoverBuilder);
         if (rootBuilder is null) throw new ArgumentNullException(nameof(rootBuilder));
-        ArgumentNullException.ThrowIfNull(configureSubmodel);
 
-        var smBuilder = new HandoverDocumentationSubmodelBuilder(submodelId);
-        configureSubmodel(smBuilder);
-
-        var typedSubmodel = smBuilder.Build();
+        var typedSubmodel = handoverBuilder.Build();
         rootBuilder.AddSubmodel(typedSubmodel.Submodel);
 
         return rootBuilder;
