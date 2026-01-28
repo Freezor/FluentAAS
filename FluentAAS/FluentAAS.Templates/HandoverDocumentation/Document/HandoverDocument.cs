@@ -1,6 +1,6 @@
 using FluentAAS.Core;
 
-namespace FluentAAS.Templates.HandoverDocumentation;
+namespace FluentAAS.Templates.HandoverDocumentation.Document;
 
 /// <summary>
 /// Represents a single document entry in the Handover Documentation submodel.

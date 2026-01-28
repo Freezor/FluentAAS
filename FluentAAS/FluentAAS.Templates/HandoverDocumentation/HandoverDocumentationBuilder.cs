@@ -1,3 +1,5 @@
+using FluentAAS.Templates.HandoverDocumentation.Document;
+
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 /// <summary>
@@ -14,7 +16,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
     private readonly List<HandoverDocument> _documents = [];
 
     // Optional root list (Entities)
-    private readonly List<IReferable> _entities = []; // Placeholder type. Replace with your entity type if you model it.
+    private readonly List<IReferable> _entities = [];
 
     public HandoverDocumentationSubmodelBuilder(string id, string? idShort = null)
     {
@@ -68,7 +70,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
                                     id: _id,
                                     idShort: _idShort,
                                     category: _category,
-                                    description: _description.Count > 0 ? _description.Cast<ILangStringTextType>().ToList() : new List<ILangStringTextType>(),
+                                    description: _description.Count > 0 ? _description.Cast<ILangStringTextType>().ToList() : [],
                                     semanticId: Ref(HandoverDocumentationSemantics.SubmodelSemanticId),
                                     kind: ModellingKind.Instance,
                                     qualifiers: null,
@@ -95,7 +97,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
 
         elements.Add(documentsList);
 
-        // Entities: optional, only add if user provided (Table 4)
+        // Entities: optional, only add if the user provided (Table 4)
         // NOTE: The spec expects SubmodelElementList with Entity SMC elements.
         // We keep this intentionally minimal; implement proper entity mapping later.
         // if (_entities.Count > 0) { ... }

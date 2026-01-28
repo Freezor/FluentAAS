@@ -1,4 +1,4 @@
-namespace FluentAAS.Templates.HandoverDocumentation;
+namespace FluentAAS.Templates.HandoverDocumentation.Document;
 
 /// <summary>
 /// Fluent builder for a single Handover Document item.

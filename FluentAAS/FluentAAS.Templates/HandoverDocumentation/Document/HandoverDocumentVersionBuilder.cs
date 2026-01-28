@@ -1,4 +1,4 @@
-namespace FluentAAS.Templates.HandoverDocumentation;
+namespace FluentAAS.Templates.HandoverDocumentation.Document;
 
 public class HandoverDocumentVersionBuilder
 {

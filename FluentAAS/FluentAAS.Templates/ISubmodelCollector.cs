@@ -1,4 +1,4 @@
-namespace FluentAAS.Templates.HandoverDocumentation;
+namespace FluentAAS.Templates;
 
 /// <summary>
 /// Contract for root builders that can collect submodels.
