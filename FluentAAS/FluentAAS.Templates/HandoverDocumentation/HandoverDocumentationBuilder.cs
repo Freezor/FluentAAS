@@ -130,11 +130,12 @@ public sealed class HandoverDocumentationSubmodelBuilder
         // - constructor params
         // - property names (OrderRelevant, SemanticIdListElement, TypeValueListElement)
         var list = new SubmodelElementList(
+                                           typeValueListElement: AasSubmodelElements.SubmodelElement,
                                            idShort: idShort,
                                            category: null,
                                            description: null,
                                            semanticId: Ref(semanticId),
-                                           value: value.ToArray()
+                                           value: [..value.ToArray()]
                                           );
 
         // List metadata (critical for compliance)

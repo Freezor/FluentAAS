@@ -19,10 +19,10 @@ public class HandoverDocumentVersion
     // Optional
     public string?                                 Subtitle         { get; set; }
     public string?                                 SubtitleLanguage { get; set; }
-    public List<(string Language, string Keyword)> KeyWords         { get; } = new();
+    public List<(string Language, string Keyword)> KeyWords         { get; } = [];
 
     // Files (required list)
-    public List<HandoverDigitalFile> DigitalFiles { get; } = new();
+    public List<HandoverDigitalFile> DigitalFiles { get; } = [];
 
     // Optional
     public HandoverDigitalFile? PreviewFile { get; set; }
@@ -159,7 +159,7 @@ public class HandoverDocumentVersion
     {
         // SML of Properties (string)
         var langElements = Languages
-                           .Select(l => (ISubmodelElement) new Property(
+                           .Select(ISubmodelElement (l) => new Property(
                                                                         idShort: "Language",
                                                                         category: null,
                                                                         semanticId: null, // list element semantic handled by listElementSemanticId
@@ -168,11 +168,12 @@ public class HandoverDocumentVersion
                            .ToList();
 
         var list = new SubmodelElementList(
+                                           typeValueListElement: AasSubmodelElements.SubmodelElement,
                                            idShort: HandoverDocumentationSemantics.IdShortLanguage,
                                            category: null,
                                            description: null,
                                            semanticId: Ref(HandoverDocumentationSemantics.SemanticIdLanguage),
-                                           value: langElements.ToArray()
+                                           value: [..langElements.ToArray()]
                                           );
 
         list.OrderRelevant = false;
@@ -193,11 +194,12 @@ public class HandoverDocumentVersion
                            .ToList();
 
         var list = new SubmodelElementList(
+                                           typeValueListElement: AasSubmodelElements.SubmodelElement,
                                            idShort: HandoverDocumentationSemantics.IdShortDigitalFiles,
                                            category: null,
                                            description: null,
                                            semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDigitalFiles),
-                                           value: fileElements.ToArray()
+                                           value: [..fileElements.ToArray()]
                                           );
 
         list.OrderRelevant = false;

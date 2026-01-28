@@ -102,13 +102,14 @@ public sealed class HandoverDocument
         bool                   orderRelevant,
         AasSubmodelElements    typeValueListElement)
     {
-        var list =  new SubmodelElementList(
-                                                idShort: idShort,
-                                                category: null,
-                                                description: null,
-                                                semanticId: semanticId.ToSemanticReference(),
-                                                value: value
-                                               );
+        var list = new SubmodelElementList(
+                                           typeValueListElement: AasSubmodelElements.SubmodelElement,
+                                           idShort: idShort,
+                                           category: null,
+                                           description: null,
+                                           semanticId: semanticId.ToSemanticReference(),
+                                           value: value
+                                          );
 
         list.OrderRelevant         = orderRelevant;
         list.SemanticIdListElement = Ref(listElementSemanticId);
