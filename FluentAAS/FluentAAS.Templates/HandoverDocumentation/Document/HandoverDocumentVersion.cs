@@ -33,7 +33,7 @@
 
         internal SubmodelElementCollection ToCollection()
         {
-            var elements = new List<ISubmodelElement>
+            var submodelElements = new List<ISubmodelElement>
                            {
                                ToLanguageList(),
                                new Property(
@@ -87,7 +87,7 @@
                            };
 
             if (!string.IsNullOrWhiteSpace(Subtitle))
-                elements.Add(
+                submodelElements.Add(
                              new MultiLanguageProperty(
                                                        idShort: HandoverDocumentationSemantics.IdShortSubtitle,
                                                        category: null,
@@ -98,7 +98,7 @@
 
             if (KeyWords.Count > 0)
                 // Template defines KeyWords as MLP (0..1). We store as multiple LangString entries.
-                elements.Add(
+                submodelElements.Add(
                              new MultiLanguageProperty(
                                                        idShort: HandoverDocumentationSemantics.IdShortKeyWords,
                                                        category: null,
@@ -108,7 +108,7 @@
                             );
 
             if (PreviewFile is not null)
-                elements.Add(
+                submodelElements.Add(
                              PreviewFile.ToFileElement(
                                                        HandoverDocumentationSemantics.IdShortPreviewFile,
                                                        HandoverDocumentationSemantics.SemanticIdPreviewFile));
@@ -118,7 +118,7 @@
                                                  category: null,
                                                  description: null,
                                                  semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentVersion),
-                                                 value: [..elements.ToArray()]
+                                                 value: [..submodelElements.ToArray()]
                                                 );
         }
 
@@ -148,15 +148,15 @@
             if (DigitalFiles.Count < 1)
                 throw new InvalidOperationException("DocumentVersion must contain at least one DigitalFile (DigitalFiles list).");
 
-            foreach (var f in DigitalFiles)
-                f.Validate();
+            foreach (var digitalFile in DigitalFiles)
+                digitalFile.Validate();
             PreviewFile?.Validate();
         }
 
         private SubmodelElementList ToLanguageList()
         {
             // SML of Properties (string)
-            var langElements = Languages
+            var languageElements = Languages
                                .Select(ISubmodelElement (l) => new Property(
                                                                             idShort: "Language",
                                                                             category: null,
@@ -165,13 +165,13 @@
                                                                             value: l))
                                .ToList();
 
-            var list = new SubmodelElementList(
+            var submodelElementList = new SubmodelElementList(
                                                AasSubmodelElements.SubmodelElement,
                                                idShort: HandoverDocumentationSemantics.IdShortLanguage,
                                                category: null,
                                                description: null,
                                                semanticId: Ref(HandoverDocumentationSemantics.SemanticIdLanguage),
-                                               value: [..langElements.ToArray()]
+                                               value: [..languageElements.ToArray()]
                                               )
                        {
                            OrderRelevant        = false,
@@ -180,7 +180,7 @@
                            TypeValueListElement = AasSubmodelElements.Property
                        };
 
-            return list;
+            return submodelElementList;
         }
 
         private SubmodelElementList ToDigitalFilesList()
@@ -192,7 +192,7 @@
                                                                               ))
                                .ToList();
 
-            var list = new SubmodelElementList(
+            var submodelElementList = new SubmodelElementList(
                                                AasSubmodelElements.SubmodelElement,
                                                idShort: HandoverDocumentationSemantics.IdShortDigitalFiles,
                                                category: null,
@@ -208,7 +208,7 @@
                            TypeValueListElement = AasSubmodelElements.File
                        };
 
-            return list;
+            return submodelElementList;
         }
 
         private static Reference Ref(string semanticId)

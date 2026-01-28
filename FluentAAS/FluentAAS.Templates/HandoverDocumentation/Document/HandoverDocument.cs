@@ -11,13 +11,28 @@
     /// </summary>
     public sealed class HandoverDocument
     {
-        public List<HandoverDocumentId>             DocumentIds             { get; } = new();
-        public List<HandoverDocumentClassification> DocumentClassifications { get; } = new();
-        public List<HandoverDocumentVersion>        DocumentVersions        { get; } = new();
+        /// <summary>
+        /// Gets the collection of document identifiers for this handover document.
+        /// </summary>
+        public List<HandoverDocumentId>             DocumentIds             { get; } = [];
+        
+        /// <summary>
+        /// Gets the collection of document classifications for this handover document.
+        /// </summary>
+        public List<HandoverDocumentClassification> DocumentClassifications { get; } = [];
+        
+        /// <summary>
+        /// Gets the collection of document versions for this handover document.
+        /// </summary>
+        public List<HandoverDocumentVersion>        DocumentVersions        { get; } = [];
 
         // Optional: DocumentedEntities (not implemented here as typed items; keep future extension point)
         // public List<ReferenceElement> DocumentedEntities { get; } = new();
 
+        /// <summary>
+        /// Converts this handover document to a SubmodelElementCollection that represents the document structure in the AAS model.
+        /// </summary>
+        /// <returns>A SubmodelElementCollection containing the document's structure and data.</returns>
         internal SubmodelElementCollection ToDocumentCollection()
         {
             var children = new List<ISubmodelElement>
@@ -36,6 +51,10 @@
                                                 );
         }
 
+        /// <summary>
+        /// Validates this handover document against template requirements and throws exceptions for any violations.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when mandatory fields are missing or invalid.</exception>
         internal void ValidateTemplateRequirements()
         {
             if (DocumentIds.Count < 1)
@@ -56,6 +75,10 @@
                 v.ValidateTemplateRequirements();
         }
 
+        /// <summary>
+        /// Creates a SubmodelElementList containing all document IDs for this handover document.
+        /// </summary>
+        /// <returns>A SubmodelElementList representing the document IDs collection.</returns>
         private SubmodelElementList ToDocumentIdsList()
         {
             return NewList(
@@ -68,6 +91,10 @@
                           );
         }
 
+        /// <summary>
+        /// Creates a SubmodelElementList containing all document classifications for this handover document.
+        /// </summary>
+        /// <returns>A SubmodelElementList representing the document classifications collection.</returns>
         private SubmodelElementList ToDocumentClassificationsList()
         {
             return NewList(
@@ -80,6 +107,10 @@
                           );
         }
 
+        /// <summary>
+        /// Creates a SubmodelElementList containing all document versions for this handover document.
+        /// </summary>
+        /// <returns>A SubmodelElementList representing the document versions collection.</returns>
         private SubmodelElementList ToDocumentVersionsList()
         {
             return NewList(
@@ -93,11 +124,26 @@
         }
 
         // Helpers
+        /// <summary>
+        /// Creates a Reference object from a semantic ID string.
+        /// </summary>
+        /// <param name="semanticId">The semantic ID string to convert to a Reference.</param>
+        /// <returns>A Reference object containing the semantic ID.</returns>
         private static Reference Ref(string semanticId)
         {
             return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
         }
 
+        /// <summary>
+        /// Creates a new SubmodelElementList with the specified configuration and elements.
+        /// </summary>
+        /// <param name="idShort">The short identifier for the list.</param>
+        /// <param name="semanticId">The semantic ID for the list.</param>
+        /// <param name="listElementSemanticId">The semantic ID for individual elements in the list.</param>
+        /// <param name="value">The collection of submodel elements to include in the list.</param>
+        /// <param name="orderRelevant">Whether the order of elements in the list is relevant.</param>
+        /// <param name="typeValueListElement">The type of elements that the list can contain.</param>
+        /// <returns>A configured SubmodelElementList containing the specified elements.</returns>
         private static SubmodelElementList NewList(
             string                 idShort,
             string                 semanticId,
