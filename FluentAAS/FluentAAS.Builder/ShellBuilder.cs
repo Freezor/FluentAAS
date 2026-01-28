@@ -132,7 +132,7 @@ public sealed class ShellBuilder : IShellBuilder
     ///     Completes configuration of this shell and returns to the parent <see cref="AasBuilder" />.
     /// </summary>
     /// <returns>The parent <see cref="AasBuilder" />.</returns>
-    public AasBuilder Done()
+    public AasBuilder CompleteShellConfiguration()
     {
         Parent.AddShellInternal(Shell);
         return Parent;

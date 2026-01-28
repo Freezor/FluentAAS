@@ -499,7 +499,7 @@ public sealed class DigitalNameplateBuilder
     /// Thrown when mandatory fields (manufacturer name, product designation, or serial number)
     /// have not been provided.
     /// </exception>
-    public IShellBuilder Build()
+    public IShellBuilder BuildDigitalNameplate()
     {
         ValidateMandatoryFields();
 

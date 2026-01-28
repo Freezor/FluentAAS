@@ -69,7 +69,7 @@ public class DigitalNameplateShellBuilderExtensionsTests
         dnpBuilder.WithManufacturerName("en", "ACME Inc.")
                   .WithManufacturerProductDesignation("en", "Super Device")
                   .WithSerialNumber("SN-001")
-                  .Build();
+                  .BuildDigitalNameplate();
 
         var env = buildEnv();
 
@@ -103,7 +103,7 @@ public class DigitalNameplateShellBuilderExtensionsTests
         dnpBuilder.WithManufacturerName("en", "ACME Corp.")
                   .WithManufacturerProductDesignation("en", "Mega Device")
                   .WithSerialNumber("SN-002")
-                  .Build();
+                  .BuildDigitalNameplate();
 
         var env = buildEnv();
 

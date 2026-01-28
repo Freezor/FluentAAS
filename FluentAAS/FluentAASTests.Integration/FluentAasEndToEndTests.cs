@@ -42,15 +42,15 @@ public class DigitalNameplateTests
                                                                                                     .Add("en", "Example value")
                                                                                                     .Add("de", "Beispielwert"))
                                     .AddElement("GenericProperty", "example value")
-                                    .Done()
+                                    .CompleteSubmodelConfiguration()
                                     .AddDigitalNameplate("urn:submodel:example:digital-nameplate:V2_0")
                                     .WithManufacturerName("de", "Muster AG")
                                     .WithManufacturerName("en", "Sample Corp")
                                     .WithManufacturerProductDesignation("de", "Super-Antriebseinheit XS")
                                     .WithManufacturerProductDesignation("en", "Super Drive Unit XS")
                                     .WithSerialNumber("SN-000123")
-                                    .Build()
-                                    .Done()
+                                    .BuildDigitalNameplate()
+                                    .CompleteShellConfiguration()
                                     .Build();
 
         // Create De/Serializing environment
@@ -123,7 +123,7 @@ public class DigitalNameplateTests
                                 .WithManufacturerName("de", "Muster AG");
 
         // Act
-        var exception = Should.Throw<InvalidOperationException>(() => builder.Build());
+        var exception = Should.Throw<InvalidOperationException>(() => builder.BuildDigitalNameplate());
 
         // Assert
         exception.Message.ShouldContain("Digital Nameplate");

@@ -15,7 +15,7 @@ public static class HandoverDocumentationBuilderExtensions
     ///             .WithDocumentId("DOC-001")
     ///             .WithLifecycleStage(HandoverLifecycleStage.Operation)
     ///             .AddFile("manual.pdf", mimeType: "application/pdf")))
-    ///     .Build();
+    ///     .BuildDigitalNameplate();
     /// </code>
     /// </summary>
     public static TRootBuilder AddHandoverDocumentation<TRootBuilder>(

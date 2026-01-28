@@ -175,7 +175,7 @@ public class SubmodelBuilderTests
         var (shellBuilder, sut) = CreateBuilder();
 
         // Act
-        var result = sut.Done();
+        var result = sut.CompleteSubmodelConfiguration();
 
         // Assert
         result.ShouldBeSameAs(shellBuilder);
