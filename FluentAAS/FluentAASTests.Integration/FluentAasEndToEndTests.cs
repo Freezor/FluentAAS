@@ -13,7 +13,7 @@ namespace FluentAASTests.Integration;
 ///     Contains integration tests for building a Digital Nameplate submodel
 ///     using the fluent FluentAAS builder API.
 /// </summary>
-public class DigitalNameplateTests
+public class FluentAasEndToEndTests
 {
     /// <summary>
     ///     Verifies that a Digital Nameplate submodel can be created and attached
