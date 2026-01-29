@@ -144,7 +144,7 @@ public class FluentAasEndToEndTests
         var environment = AasBuilder.Create()
                                     .AddShell("urn:aas:example:my-shell", "MyShell")
                                     .WithGlobalAssetId("urn:asset:example:my-asset")
-                                    .AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0", "MyShell")
+                                    .AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
                                     .WithDescription("en", "Complete handover documentation for the asset")
                                     .WithDescription("de", "Vollständige Übergabedokumentation für das Asset")
                                     .WithCategory("INSTANCE")
@@ -152,10 +152,13 @@ public class FluentAasEndToEndTests
                                                         .AddDocumentId("URI", "DOC-001", true)
                                                         .AddDocumentClassification("01-01", "Installation Manual", "VDI2770", "en")
                                                         .AddDocumentVersion(ver => ver
-                                                                                   .WithLanguage("en")
-                                                                                   .WithVersion("1.0")
-                                                                                   .WithTitle("Installation Manual")
-                                                                                   .WithStatus("Released"))
+                                                                                    .WithLanguage("en")
+                                                                                    .WithVersion("1.0")
+                                                                                    .WithTitle("Installation Manual")
+                                                                                    .WithStatus("Released")
+                                                                                    .AddDigitalFile("installation_manual.pdf", "application/pdf")
+                                                                                    .WithDescription("This is a document")
+                                                                                    .WithOrganization("CRM","Customer Relations"))
                                                         .WithDescription("A document")
                                                         .WithOrganization("CRM", "Customer Rally Management")
                                                         .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
@@ -261,15 +264,17 @@ public class FluentAasEndToEndTests
     public void HandoverDocumentationBuilder_ThrowsOnMissingRequiredDocuments()
     {
         // Arrange
-        var builder = HandoverDocumentationBuilderExtensions.AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
-                                                            .WithDescription("en", "Test documentation");
+        var builder = AasBuilder.Create()
+                                .AddShell("urn:aas:example:my-shell", "MyShell")
+                                .AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
+                                .WithDescription("en", "Test documentation");
 
         // Act
-        //var exception = Should.Throw<InvalidOperationException>(() => builder.BuildHandoverDocumentation());
+        var exception = Should.Throw<InvalidOperationException>(() => builder.BuildHandoverDocumentation());
 
         // Assert
-        //exception.Message.ShouldContain("Handover Documentation");}}
-        //exception.Message.ShouldContain("Document");
+        exception.Message.ShouldContain("Handover Documentation");
+        exception.Message.ShouldContain("Document");
     }
 
     private static Property? GetProperty(ISubmodel submodel, string idShort)
