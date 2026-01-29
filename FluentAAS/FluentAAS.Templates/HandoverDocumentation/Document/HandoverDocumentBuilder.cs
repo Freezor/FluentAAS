@@ -19,11 +19,11 @@ public sealed class HandoverDocumentBuilder
     public HandoverDocumentBuilder AddDocumentId(string domainId, string identifier, bool? isPrimary = true)
     {
         var handoverDocumentId = new HandoverDocumentId
-                 {
-                     DocumentDomainId   = domainId ?? throw new ArgumentNullException(nameof(domainId)),
-                     DocumentIdentifier = identifier ?? throw new ArgumentNullException(nameof(identifier)),
-                     DocumentIsPrimary  = isPrimary
-                 };
+                                 {
+                                     DocumentDomainId   = domainId ?? throw new ArgumentNullException(nameof(domainId)),
+                                     DocumentIdentifier = identifier ?? throw new ArgumentNullException(nameof(identifier)),
+                                     DocumentIsPrimary  = isPrimary
+                                 };
         handoverDocumentId.Validate();
         _document.DocumentIds.Add(handoverDocumentId);
         return this;
@@ -140,12 +140,12 @@ public sealed class HandoverDocumentBuilder
         string language             = "en")
     {
         var documentClassification = new HandoverDocumentClassification
-                {
-                    ClassId              = classId ?? throw new ArgumentNullException(nameof(classId)),
-                    ClassName            = className ?? throw new ArgumentNullException(nameof(className)),
-                    ClassNameLanguage    = language,
-                    ClassificationSystem = classificationSystem ?? throw new ArgumentNullException(nameof(classificationSystem))
-                };
+                                     {
+                                         ClassId              = classId ?? throw new ArgumentNullException(nameof(classId)),
+                                         ClassName            = className ?? throw new ArgumentNullException(nameof(className)),
+                                         ClassNameLanguage    = language,
+                                         ClassificationSystem = classificationSystem ?? throw new ArgumentNullException(nameof(classificationSystem))
+                                     };
         documentClassification.Validate();
         _document.DocumentClassifications.Add(documentClassification);
         return this;
@@ -176,8 +176,13 @@ public sealed class HandoverDocumentBuilder
     internal HandoverDocument Build()
     {
         // If the user used the default version fluent methods, finalize it
-        if (_defaultVersionBuilder is not null && _document.DocumentVersions.Count == 0)
+        if (_defaultVersionBuilder is not null)
+        {
+            if (_document.DocumentVersions.Count > 0)
+                throw new InvalidOperationException(
+                                                    "Cannot mix fluent default version methods (WithTitle, WithDescription, etc.) with AddDocumentVersion(). Use one approach consistently.");
             _document.DocumentVersions.Add(_defaultVersionBuilder.Build());
+        }
 
         // Validate template requirements
         foreach (var id in _document.DocumentIds) id.Validate();

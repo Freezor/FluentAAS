@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/FluentAAS.Builder.svg)](https://www.nuget.org/packages/FluentAAS.Builder/)
 [![Downloads](https://img.shields.io/nuget/dt/FluentAAS.Builder.svg)](https://www.nuget.org/packages/FluentAAS.Builder/)
-[![.NET](https://img.shields.io/badge/.NET-9.0%2B-512BD4)]()
+[![.NET](https://img.shields.io/badge/.NET-9.0%2B-512BD4)](https://dotnet.microsoft.com/)
 
 Building AAS models in C# shouldn't require reading 500 pages of specs first.
 
@@ -140,12 +140,12 @@ You get full control when you need it.
 
 ## Project Structure
 
-| Package | What it does |
-|---------|--------------|
-| **FluentAAS.Core** | Immutable AAS meta-model types (C# records) |
-| **FluentAAS.Builder** | Fluent builders + submodel templates |
-| **FluentAAS.Validation** | Rule-based validation against AAS 3.0 |
-| **FluentAAS.IO** | JSON serialization, AASX packaging |
+| Package                  | What it does                                |
+|--------------------------|---------------------------------------------|
+| **FluentAAS.Core**       | Immutable AAS meta-model types (C# records) |
+| **FluentAAS.Builder**    | Fluent builders + submodel templates        |
+| **FluentAAS.Validation** | Rule-based validation against AAS 3.0       |
+| **FluentAAS.IO**         | JSON serialization, AASX packaging          |
 
 ---
 
@@ -195,15 +195,15 @@ I'm building this in the open. If a template you need is missing, let me know �
 
 ## Roadmap
 
-| Feature | Status |
-|---------|--------|
-| Digital Nameplate V2.0 | ✅ Done |
-| JSON/AASX Export | ✅ Done |
-| Validation Service | ✅ Done |
-| Handover Documentation | 🔨 In progress |
-| Technical Data | 📋 Planned |
-| Digital Product Passport | 📋 Planned |
-| AAS Registry Integration | 📋 Planned |
+| Feature                  | Status         |
+|--------------------------|----------------|
+| Digital Nameplate V2.0   | ✅ Done         |
+| JSON/AASX Export         | ✅ Done         |
+| Validation Service       | ✅ Done         |
+| Handover Documentation   | 🔨 In progress |
+| Technical Data           | 📋 Planned     |
+| Digital Product Passport | 📋 Planned     |
+| AAS Registry Integration | 📋 Planned     |
 
 ---
 

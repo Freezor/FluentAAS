@@ -9,7 +9,7 @@ public static class DigitalNameplateSemantics
     /// <summary>
     /// Submodel semantic ID for "Digital Nameplate".
     /// </summary>
-    public const string SubmodelSemanticId = "0112/2///61987#ABN590#002";
+    public const string SubmodelSemanticId = "https://admin-shell.io/idta/SubmodelTemplate/DigitalNameplate/3/0\n";
     
     /// <summary>
     /// Semantic identifier for the Digital Nameplate submodel itself.
@@ -20,7 +20,7 @@ public static class DigitalNameplateSemantics
     /// <summary>
     /// Semantic identifier (IRDI) for the manufacturer name element.
     /// </summary>
-    public const string ManufacturerName = "112/2///61987#ABA565#009";
+    public const string ManufacturerName = "0112/2///61987#ABA565[#009](#009)";
     
     /// <summary>
     /// Semantic identifier (IRDI) for the manufacturer product designation element.

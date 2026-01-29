@@ -9,12 +9,12 @@ public static class HandoverDocumentationBuilderExtensions
     ///     Example:
     ///     <code>
     /// aasBuilder
-    ///     .AddHandoverDocumentation("urn:submodel:handover:123", sm => sm
-    ///         .AddDocument(doc => doc
-    ///             .WithTitle("Operating Manual")
-    ///             .WithDocumentId("DOC-001")
-    ///             .WithLifecycleStage(HandoverLifecycleStage.Operation)
-    ///             .AddFile("manual.pdf", mimeType: "application/pdf")))
+    ///     .AddHandoverDocumentation("urn:submodel:handover:123")
+    ///     .AddDocument(doc => doc
+    ///         .WithTitle("Operating Manual")
+    ///         .WithDocumentId("DOC-001")
+    ///         .WithLifecycleStage(HandoverLifecycleStage.Operation)
+    ///         .AddFile("manual.pdf", mimeType: "application/pdf"))
     ///     .BuildHandoverDocumentation();
     /// </code>
     /// </summary>

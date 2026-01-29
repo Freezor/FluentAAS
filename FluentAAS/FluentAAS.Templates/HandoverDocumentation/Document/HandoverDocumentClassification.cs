@@ -50,6 +50,9 @@ public class HandoverDocumentClassification
         if (string.IsNullOrWhiteSpace(ClassName))
             throw new InvalidOperationException("ClassName is required in DocumentClassification.");
 
+        if (string.IsNullOrWhiteSpace(ClassNameLanguage))
+            throw new InvalidOperationException("ClassNameLanguage is required in DocumentClassification.");
+
         if (string.IsNullOrWhiteSpace(ClassificationSystem))
             throw new InvalidOperationException("ClassificationSystem is required in DocumentClassification.");
     }

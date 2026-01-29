@@ -7,6 +7,7 @@ public sealed class HandoverDocumentationV20
 {
     internal HandoverDocumentationV20(Submodel submodel)
     {
+        ArgumentNullException.ThrowIfNull(submodel);
         Submodel = submodel;
     }
 
