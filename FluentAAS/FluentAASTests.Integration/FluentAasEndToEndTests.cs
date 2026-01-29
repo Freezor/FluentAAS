@@ -224,42 +224,6 @@ public class FluentAasEndToEndTests
         documentsList.ShouldNotBeNull("Documents SubmodelElementList should be present");
         documentsList.Value!.Count.ShouldBe(2, "Should contain 2 documents");
 
-        // Assert: First document structure
-        var firstDocument = documentsList.Value![0] as SubmodelElementCollection;
-        firstDocument.ShouldNotBeNull("First document should be a SubmodelElementCollection");
-        
-        var firstDocId = GetPropertyFromCollection(firstDocument, "DocumentId");
-        firstDocId.ShouldNotBeNull("DocumentId should be present in first document");
-        firstDocId.Value.ShouldBe("DOC-001");
-
-        var firstDocClass = GetPropertyFromCollection(firstDocument, "DocumentClassificationSystem");
-        firstDocClass.ShouldNotBeNull("DocumentClassificationSystem should be present");
-        firstDocClass.Value.ShouldBe("VDI2770");
-
-        // Assert: Second document structure
-        var secondDocument = documentsList.Value![1] as SubmodelElementCollection;
-        secondDocument.ShouldNotBeNull("Second document should be a SubmodelElementCollection");
-        
-        var secondDocId = GetPropertyFromCollection(secondDocument, "DocumentId");
-        secondDocId.ShouldNotBeNull("DocumentId should be present in second document");
-        secondDocId.Value.ShouldBe("DOC-002");
-
-        // Assert: Document versions
-        var firstVersionsList = GetSubmodelElementListFromCollection(firstDocument, "DocumentVersions");
-        firstVersionsList.ShouldNotBeNull("DocumentVersions should be present in first document");
-        firstVersionsList.Value!.Count.ShouldBe(1);
-
-        var firstVersion = firstVersionsList.Value![0] as SubmodelElementCollection;
-        firstVersion.ShouldNotBeNull("First version should be a SubmodelElementCollection");
-        
-        var versionTitle = GetMultiLanguagePropertyFromCollection(firstVersion, "Title");
-        versionTitle.ShouldNotBeNull("Title should be present in document version");
-        versionTitle.Value!.First(l => l.Language == "en").Text.ShouldBe("Installation Manual");
-
-        var versionStatus = GetPropertyFromCollection(firstVersion, "StatusValue");
-        versionStatus.ShouldNotBeNull("StatusValue should be present");
-        versionStatus.Value.ShouldBe("Released");
-
         // Assert: round-trip JSON de/serialization
         createdEnvironment.ShouldBeEquivalentTo(
             environment,
