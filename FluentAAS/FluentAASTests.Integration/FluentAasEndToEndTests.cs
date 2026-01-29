@@ -166,13 +166,13 @@
                              .WithCategory("INSTANCE")
                              .AddDocument(doc => doc
                                                  .AddDocumentId("URI", "DOC-001")
-                                                 .AddDocumentClassification("01-01", "Installation Manual")
+                                                 .WithDocumentClassification("01-01", "Installation Manual")
                                                  .WithTitle("Installation Manual Document")
                                                  .WithDescription("A comprehensive installation manual document")
                                                  .WithOrganization("CRM", "Customer Rally Management")
                                                  .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, testDate)
                                                  .WithPreviewFile("path/to/preview.pdf", "application/pdf")
-                                                 .AddDocumentVersion(CreateDocumentVersion))
+                                                 .WithDocumentVersion(CreateDocumentVersion))
                              .BuildHandoverDocumentation()
                              .CompleteShellConfiguration()
                              .Build();

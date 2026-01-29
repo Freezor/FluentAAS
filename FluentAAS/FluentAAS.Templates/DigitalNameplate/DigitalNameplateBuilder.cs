@@ -556,7 +556,7 @@ public sealed class DigitalNameplateBuilder
     private SubmodelBuilder CreateSubmodelBuilder()
     {
         return new SubmodelBuilder(_shellBuilder, _id, _idShort)
-            .WithSemanticId(RefFactory.GlobalConceptDescription(SubmodelDigitalNameplate));
+            .WithSemanticId(ReferenceFactory.GlobalConceptDescription(SubmodelDigitalNameplate));
     }
 
     /// <summary>
@@ -567,20 +567,20 @@ public sealed class DigitalNameplateBuilder
         AddMultiLanguagePropertyWithSemantic(
                                              submodelBuilder,
                                              submodel, DigitalNameplateIdentifiers.ManufacturerNameIdShort,
-                                             RefFactory.GlobalConceptDescription(ManufacturerName),
+                                             ReferenceFactory.GlobalConceptDescription(ManufacturerName),
                                              _manufacturerName);
 
         AddMultiLanguagePropertyWithSemantic(
                                              submodelBuilder,
                                              submodel, DigitalNameplateIdentifiers.ManufacturerProductDesignationIdShort,
-                                             RefFactory.GlobalConceptDescription(ManufacturerProductDesignation),
+                                             ReferenceFactory.GlobalConceptDescription(ManufacturerProductDesignation),
                                              _manufacturerProductDesignation);
 
         AddPropertyWithSemantic(
                                 submodelBuilder,
                                 submodel, DigitalNameplateIdentifiers.SerialNumberIdShort,
                                 _serialNumber!,
-                                RefFactory.GlobalConceptDescription(SerialNumber));
+                                ReferenceFactory.GlobalConceptDescription(SerialNumber));
     }
 
     /// <summary>
@@ -592,79 +592,79 @@ public sealed class DigitalNameplateBuilder
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.UriOfTheProductIdShort,
                                         _uriOfTheProduct,
-                                        RefFactory.GlobalConceptDescription(UriOfTheProduct));
+                                        ReferenceFactory.GlobalConceptDescription(UriOfTheProduct));
 
         AddOptionalMultiLanguagePropertyWithSemantic(
                                                      submodelBuilder,
                                                      submodel, DigitalNameplateIdentifiers.ManufacturerProductRootIdShort,
-                                                     RefFactory.GlobalConceptDescription(ManufacturerProductRoot),
+                                                     ReferenceFactory.GlobalConceptDescription(ManufacturerProductRoot),
                                                      _manufacturerProductRoot);
 
         AddOptionalMultiLanguagePropertyWithSemantic(
                                                      submodelBuilder,
                                                      submodel, DigitalNameplateIdentifiers.ManufacturerProductFamilyIdShort,
-                                                     RefFactory.GlobalConceptDescription(ManufacturerProductFamily),
+                                                     ReferenceFactory.GlobalConceptDescription(ManufacturerProductFamily),
                                                      _manufacturerProductFamily);
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.ManufacturerProductTypeIdShort,
                                         _manufacturerProductType,
-                                        RefFactory.GlobalConceptDescription(ManufacturerProductType));
+                                        ReferenceFactory.GlobalConceptDescription(ManufacturerProductType));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.OrderCodeOfManufacturerIdShort,
                                         _orderCodeOfManufacturer,
-                                        RefFactory.GlobalConceptDescription(OrderCodeOfManufacturer));
+                                        ReferenceFactory.GlobalConceptDescription(OrderCodeOfManufacturer));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.ProductArticleNumberOfManufacturerIdShort,
                                         _productArticleNumberOfManufacturer,
-                                        RefFactory.GlobalConceptDescription(ProductArticleNumberOfManufacturer));
+                                        ReferenceFactory.GlobalConceptDescription(ProductArticleNumberOfManufacturer));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.YearOfConstructionIdShort,
                                         _yearOfConstruction,
-                                        RefFactory.GlobalConceptDescription(YearOfConstruction));
+                                        ReferenceFactory.GlobalConceptDescription(YearOfConstruction));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.DateOfManufactureIdShort,
                                         _dateOfManufactureIso,
-                                        RefFactory.GlobalConceptDescription(DateOfManufacture));
+                                        ReferenceFactory.GlobalConceptDescription(DateOfManufacture));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.HardwareVersionIdShort,
                                         _hardwareVersion,
-                                        RefFactory.GlobalConceptDescription(HardwareVersion));
+                                        ReferenceFactory.GlobalConceptDescription(HardwareVersion));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.FirmwareVersionIdShort,
                                         _firmwareVersion,
-                                        RefFactory.GlobalConceptDescription(FirmwareVersion));
+                                        ReferenceFactory.GlobalConceptDescription(FirmwareVersion));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.SoftwareVersionIdShort,
                                         _softwareVersion,
-                                        RefFactory.GlobalConceptDescription(SoftwareVersion));
+                                        ReferenceFactory.GlobalConceptDescription(SoftwareVersion));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.CountryOfOriginIdShort,
                                         _countryOfOrigin,
-                                        RefFactory.GlobalConceptDescription(CountryOfOrigin));
+                                        ReferenceFactory.GlobalConceptDescription(CountryOfOrigin));
 
         AddOptionalPropertyWithSemantic(
                                         submodelBuilder,
                                         submodel, DigitalNameplateIdentifiers.UniqueFacilityIdentifierIdShort,
                                         _uniqueFacilityIdentifier,
-                                        RefFactory.GlobalConceptDescription(UniqueFacilityIdentifier));
+                                        ReferenceFactory.GlobalConceptDescription(UniqueFacilityIdentifier));
     }
 
     /// <summary>
@@ -677,22 +677,22 @@ public sealed class DigitalNameplateBuilder
         AddComplexElementIfPresent(
                                    elements,
                                    _addressInformation, DigitalNameplateIdentifiers.AddressInformationIdShort,
-                                   RefFactory.GlobalConceptDescription(AddressInformation));
+                                   ReferenceFactory.GlobalConceptDescription(AddressInformation));
 
         AddComplexElementIfPresent(
                                    elements,
                                    _companyLogo, DigitalNameplateIdentifiers.CompanyLogoIdShort,
-                                   RefFactory.GlobalConceptDescription(CompanyLogo));
+                                   ReferenceFactory.GlobalConceptDescription(CompanyLogo));
 
         AddComplexElementIfPresent(
                                    elements,
                                    _markings, DigitalNameplateIdentifiers.MarkingsIdShort,
-                                   RefFactory.GlobalConceptDescription(Markings));
+                                   ReferenceFactory.GlobalConceptDescription(Markings));
 
         AddComplexElementIfPresent(
                                    elements,
                                    _assetSpecificProperties, DigitalNameplateIdentifiers.AssetSpecificPropertiesIdShort,
-                                   RefFactory.GlobalConceptDescription(AssetSpecificProperties));
+                                   ReferenceFactory.GlobalConceptDescription(AssetSpecificProperties));
     }
 
     /// <summary>

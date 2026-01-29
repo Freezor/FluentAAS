@@ -133,7 +133,7 @@ public sealed class HandoverDocumentBuilder
     /// <param name="language">The language code for the classification name. Defaults to "en".</param>
     /// <returns>The current HandoverDocumentBuilder instance for method chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when classId, className, or classificationSystem is null.</exception>
-    public HandoverDocumentBuilder AddDocumentClassification(
+    public HandoverDocumentBuilder WithDocumentClassification(
         string classId,
         string className,
         string classificationSystem = HandoverDocumentationSemantics.Vdi2770ClassificationSystemName,
@@ -157,7 +157,7 @@ public sealed class HandoverDocumentBuilder
     /// <param name="configure">A configuration action that sets up the document version using a HandoverDocumentVersionBuilder.</param>
     /// <returns>The current HandoverDocumentBuilder instance for method chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when configure is null.</exception>
-    public HandoverDocumentBuilder AddDocumentVersion(Action<HandoverDocumentVersionBuilder> configure)
+    public HandoverDocumentBuilder WithDocumentVersion(Action<HandoverDocumentVersionBuilder> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
 

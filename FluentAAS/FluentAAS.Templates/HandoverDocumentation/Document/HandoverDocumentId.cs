@@ -13,14 +13,14 @@ public class HandoverDocumentId
                            new Property(
                                         idShort: HandoverDocumentationSemantics.IdShortDocumentDomainId,
                                         category: null,
-                                        semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentDomainId),
+                                        semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdDocumentDomainId),
                                         valueType: DataTypeDefXsd.String,
                                         value: DocumentDomainId
                                        ),
                            new Property(
                                         idShort: HandoverDocumentationSemantics.IdShortDocumentIdentifier,
                                         category: null,
-                                        semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentIdentifier),
+                                        semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdDocumentIdentifier),
                                         valueType: DataTypeDefXsd.String,
                                         value: DocumentIdentifier
                                        )
@@ -31,7 +31,7 @@ public class HandoverDocumentId
                          new Property(
                                       idShort: HandoverDocumentationSemantics.IdShortDocumentIsPrimary,
                                       category: null,
-                                      semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentIsPrimary),
+                                      semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdDocumentIsPrimary),
                                       valueType: DataTypeDefXsd.Boolean,
                                       value: DocumentIsPrimary.Value ? "true" : "false"
                                      )
@@ -41,8 +41,8 @@ public class HandoverDocumentId
                                              idShort: "DocumentId",
                                              category: null,
                                              description: null,
-                                             semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentId),
-                                             value: [..elements.ToArray()]
+                                             semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdDocumentId),
+                                             value: [..elements]
                                             );
     }
 
@@ -53,10 +53,5 @@ public class HandoverDocumentId
 
         if (string.IsNullOrWhiteSpace(DocumentIdentifier))
             throw new InvalidOperationException("DocumentIdentifier is required in DocumentId.");
-    }
-
-    private static Reference Ref(string semanticId)
-    {
-        return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
     }
 }

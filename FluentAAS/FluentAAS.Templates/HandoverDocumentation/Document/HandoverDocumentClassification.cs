@@ -14,20 +14,20 @@ public class HandoverDocumentClassification
                            new Property(
                                         idShort: HandoverDocumentationSemantics.IdShortClassId,
                                         category: null,
-                                        semanticId: Ref(HandoverDocumentationSemantics.SemanticIdClassId),
+                                        semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdClassId),
                                         valueType: DataTypeDefXsd.String,
                                         value: ClassId
                                        ),
                            new MultiLanguageProperty(
                                                      idShort: HandoverDocumentationSemantics.IdShortClassName,
                                                      category: null,
-                                                     semanticId: Ref(HandoverDocumentationSemantics.SemanticIdClassName),
+                                                     semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdClassName),
                                                      value: [new LangStringTextType(ClassNameLanguage, ClassName)]
                                                     ),
                            new Property(
                                         idShort: HandoverDocumentationSemantics.IdShortClassificationSystem,
                                         category: null,
-                                        semanticId: Ref(HandoverDocumentationSemantics.SemanticIdClassificationSystem),
+                                        semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdClassificationSystem),
                                         valueType: DataTypeDefXsd.String,
                                         value: ClassificationSystem
                                        )
@@ -37,7 +37,7 @@ public class HandoverDocumentClassification
                                              idShort: "DocumentClassification",
                                              category: null,
                                              description: null,
-                                             semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocumentClassification),
+                                             semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdDocumentClassification),
                                              value: [..elements.ToArray()]
                                             );
     }
@@ -55,10 +55,5 @@ public class HandoverDocumentClassification
 
         if (string.IsNullOrWhiteSpace(ClassificationSystem))
             throw new InvalidOperationException("ClassificationSystem is required in DocumentClassification.");
-    }
-
-    private static Reference Ref(string semanticId)
-    {
-        return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
     }
 }

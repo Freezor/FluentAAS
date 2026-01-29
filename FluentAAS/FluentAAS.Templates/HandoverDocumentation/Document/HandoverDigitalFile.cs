@@ -10,7 +10,7 @@ public class HandoverDigitalFile
         return new Aas.File(
                             idShort: idShort,
                             category: null,
-                            semanticId: semanticId is null ? null : Ref(semanticId),
+                            semanticId: semanticId is null ? null : ReferenceFactory.GlobalSemanticReference(semanticId),
                             contentType: MimeType,
                             value: Path
                            );
@@ -23,10 +23,5 @@ public class HandoverDigitalFile
 
         if (string.IsNullOrWhiteSpace(MimeType))
             throw new InvalidOperationException("DigitalFile.MimeType is required.");
-    }
-
-    private static Reference Ref(string semanticId)
-    {
-        return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
     }
 }

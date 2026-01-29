@@ -108,7 +108,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
                                     idShort: _idShort,
                                     category: _category,
                                     description: _description.Count > 0 ? _description.Cast<ILangStringTextType>().ToList() : [],
-                                    semanticId: Ref(HandoverDocumentationSemantics.SubmodelSemanticId),
+                                    semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SubmodelSemanticId),
                                     kind: ModellingKind.Instance,
                                     qualifiers: null,
                                     administration: null,
@@ -154,11 +154,6 @@ public sealed class HandoverDocumentationSubmodelBuilder
             doc.ValidateTemplateRequirements();
     }
 
-    private static Reference Ref(string semanticId)
-    {
-        return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
-    }
-
     private static SubmodelElementList NewList(
         string                 idShort,
         string                 semanticId,
@@ -175,13 +170,13 @@ public sealed class HandoverDocumentationSubmodelBuilder
                                            idShort: idShort,
                                            category: null,
                                            description: null,
-                                           semanticId: Ref(semanticId),
+                                           semanticId: ReferenceFactory.GlobalSemanticReference(semanticId),
                                            value: [..value.ToArray()]
                                           )
                    {
                        // List metadata (critical for compliance)
                        OrderRelevant         = orderRelevant,
-                       SemanticIdListElement = Ref(listElementSemanticId),
+                       SemanticIdListElement = ReferenceFactory.GlobalSemanticReference(listElementSemanticId),
                        TypeValueListElement  = typeValueListElement
                    };
 
