@@ -157,7 +157,7 @@ public sealed class HandoverDocumentBuilder
     /// <param name="configure">A configuration action that sets up the document version using a HandoverDocumentVersionBuilder.</param>
     /// <returns>The current HandoverDocumentBuilder instance for method chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when configure is null.</exception>
-    public HandoverDocumentBuilder WithDocumentVersion(Action<HandoverDocumentVersionBuilder> configure)
+    public HandoverDocumentBuilder AddDocumentVersion(Action<HandoverDocumentVersionBuilder> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
 
@@ -178,9 +178,6 @@ public sealed class HandoverDocumentBuilder
         // If the user used the default version fluent methods, finalize it
         if (_defaultVersionBuilder is not null)
         {
-            if (_document.DocumentVersions.Count > 0)
-                throw new InvalidOperationException(
-                                                    "Cannot mix fluent default version methods (WithTitle, WithDescription, etc.) with AddDocumentVersion(). Use one approach consistently.");
             _document.DocumentVersions.Add(_defaultVersionBuilder.Build());
         }
 

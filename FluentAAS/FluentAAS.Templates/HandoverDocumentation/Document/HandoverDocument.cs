@@ -46,7 +46,7 @@
                                                  idShort: "Document", // Note: list element idShort is "Document" in many templates; keep stable.
                                                  category: null,
                                                  description: null,
-                                                 semanticId: Ref(HandoverDocumentationSemantics.SemanticIdDocument),
+                                                 semanticId: ReferenceFactory.GlobalSemanticReference(HandoverDocumentationSemantics.SemanticIdDocument),
                                                  value: [..children.ToArray()]
                                                 );
         }
@@ -123,17 +123,6 @@
                           );
         }
 
-        // Helpers
-        /// <summary>
-        /// Creates a Reference object from a semantic ID string.
-        /// </summary>
-        /// <param name="semanticId">The semantic ID string to convert to a Reference.</param>
-        /// <returns>A Reference object containing the semantic ID.</returns>
-        private static Reference Ref(string semanticId)
-        {
-            return new Reference(ReferenceTypes.ExternalReference, [new Key(KeyTypes.GlobalReference, semanticId)]);
-        }
-
         /// <summary>
         /// Creates a new SubmodelElementList with the specified configuration and elements.
         /// </summary>
@@ -162,7 +151,7 @@
                                               )
                        {
                            OrderRelevant         = orderRelevant,
-                           SemanticIdListElement = Ref(listElementSemanticId),
+                           SemanticIdListElement = ReferenceFactory.GlobalSemanticReference(listElementSemanticId),
                            TypeValueListElement  = typeValueListElement
                        };
 

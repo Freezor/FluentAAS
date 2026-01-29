@@ -167,33 +167,28 @@
                              .AddDocument(doc => doc
                                                  .AddDocumentId("URI", "DOC-001")
                                                  .WithDocumentClassification("01-01", "Installation Manual")
-                                                 .WithTitle("Installation Manual Document")
-                                                 .WithDescription("A comprehensive installation manual document")
-                                                 .WithOrganization("CRM", "Customer Rally Management")
-                                                 .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, testDate)
-                                                 .WithPreviewFile("path/to/preview.pdf", "application/pdf")
-                                                 .WithDocumentVersion(CreateDocumentVersion))
+                                                 .AddDocumentVersion(ver => ver
+                                                                            .WithLanguage("en")
+                                                                            .WithLanguage("de")
+                                                                            .WithVersion("1.0")
+                                                                            .WithTitle("Installation Manual Document")
+                                                                            .WithDescription("A comprehensive installation manual document")
+                                                                            .WithSubtitle("Quick Start Guide")
+                                                                            .AddKeyword("installation")
+                                                                            .AddKeyword("manual")
+                                                                            .AddKeyword("anleitung", "de")
+                                                                            .WithStatus("Released", testDate)
+                                                                            .WithOrganization("CRM", "Customer Relations Management")
+                                                                            .AddDigitalFile("installation_manual.pdf", "application/pdf")
+                                                                            .AddDigitalFile(
+                                                                                            "installation_guide.docx",
+                                                                                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                                                                            .WithPreviewFile("path/to/preview.pdf", "application/pdf")
+                                                                    )
+                                                 )
                              .BuildHandoverDocumentation()
                              .CompleteShellConfiguration()
                              .Build();
-        }
-
-        private static void CreateDocumentVersion(HandoverDocumentVersionBuilder ver)
-        {
-            ver.WithLanguage("en")
-               .WithLanguage("de")
-               .WithVersion("1.0")
-               .WithTitle("Installation Manual")
-               .WithDescription("Detailed installation instructions")
-               .WithSubtitle("Quick Start Guide")
-               .AddKeyword("installation")
-               .AddKeyword("manual")
-               .AddKeyword("anleitung", "de")
-               .WithStatus("Released")
-               .WithOrganization("CRM", "Customer Relations Management")
-               .AddDigitalFile("installation_manual.pdf", "application/pdf")
-               .AddDigitalFile("installation_guide.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-               .WithPreviewFile("preview_thumbnail.jpg", "image/jpeg");
         }
 
         private static void AssertEnvironmentStructure(IEnvironment environment)
@@ -319,10 +314,10 @@
             GetPropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortVersion).Value.ShouldBe("1.0");
 
             var titleProperty = GetMultiLanguagePropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortTitle);
-            titleProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Installation Manual");
+            titleProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Installation Manual Document");
 
             var descriptionProperty = GetMultiLanguagePropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortDescription);
-            descriptionProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Detailed installation instructions");
+            descriptionProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "A comprehensive installation manual document");
 
             var subtitleProperty = GetMultiLanguagePropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortSubtitle);
             subtitleProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Quick Start Guide");
@@ -359,8 +354,8 @@
         private static void AssertPreviewFile(SubmodelElementCollection versionCollection)
         {
             var previewFile = GetFile(versionCollection, HandoverDocumentationSemantics.IdShortPreviewFile);
-            previewFile.Value.ShouldBe("preview_thumbnail.jpg");
-            previewFile.ContentType.ShouldBe("image/jpeg");
+            previewFile.Value.ShouldBe("path/to/preview.pdf");
+            previewFile.ContentType.ShouldBe("application/pdf");
             previewFile.SemanticId!.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SemanticIdPreviewFile);
         }
 
