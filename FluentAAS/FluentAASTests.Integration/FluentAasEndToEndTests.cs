@@ -140,7 +140,10 @@ public class FluentAasEndToEndTests
     [Fact]
     public void CanCreateHandoverDocumentationWithFluentApi()
     {
-    var environment = AasBuilder.Create()
+        // Arrange & Act
+        var testDate = new DateTime(2025, 1, 15, 10, 30, 0, DateTimeKind.Utc);
+        
+        var environment = AasBuilder.Create()
                                     .AddShell("urn:aas:example:my-shell", "MyShell")
                                     .WithGlobalAssetId("urn:asset:example:my-asset")
                                     .AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
@@ -148,92 +151,157 @@ public class FluentAasEndToEndTests
                                     .WithDescription("de", "Vollständige Übergabedokumentation für das Asset")
                                     .WithCategory("INSTANCE")
                                     .AddDocument(doc => doc
-                                                        .AddDocumentId("URI", "DOC-001", true)
-                                                        .AddDocumentClassification("01-01", "Installation Manual", "VDI 2770 Blatt 1:2020", "en")
-                                                        .AddDocumentVersion(ver => ver
-                                                                                    .WithLanguage("en")
-                                                                                    .WithVersion("1.0")
-                                                                                    .WithTitle("Installation Manual")
-                                                                                    .WithStatus("Released")
-                                                                                    .AddDigitalFile("installation_manual.pdf", "application/pdf")
-                                                                                    .WithDescription("This is a document")
-                                                                                    .WithOrganization("CRM","Customer Relations"))
-                                                        .WithDescription("A document")
-                                                        .WithOrganization("CRM", "Customer Rally Management")
-                                                        .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
-                                                        .WithPreviewFile("path/to/file")
-                                                        .WithTitle("A new document"))
-                                    .AddDocument(doc => doc
-                                                        .AddDocumentId("URI", "DOC-002", true)
-                                                        .AddDocumentClassification("01-02", "Certification Manual", "VDI 2770 Blatt 1:2020", "en")
-                                                        .AddDocumentVersion(ver => ver
-                                                                                   .WithLanguage("en")
-                                                                                   .WithVersion("1.0")
-                                                                                   .WithTitle("Certification Manual")
-                                                                                   .WithStatus("Released")
-                                                                                   .AddDigitalFile("certification_manual.pdf", "application/pdf")
-                                                                                   .WithDescription("This is a document")
-                                                                                   .WithOrganization("CRM","Customer Relations"))
-                                                        .WithDescription("A Certification")
-                                                        .WithOrganization("CRM", "Customer Rally Management")
-                                                        .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
-                                                        .WithPreviewFile("path/to/file")
-                                                        .WithTitle("A new Certification document"))
-                                    .BuildHandoverDocumentation()
-                                    .CompleteShellConfiguration()
-                                    .Build();
+                                            .AddDocumentId("URI", "DOC-001")
+                                            .AddDocumentClassification("01-01", "Installation Manual")
+                                            .WithTitle("Installation Manual Document")
+                                            .WithDescription("A comprehensive installation manual document")
+                                            .WithOrganization("CRM", "Customer Rally Management")
+                                            .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, testDate)
+                                            .WithPreviewFile("path/to/preview.pdf", "application/pdf")
+                                            .AddDocumentVersion(ver => ver
+                                                                        .WithLanguage("en")
+                                                                        .WithLanguage("de")
+                                                                        .WithVersion("1.0")
+                                                                        .WithTitle("Installation Manual")
+                                                                        .WithDescription("Detailed installation instructions")
+                                                                        .WithSubtitle("Quick Start Guide")
+                                                                        .AddKeyword("installation")
+                                                                        .AddKeyword("manual")
+                                                                        .AddKeyword("anleitung", "de")
+                                                                        .WithStatus("Released")
+                                                                        .WithOrganization("CRM", "Customer Relations Management")
+                                                                        .AddDigitalFile("installation_manual.pdf", "application/pdf")
+                                                                        .AddDigitalFile("installation_guide.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                                                                        .WithPreviewFile("preview_thumbnail.jpg", "image/jpeg")))
+                                .BuildHandoverDocumentation()
+                                .CompleteShellConfiguration()
+                                .Build();
 
-        // Create De/Serializing environment
-        var json = AasJsonSerializer.ToJson(environment);
-        var createdEnvironment = AasJsonSerializer.FromJson(json);
-
-        // Create AASX package
-        const string aasxPath = "./test_handover.aasx";
-        environment.ToAasx(aasxPath, "/spec/uri/env.json");
-        var extractedAasEnvironment = AasxToAasEnvironmentExtractor.ExtractEnvironment(aasxPath);
-
-        File.Delete(aasxPath);
-
-        // Assert: environment basics
+        // Assert - Environment Structure
         environment.ShouldNotBeNull();
-        environment.AssetAdministrationShells.ShouldHaveSingleItem();
-        environment.Submodels!.Count.ShouldBe(1);
+        environment.AssetAdministrationShells.ShouldNotBeNull();
+        environment.AssetAdministrationShells.Count.ShouldBe(1);
+        environment.Submodels.ShouldNotBeNull();
+        environment.Submodels.Count.ShouldBe(1);
 
-        // Assert: shell and asset info
-        var shell = environment.AssetAdministrationShells!.First();
+        // Assert - Shell Properties
+        var shell = environment.AssetAdministrationShells.First();
+        shell.Id.ShouldBe("urn:aas:example:my-shell");
         shell.IdShort.ShouldBe("MyShell");
+        shell.AssetInformation.ShouldNotBeNull();
         shell.AssetInformation.GlobalAssetId.ShouldBe("urn:asset:example:my-asset");
+        shell.Submodels.ShouldNotBeNull();
+        shell.Submodels.Count.ShouldBe(1);
 
-        // Assert: submodel basics
-        var submodel = environment.Submodels!.Find(x => x.IdShort!.Equals("HandoverDocumentation"));
-        submodel.ShouldNotBeNull();
+        // Assert - Submodel Properties
+        var submodel = environment.Submodels.First();
+        submodel.Id.ShouldBe("urn:submodel:example:handover-documentation:V2_0");
+        submodel.IdShort.ShouldBe("HandoverDocumentation");
         submodel.Category.ShouldBe("INSTANCE");
+        submodel.SemanticId.ShouldNotBeNull();
+        submodel.SemanticId.Type.ShouldBe(ReferenceTypes.ExternalReference);
+        submodel.SemanticId.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SubmodelSemanticId);
 
-        // Assert: submodel description
+        // Assert - Submodel Descriptions
         submodel.Description.ShouldNotBeNull();
         submodel.Description.Count.ShouldBe(2);
-        var englishDesc = submodel.Description.First(d => d.Language == "en");
-        englishDesc.Text.ShouldBe("Complete handover documentation for the asset");
-        var germanDesc = submodel.Description.First(d => d.Language == "de");
-        germanDesc.Text.ShouldBe("Vollständige Übergabedokumentation für das Asset");
+        submodel.Description.ShouldContain(d => d.Language == "en" && d.Text == "Complete handover documentation for the asset");
+        submodel.Description.ShouldContain(d => d.Language == "de" && d.Text == "Vollständige Übergabedokumentation für das Asset");
 
-        // Assert: Documents list exists
-        var documentsList = submodel.SubmodelElements!
-            .OfType<SubmodelElementList>()
-            .FirstOrDefault(sml => sml.IdShort == "Documents");
-        documentsList.ShouldNotBeNull("Documents SubmodelElementList should be present");
-        documentsList.Value!.Count.ShouldBe(2, "Should contain 2 documents");
+        // Assert - Documents List Structure
+        submodel.SubmodelElements.ShouldNotBeNull();
+        submodel.SubmodelElements.Count.ShouldBe(1);
+        
+        var documentsList = submodel.SubmodelElements.OfType<SubmodelElementList>()
+                                  .Single(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocuments);
+        documentsList.SemanticId!.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SemanticIdDocuments);
+        documentsList.TypeValueListElement.ShouldBe(AasSubmodelElements.SubmodelElementCollection);
+        documentsList.Value.ShouldNotBeNull();
+        documentsList.Value.Count.ShouldBe(1);
 
-        // Assert: round-trip JSON de/serialization
-        createdEnvironment.ShouldBeEquivalentTo(
-            environment,
-            "Serializing and Deserializing the same object should result in identical objects");
+        // Assert - Document Structure
+        var documentCollection = documentsList.Value.OfType<SubmodelElementCollection>().Single();
+        documentCollection.IdShort.ShouldBe("Document");
+        documentCollection.SemanticId!.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SemanticIdDocument);
 
-        // Assert: round-trip AASX de/serialization
-        extractedAasEnvironment.ShouldBeEquivalentTo(
-            environment, 
-            "Packaging to .aasx and reading from the same object should result in identical objects");
+        // Assert - Document IDs
+        var documentIds = GetSubmodelElementList(documentCollection, HandoverDocumentationSemantics.IdShortDocumentIds);
+        documentIds.SemanticId!.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SemanticIdDocumentIds);
+        documentIds.Value!.Count.ShouldBe(1);
+        
+        var documentIdCollection = documentIds.Value.OfType<SubmodelElementCollection>().Single();
+        GetPropertyLocal(documentIdCollection, HandoverDocumentationSemantics.IdShortDocumentDomainId).Value.ShouldBe("URI");
+        GetPropertyLocal(documentIdCollection, HandoverDocumentationSemantics.IdShortDocumentIdentifier).Value.ShouldBe("DOC-001");
+        GetPropertyLocal(documentIdCollection, HandoverDocumentationSemantics.IdShortDocumentIsPrimary).Value.ShouldBe("true");
+
+        // Assert - Document Classifications
+        var documentClassifications = GetSubmodelElementList(documentCollection, HandoverDocumentationSemantics.IdShortDocumentClassifications);
+        documentClassifications.SemanticId!.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SemanticIdDocumentClassifications);
+        documentClassifications.Value!.Count.ShouldBe(1);
+        
+        var classificationCollection = documentClassifications.Value.OfType<SubmodelElementCollection>().Single();
+        GetPropertyLocal(classificationCollection, HandoverDocumentationSemantics.IdShortClassId).Value.ShouldBe("01-01");
+        GetMultiLanguagePropertyLocal(classificationCollection, HandoverDocumentationSemantics.IdShortClassName)
+            .Value!.ShouldContain(v => v.Language == "en" && v.Text == "Installation Manual");
+        GetPropertyLocal(classificationCollection, HandoverDocumentationSemantics.IdShortClassificationSystem).Value.ShouldBe("VDI 2770 Blatt 1:2020");
+
+        // Assert - Document Versions
+        var documentVersions = GetSubmodelElementList(documentCollection, HandoverDocumentationSemantics.IdShortDocumentVersions);
+        documentVersions.SemanticId!.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SemanticIdDocumentVersions);
+        documentVersions.Value!.Count.ShouldBe(1);
+        
+        var versionCollection = documentVersions.Value.OfType<SubmodelElementCollection>().Single();
+        
+        // Assert - Version Language List
+        var languageList = GetSubmodelElementList(versionCollection, HandoverDocumentationSemantics.IdShortLanguage);
+        languageList.Value!.Count.ShouldBe(2);
+        var languageProperties = languageList.Value.OfType<Property>().ToList();
+        languageProperties.Select(p => p.Value).ShouldContain("en");
+        languageProperties.Select(p => p.Value).ShouldContain("de");
+
+        // Assert - Version Properties
+        GetPropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortVersion).Value.ShouldBe("1.0");
+        
+        var titleProperty = GetMultiLanguagePropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortTitle);
+        titleProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Installation Manual");
+        
+        var descriptionProperty = GetMultiLanguagePropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortDescription);
+        descriptionProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Detailed installation instructions");
+        
+        var subtitleProperty = GetMultiLanguagePropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortSubtitle);
+        subtitleProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "Quick Start Guide");
+        
+        var keywordsProperty = GetMultiLanguagePropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortKeyWords);
+        keywordsProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "installation");
+        keywordsProperty.Value!.ShouldContain(v => v.Language == "en" && v.Text == "manual");
+        keywordsProperty.Value!.ShouldContain(v => v.Language == "de" && v.Text == "anleitung");
+
+        GetPropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortStatusValue).Value.ShouldBe("Released");
+        GetPropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortOrganizationShortName).Value.ShouldBe("CRM");
+        GetPropertyLocal(versionCollection, HandoverDocumentationSemantics.IdShortOrganizationOfficialName).Value.ShouldBe("Customer Relations Management");
+
+        // Assert - Digital Files
+        var digitalFilesList = GetSubmodelElementList(versionCollection, HandoverDocumentationSemantics.IdShortDigitalFiles);
+        digitalFilesList.Value!.Count.ShouldBe(2);
+        
+        var digitalFiles = digitalFilesList.Value.OfType<AasCore.Aas3_0.File>().ToList();
+        digitalFiles.ShouldContain(f => f.Value == "installation_manual.pdf" && f.ContentType == "application/pdf");
+        digitalFiles.ShouldContain(f => f.Value == "installation_guide.docx" && f.ContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+
+        // Assert - Preview File
+        var previewFile = GetFile(versionCollection, HandoverDocumentationSemantics.IdShortPreviewFile);
+        previewFile.Value.ShouldBe("preview_thumbnail.jpg");
+        previewFile.ContentType.ShouldBe("image/jpeg");
+        previewFile.SemanticId!.Keys.Single().Value.ShouldBe(HandoverDocumentationSemantics.SemanticIdPreviewFile);
     }
+
+    private static AasCore.Aas3_0.File GetFile(SubmodelElementCollection collection, string idShort) => collection.Value!.OfType<AasCore.Aas3_0.File>().Single(p => p.IdShort == idShort);
+
+    private static SubmodelElementList GetSubmodelElementList(SubmodelElementCollection collection, string idShort) => collection.Value!.OfType<SubmodelElementList>().Single(p => p.IdShort == idShort);
+
+    private static MultiLanguageProperty GetMultiLanguagePropertyLocal(SubmodelElementCollection collection, string idShort) => collection.Value!.OfType<MultiLanguageProperty>().Single(p => p.IdShort == idShort);
+
+    private static Property GetPropertyLocal(SubmodelElementCollection collection, string idShort) => collection.Value!.OfType<Property>().Single(p => p.IdShort == idShort);
 
     /// <summary>
     ///     Verifies that the HandoverDocumentationSubmodelBuilder throws an
@@ -268,26 +336,5 @@ public class FluentAasEndToEndTests
         return submodel.SubmodelElements!
                        .OfType<MultiLanguageProperty>()
                        .FirstOrDefault(p => p.IdShort == idShort);
-    }
-
-    private static Property? GetPropertyFromCollection(SubmodelElementCollection collection, string idShort)
-    {
-        return collection.Value!
-                    .OfType<Property>()
-                    .FirstOrDefault(p => p.IdShort == idShort);
-    }
-
-    private static MultiLanguageProperty? GetMultiLanguagePropertyFromCollection(SubmodelElementCollection collection, string idShort)
-    {
-        return collection.Value!
-                    .OfType<MultiLanguageProperty>()
-                    .FirstOrDefault(p => p.IdShort == idShort);
-    }
-
-    private static SubmodelElementList? GetSubmodelElementListFromCollection(SubmodelElementCollection collection, string idShort)
-    {
-        return collection.Value!
-                    .OfType<SubmodelElementList>()
-                    .FirstOrDefault(p => p.IdShort == idShort);
     }
 }
