@@ -140,8 +140,7 @@ public class FluentAasEndToEndTests
     [Fact]
     public void CanCreateHandoverDocumentationWithFluentApi()
     {
-        // Arrange & Act
-        var environment = AasBuilder.Create()
+    var environment = AasBuilder.Create()
                                     .AddShell("urn:aas:example:my-shell", "MyShell")
                                     .WithGlobalAssetId("urn:asset:example:my-asset")
                                     .AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
@@ -150,7 +149,7 @@ public class FluentAasEndToEndTests
                                     .WithCategory("INSTANCE")
                                     .AddDocument(doc => doc
                                                         .AddDocumentId("URI", "DOC-001", true)
-                                                        .AddDocumentClassification("01-01", "Installation Manual", "VDI2770", "en")
+                                                        .AddDocumentClassification("01-01", "Installation Manual", "VDI 2770 Blatt 1:2020", "en")
                                                         .AddDocumentVersion(ver => ver
                                                                                     .WithLanguage("en")
                                                                                     .WithVersion("1.0")
@@ -164,6 +163,22 @@ public class FluentAasEndToEndTests
                                                         .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
                                                         .WithPreviewFile("path/to/file")
                                                         .WithTitle("A new document"))
+                                    .AddDocument(doc => doc
+                                                        .AddDocumentId("URI", "DOC-002", true)
+                                                        .AddDocumentClassification("01-02", "Certification Manual", "VDI 2770 Blatt 1:2020", "en")
+                                                        .AddDocumentVersion(ver => ver
+                                                                                   .WithLanguage("en")
+                                                                                   .WithVersion("1.0")
+                                                                                   .WithTitle("Certification Manual")
+                                                                                   .WithStatus("Released")
+                                                                                   .AddDigitalFile("certification_manual.pdf", "application/pdf")
+                                                                                   .WithDescription("This is a document")
+                                                                                   .WithOrganization("CRM","Customer Relations"))
+                                                        .WithDescription("A Certification")
+                                                        .WithOrganization("CRM", "Customer Rally Management")
+                                                        .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
+                                                        .WithPreviewFile("path/to/file")
+                                                        .WithTitle("A new Certification document"))
                                     .BuildHandoverDocumentation()
                                     .CompleteShellConfiguration()
                                     .Build();
