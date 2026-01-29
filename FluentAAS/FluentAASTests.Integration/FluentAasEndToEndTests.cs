@@ -141,26 +141,29 @@ public class FluentAasEndToEndTests
     public void CanCreateHandoverDocumentationWithFluentApi()
     {
         // Arrange & Act
-        var environment = HandoverDocumentationBuilderExtensions.AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0")
-                                                                .WithDescription("en", "Complete handover documentation for the asset")
-                                                                .WithDescription("de", "Vollständige Übergabedokumentation für das Asset")
-                                                                .WithCategory("INSTANCE")
-                                                                .AddDocument(doc => doc
-                                                                                    .AddDocumentId("URI", "DOC-001", true)
-                                                                                    .AddDocumentClassification("01-01", "Installation Manual", "VDI2770", "en")
-                                                                                    .AddDocumentVersion(ver => ver
-                                                                                                                .WithLanguage("en")
-                                                                                                                .WithVersion("1.0")
-                                                                                                                .WithTitle("Installation Manual")
-                                                                                                                .WithStatus("Released"))
-                                                                                    .WithDescription("A document")
-                                                                                    .WithOrganization("CRM", "Customer Rally Management")
-                                                                                    .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
-                                                                                    .WithPreviewFile("path/to/file")
-                                                                                    .WithTitle("A new document"))
-                                                                .BuildHandoverDocumentation()
-                                                                .CompleteShellConfiguration()
-                                                                .Build();
+        var environment = AasBuilder.Create()
+                                    .AddShell("urn:aas:example:my-shell", "MyShell")
+                                    .WithGlobalAssetId("urn:asset:example:my-asset")
+                                    .AddHandoverDocumentation("urn:submodel:example:handover-documentation:V2_0", "MyShell")
+                                    .WithDescription("en", "Complete handover documentation for the asset")
+                                    .WithDescription("de", "Vollständige Übergabedokumentation für das Asset")
+                                    .WithCategory("INSTANCE")
+                                    .AddDocument(doc => doc
+                                                        .AddDocumentId("URI", "DOC-001", true)
+                                                        .AddDocumentClassification("01-01", "Installation Manual", "VDI2770", "en")
+                                                        .AddDocumentVersion(ver => ver
+                                                                                   .WithLanguage("en")
+                                                                                   .WithVersion("1.0")
+                                                                                   .WithTitle("Installation Manual")
+                                                                                   .WithStatus("Released"))
+                                                        .WithDescription("A document")
+                                                        .WithOrganization("CRM", "Customer Rally Management")
+                                                        .WithStatus(HandoverDocumentationSemantics.StatusValues.Released, DateTime.Now)
+                                                        .WithPreviewFile("path/to/file")
+                                                        .WithTitle("A new document"))
+                                    .BuildHandoverDocumentation()
+                                    .CompleteShellConfiguration()
+                                    .Build();
 
         // Create De/Serializing environment
         var json = AasJsonSerializer.ToJson(environment);

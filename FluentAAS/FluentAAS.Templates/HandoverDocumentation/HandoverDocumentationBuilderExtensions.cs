@@ -1,3 +1,5 @@
+using FluentAAS.Builder;
+
 namespace FluentAAS.Templates.HandoverDocumentation;
 
 public static class HandoverDocumentationBuilderExtensions
@@ -16,26 +18,17 @@ public static class HandoverDocumentationBuilderExtensions
     ///     .BuildHandoverDocumentation();
     /// </code>
     /// </summary>
-    public static HandoverDocumentationSubmodelBuilder AddHandoverDocumentation(string  submodelId,
-                                                                                string? idShort = null)
+    public static HandoverDocumentationSubmodelBuilder AddHandoverDocumentation(this IShellBuilder shellBuilder,
+                                                                                string             submodelId,
+                                                                                string?            idShort = "HandoverDocumentation")
     {
-        return new HandoverDocumentationSubmodelBuilder(submodelId, idShort);
-    }
+        ArgumentNullException.ThrowIfNull(shellBuilder);
 
-    /// <summary>
-    ///     Builds and adds the configured Handover Documentation submodel to the root builder.
-    /// </summary>
-    public static TRootBuilder BuildHandoverDocumentation<TRootBuilder>(
-        this HandoverDocumentationSubmodelBuilder handoverBuilder,
-        TRootBuilder rootBuilder)
-        where TRootBuilder : ISubmodelCollector
-    {
-        ArgumentNullException.ThrowIfNull(handoverBuilder);
-        if (rootBuilder is null) throw new ArgumentNullException(nameof(rootBuilder));
+        if (string.IsNullOrWhiteSpace(submodelId))
+        {
+            throw new ArgumentException("Submodel id must not be empty.", nameof(submodelId));
+        }
 
-        var typedSubmodel = handoverBuilder.Build();
-        rootBuilder.AddSubmodel(typedSubmodel.Submodel);
-
-        return rootBuilder;
+        return new HandoverDocumentationSubmodelBuilder(shellBuilder, submodelId, idShort);
     }
 }

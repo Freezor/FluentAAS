@@ -1,3 +1,4 @@
+using FluentAAS.Builder;
 using FluentAAS.Templates.HandoverDocumentation.Document;
 
 namespace FluentAAS.Templates.HandoverDocumentation;
@@ -11,6 +12,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
 
     private readonly List<HandoverDocument> _documents = [];
 
+    private readonly IShellBuilder _shellBuilder;
     // Optional root list (Entities)
     private readonly List<IReferable> _entities = [];
     private readonly string           _id;
@@ -21,12 +23,15 @@ public sealed class HandoverDocumentationSubmodelBuilder
     /// <summary>
     ///     Initializes a new instance of the HandoverDocumentationSubmodelBuilder with the specified ID and optional IdShort.
     /// </summary>
+    /// <param name="shellBuilder">The parent <see cref="ShellBuilder"/> to which the submodel will be attached.</param>
     /// <param name="id">The unique identifier for the submodel.</param>
     /// <param name="idShort">The optional short identifier for the submodel. If not provided, uses the default from semantics.</param>
     /// <exception cref="ArgumentNullException">Thrown when id is null.</exception>
-    public HandoverDocumentationSubmodelBuilder(string id, string? idShort = null)
+    public HandoverDocumentationSubmodelBuilder(IShellBuilder shellBuilder,string id, string? idShort = null)
     {
-        _id = id ?? throw new ArgumentNullException(nameof(id));
+        _shellBuilder = shellBuilder ?? throw new ArgumentNullException(nameof(shellBuilder));
+        
+        _id           = id ?? throw new ArgumentNullException(nameof(id));
         if (!string.IsNullOrWhiteSpace(idShort))
             _idShort = idShort;
     }
@@ -94,7 +99,7 @@ public sealed class HandoverDocumentationSubmodelBuilder
     /// </summary>
     /// <returns>A fully configured HandoverDocumentationV20 submodel instance.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the submodel configuration is invalid or incomplete.</exception>
-    public HandoverDocumentationV20 Build()
+    public IShellBuilder BuildHandoverDocumentation()
     {
         Validate();
 
@@ -110,7 +115,9 @@ public sealed class HandoverDocumentationSubmodelBuilder
                                     submodelElements: BuildSubmodelElements()
                                    );
 
-        return new HandoverDocumentationV20(submodel);
+        _shellBuilder.AddSubmodelReference(submodel);
+
+        return _shellBuilder;
     }
 
     private List<ISubmodelElement> BuildSubmodelElements()
