@@ -172,9 +172,17 @@ public sealed class HandoverDocumentBuilder
     /// Builds and validates the HandoverDocument instance with all configured settings.
     /// </summary>
     /// <returns>A fully configured and validated HandoverDocument instance.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the document fails template validation requirements.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the document fails template validation requirements or when mixed usage patterns are detected.</exception>
     internal HandoverDocument Build()
     {
+        // Check for mixed usage of default version fluent methods and explicit AddDocumentVersion calls
+        if (_defaultVersionBuilder is not null && _document.DocumentVersions.Count > 0)
+        {
+            throw new InvalidOperationException(
+                "Mixed usage detected: default version fluent methods (e.g., WithTitle) cannot be used together with AddDocumentVersion. " +
+                "Either use the default version fluent methods OR explicit AddDocumentVersion calls, but not both.");
+        }
+
         // If the user used the default version fluent methods, finalize it
         if (_defaultVersionBuilder is not null)
         {
