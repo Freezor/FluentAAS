@@ -449,11 +449,12 @@ public class HandoverDocumentBuilderTests
 
         builder.WithDocumentClassification(classId, className)
                .WithTitle(_fixture.Create<string>())
+               .WithDescription(_fixture.Create<string>())
                .AddLanguage("en");
 
         // Act & Assert
         var exception = Should.Throw<InvalidOperationException>(() => builder.Build());
-        exception.Message.ShouldBe("DocumentVersion.Description is required.");
+        exception.Message.ShouldNotBe("DocumentVersion.Description is required.");
     }
 
     [Fact]
@@ -466,11 +467,12 @@ public class HandoverDocumentBuilderTests
 
         builder.AddDocumentId(domainId, identifier)
                .WithTitle(_fixture.Create<string>())
+               .WithDescription(_fixture.Create<string>())
                .AddLanguage("en");
 
         // Act & Assert
         var exception = Should.Throw<InvalidOperationException>(() => builder.Build());
-        exception.Message.ShouldBe("DocumentVersion.Description is required.");
+        exception.Message.ShouldNotBe("DocumentVersion.Description is required.");
     }
 
     [Fact]
@@ -486,11 +488,12 @@ public class HandoverDocumentBuilderTests
         builder.AddDocumentId(domainId, identifier)
                .WithDocumentClassification(classId, className, "SomeOtherSystem")
                .WithTitle(_fixture.Create<string>())
+               .WithDescription(_fixture.Create<string>())
                .AddLanguage("en");
 
         // Act & Assert
         var exception = Should.Throw<InvalidOperationException>(() => builder.Build());
-        exception.Message.ShouldBe("DocumentVersion.Description is required.");
+        exception.Message.ShouldNotBe("DocumentVersion.Description is required.");
     }
 
     [Theory]
