@@ -258,7 +258,7 @@ public class HandoverDocumentTests
     [Theory]
     [InlineData("VDI2770:2018")]
     [InlineData("vdi2770:2018")]
-    [InlineData("VDI2770:2018")]
+    [InlineData("Vdi2770:2018")]
     public void ValidateTemplateRequirements_WithDifferentVdi2770CasingVariations_ShouldUseExactMatch(string classificationSystem)
     {
         // Arrange
