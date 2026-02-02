@@ -16,8 +16,8 @@ var environment = AasBuilder.Create()
     .AddDigitalNameplate("urn:submodel:nameplate")
         .WithManufacturerName("en", "Acme Manufacturing Ltd.")
         .WithSerialNumber("SN-2024-00142")
-        .Build()
-    .Done()
+        .BuildDigitalNameplate()
+    .CompleteShellConfiguration()
     .Build();
 ```
 
@@ -60,7 +60,7 @@ Serialize to JSON or package as AASX for import into other tools.
 ## Getting Started
 
 ```bash
-dotnet add package FluentAAS
+dotnet add package FluentAAS.Builder
 ```
 
 ### Basic Example
@@ -131,7 +131,7 @@ For custom submodels or templates not yet supported:
     .AddMultiLanguageProperty("Status", ls => ls
         .Add("en", "Running")
         .Add("de", "Läuft"))
-    .Build()
+    .CompleteSubmodelConfiguration()
 ```
 
 You get full control when you need it.
@@ -195,15 +195,15 @@ I'm building this in the open. If a template you need is missing, let me know �
 
 ## Roadmap
 
-| Feature                  | Status         |
-|--------------------------|----------------|
-| Digital Nameplate V2.0   | ✅ Done         |
-| JSON/AASX Export         | ✅ Done         |
-| Validation Service       | ✅ Done         |
-| Handover Documentation   | ✅ Done   |
-| Technical Data           | 📋 Planned     |
-| Digital Product Passport | 📋 Planned     |
-| AAS Registry Integration | 📋 Planned     |
+| Feature                  | Status     |
+|--------------------------|------------|
+| Digital Nameplate V2.0   | ✅ Done     |
+| JSON/AASX Export         | ✅ Done     |
+| Validation Service       | ✅ Done     |
+| Handover Documentation   | ✅ Done     |
+| Technical Data           | 📋 Planned |
+| Digital Product Passport | 📋 Planned |
+| AAS Registry Integration | 📋 Planned |
 
 ---
 
@@ -236,6 +236,6 @@ MIT – free for commercial and open-source use.
 
 ## Questions?
 
-If you're working on AAS integration and have questions, feel free to reach out on [LinkedIn](https://www.linkedin.com/in/oliver-fries).
+If you're working on AAS integration and have questions, feel free to reach out on [LinkedIn](https://www.linkedin.com/in/oliver-fries-industrie40-dotnet/).
 
 I'm also available for consulting on .NET modernization and Industry 4.0 projects – but no pressure. The library stands on its own.
