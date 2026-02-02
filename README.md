@@ -80,8 +80,8 @@ var environment = AasBuilder.Create()
         .WithManufacturerProductDesignation("en", "Universal CNC Milling Machine")
         .WithSerialNumber("SN-2024-00142")
         .WithYearOfConstruction("2024")
-        .Build()
-    .Done()
+        .BuildDigitalNameplate()
+    .CompleteShellConfiguration()
     .Build();
 
 // Export as JSON
@@ -106,7 +106,7 @@ Use these when your submodel matches an official IDTA template. The builder enfo
     .WithContactInformation(contact => contact
         .WithPhone("+49 123 456789")
         .WithEmail("info@acme.example"))
-    .Build()
+    .BuildDigitalNameplate()
 ```
 
 **Currently supported:**
@@ -200,7 +200,7 @@ I'm building this in the open. If a template you need is missing, let me know �
 | Digital Nameplate V2.0   | ✅ Done         |
 | JSON/AASX Export         | ✅ Done         |
 | Validation Service       | ✅ Done         |
-| Handover Documentation   | 🔨 In progress |
+| Handover Documentation   | ✅ Done   |
 | Technical Data           | 📋 Planned     |
 | Digital Product Passport | 📋 Planned     |
 | AAS Registry Integration | 📋 Planned     |
