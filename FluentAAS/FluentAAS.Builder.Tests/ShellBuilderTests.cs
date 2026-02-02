@@ -144,7 +144,7 @@ public class ShellBuilderTests
         var nameSpace = "ns-" + Guid.NewGuid().ToString("N")[..8];
 
         // Act
-        builder.WithSpecificAssetId(key, value, nameSpace).Done();
+        builder.WithSpecificAssetId(key, value, nameSpace).CompleteShellConfiguration();
 
         // Assert
         //result.ShouldBeEquivalentTo(builder);
@@ -198,7 +198,7 @@ public class ShellBuilderTests
         var submodelIdShort = "subShort-" + Guid.NewGuid().ToString("N")[..4];
 
         // Act
-        var submodelBuilder = builder.AddSubmodel(submodelId, submodelIdShort).Done();
+        var submodelBuilder = builder.AddSubmodel(submodelId, submodelIdShort).CompleteSubmodelConfiguration();
 
         // Assert
         submodelBuilder.ShouldNotBeNull();
@@ -215,7 +215,7 @@ public class ShellBuilderTests
         var (parent, _, builder) = CreateBuilder();
 
         // Act
-        var result = builder.Done();
+        var result = builder.CompleteShellConfiguration();
 
         // Assert
         result.ShouldBeSameAs(parent);

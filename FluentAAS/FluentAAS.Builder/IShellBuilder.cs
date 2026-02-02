@@ -54,5 +54,5 @@ public interface IShellBuilder
     ///     Completes configuration of this shell and returns to the parent <see cref="AasBuilder" />.
     /// </summary>
     /// <returns>The parent <see cref="AasBuilder" />.</returns>
-    AasBuilder Done();
+    AasBuilder CompleteShellConfiguration();
 }

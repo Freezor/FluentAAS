@@ -145,7 +145,7 @@ public sealed class SubmodelBuilderWithShell
     /// and returns the parent <see cref="ShellBuilder"/>.
     /// </summary>
     /// <returns>The parent <see cref="ShellBuilder"/>.</returns>
-    public IShellBuilder Done()
+    public IShellBuilder CompleteSubmodelConfiguration()
     {
         _parentShell.AddSubmodelReference(_submodel);
         return _parentShell;

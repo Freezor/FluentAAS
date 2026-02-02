@@ -5,9 +5,9 @@ using Shouldly;
 namespace FluentAas.Templates.Tests;
 
 /// <summary>
-/// Unit tests for <see cref="RefFactory"/>.
+/// Unit tests for <see cref="ReferenceFactory"/>.
 /// </summary>
-public class RefFactoryTests
+public class ReferenceFactoryTests
 {
     [Theory]
     [InlineData(null!)]
@@ -16,7 +16,7 @@ public class RefFactoryTests
     public void GlobalConceptDescription_ShouldThrowArgumentException_WhenConceptIdIsNullOrWhitespace(string? conceptId)
     {
         // Act
-        var ex = Should.Throw<ArgumentException>(() => RefFactory.GlobalConceptDescription(conceptId!));
+        var ex = Should.Throw<ArgumentException>(() => ReferenceFactory.GlobalConceptDescription(conceptId!));
 
         // Assert
         ex.ParamName.ShouldBe("conceptId");
@@ -30,7 +30,7 @@ public class RefFactoryTests
         const string conceptId = "0173-1#02-BAF577#003";
 
         // Act
-        var reference = RefFactory.GlobalConceptDescription(conceptId);
+        var reference = ReferenceFactory.GlobalConceptDescription(conceptId);
 
         // Assert
         reference.ShouldNotBeNull();
@@ -51,8 +51,8 @@ public class RefFactoryTests
         const string conceptId = "some-global-concept-id";
 
         // Act
-        var first  = RefFactory.GlobalConceptDescription(conceptId);
-        var second = RefFactory.GlobalConceptDescription(conceptId);
+        var first  = ReferenceFactory.GlobalConceptDescription(conceptId);
+        var second = ReferenceFactory.GlobalConceptDescription(conceptId);
 
         // Assert
         first.ShouldNotBeSameAs(second);

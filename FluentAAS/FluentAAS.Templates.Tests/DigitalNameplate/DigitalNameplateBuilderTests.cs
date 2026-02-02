@@ -82,7 +82,7 @@ public class DigitalNameplateBuilderTests
            .WithSerialNumber("SN-123");
 
         // Act
-        sut.WithIds(newId, newIdShort).Build();
+        sut.WithIds(newId, newIdShort).BuildDigitalNameplate();
         var env = buildEnv();
 
         // Assert
@@ -102,7 +102,7 @@ public class DigitalNameplateBuilderTests
         var (_, sut, _) = CreateBuilder();
 
         // Act
-        var ex = Record.Exception(() => sut.Build());
+        var ex = Record.Exception(() => sut.BuildDigitalNameplate());
 
         // Assert
         ex.ShouldBeOfType<InvalidOperationException>();
@@ -121,7 +121,7 @@ public class DigitalNameplateBuilderTests
            .WithManufacturerProductDesignation("en", "Super Unit");
 
         // Act
-        var ex = Record.Exception(() => sut.Build());
+        var ex = Record.Exception(() => sut.BuildDigitalNameplate());
 
         // Assert
         ex.ShouldBeOfType<InvalidOperationException>();
@@ -163,7 +163,7 @@ public class DigitalNameplateBuilderTests
            .WithSerialNumber("SN-XYZ-001");
 
         // Act
-        var returnedShell = sut.Build();
+        var returnedShell = sut.BuildDigitalNameplate();
         var env           = buildEnv();
 
         // Assert
@@ -227,7 +227,7 @@ public class DigitalNameplateBuilderTests
            .WithUniqueFacilityIdentifier("FAC-001");
 
         // Act
-        sut.Build();
+        sut.BuildDigitalNameplate();
         var env = buildEnv();
 
         var submodel = env.Submodels!.Single();
@@ -285,7 +285,7 @@ public class DigitalNameplateBuilderTests
            .WithManufacturerProductFamily("en", "Family-Y");
 
         // Act
-        sut.Build();
+        sut.BuildDigitalNameplate();
         var env = buildEnv();
         var submodel = env.Submodels!.Single();
 
@@ -332,7 +332,7 @@ public class DigitalNameplateBuilderTests
            .WithAssetSpecificProperties(assetProps);
 
         // Act
-        sut.Build();
+        sut.BuildDigitalNameplate();
         var env = buildEnv();
         var submodel = env.Submodels!.Single();
 

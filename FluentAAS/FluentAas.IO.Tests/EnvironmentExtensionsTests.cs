@@ -32,8 +32,8 @@ public class EnvironmentExtensionsTests
                                                                                                     .Add("en", "Example value")
                                                                                                     .Add("de", "Beispielwert"))
                                     .AddElement("GenericProperty", "example value")
-                                    .Done()
-                                    .Done()
+                                    .CompleteSubmodelConfiguration()
+                                    .CompleteShellConfiguration()
                                     .Build();
 
         return environment;
