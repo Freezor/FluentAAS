@@ -13,6 +13,11 @@ on:
         description: "Release version (e.g. v0.2.0.12)"
         required: true
         type: string
+      ref:
+        description: "Git reference (commit SHA, branch, or tag) to create the release from"
+        required: true
+        type: string
+        default: "main"
 
 jobs:
   build-pack-push:
@@ -23,6 +28,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          ref: ${{ inputs.ref || github.ref }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -32,11 +38,15 @@ jobs:
       - name: Determine version (from tag or input)
         id: version
         shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            TAG="${{ inputs.version }}"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            TAG="$INPUT_VERSION"
           else
-            TAG="${{ github.ref_name }}"
+            TAG="$GITHUB_REF_NAME"
           fi
 
           echo "Tag: $TAG"
@@ -77,23 +87,34 @@ jobs:
       - name: Verify package versions
         shell: bash
         run: |
+          shopt -s nullglob
+          packages=(./artifacts/*.nupkg)
+          
+          if [ ${#packages[@]} -eq 0 ]; then
+            echo "❌ No NuGet packages found in ./artifacts/"
+            exit 1
+          fi
+          
           echo "📦 Generated NuGet packages:"
-          for pkg in ./artifacts/*.nupkg; do
-            if [ -f "$pkg" ]; then
-              filename=$(basename "$pkg")
-              echo "  - $filename"
-              # Verify the package name contains the expected version
-              if [[ "$filename" =~ \.${{ steps.version.outputs.VERSION }}\.nupkg$ ]]; then
-                echo "✅ Version matches tag: ${{ steps.version.outputs.VERSION }}"
-              else
-                echo "❌ Version mismatch in package name"
-                exit 1
-              fi
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          ESCAPED_VERSION="${VERSION//./\\.}"
+          
+          for pkg in "${packages[@]}"; do
+            filename=$(basename "$pkg")
+            echo "  - $filename"
+            # Verify the package name contains the expected version using escaped dots
+            if [[ "$filename" =~ \.$ESCAPED_VERSION\.nupkg$ ]]; then
+              echo "✅ Version matches tag: $VERSION"
+            else
+              echo "❌ Version mismatch in package name"
+              exit 1
             fi
           done
 
       - name: Publish to NuGet
-        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key "$NUGET_API_KEY" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
 
       - name: Build Changelog
         id: build_changelog
