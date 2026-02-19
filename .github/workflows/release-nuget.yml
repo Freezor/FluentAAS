@@ -44,14 +44,14 @@ jobs:
           # Guardrail: must start with v and look like vX.Y.Z(.W)
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
             echo "❌ Invalid tag format: $TAG"
-            echo "Expected: v0.2.0.12 (or v1.2.3)"
+            echo "Expected format: v<major>.<minor>.<patch>[.<revision>] (e.g., v0.2.0.12 or v1.2.3)"
             exit 1
           fi
 
           VERSION="${TAG#v}"
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION"
+          echo "✅ Valid version format: $VERSION"
 
       - name: Locate solution file
         id: solution
@@ -63,13 +63,34 @@ jobs:
             exit 1
           fi
           echo "SOLUTION_PATH=$SOLUTION" >> $GITHUB_OUTPUT
-          echo "Found solution: $SOLUTION"
+          echo "✅ Found solution: $SOLUTION"
 
-      - name: Restore
+      - name: Restore dependencies
         run: dotnet restore "${{ steps.solution.outputs.SOLUTION_PATH }}"
 
-      - name: Pack all NuGet projects
-        run: dotnet pack "${{ steps.solution.outputs.SOLUTION_PATH }}" -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.VERSION }}
+      - name: Build solution
+        run: dotnet build "${{ steps.solution.outputs.SOLUTION_PATH }}" -c Release --no-restore
+
+      - name: Pack NuGet packages
+        run: dotnet pack "${{ steps.solution.outputs.SOLUTION_PATH }}" -c Release -o ./artifacts --no-build /p:PackageVersion=${{ steps.version.outputs.VERSION }}
+
+      - name: Verify package versions
+        shell: bash
+        run: |
+          echo "📦 Generated NuGet packages:"
+          for pkg in ./artifacts/*.nupkg; do
+            if [ -f "$pkg" ]; then
+              filename=$(basename "$pkg")
+              echo "  - $filename"
+              # Verify the package name contains the expected version
+              if [[ "$filename" =~ \.${{ steps.version.outputs.VERSION }}\.nupkg$ ]]; then
+                echo "✅ Version matches tag: ${{ steps.version.outputs.VERSION }}"
+              else
+                echo "❌ Version mismatch in package name"
+                exit 1
+              fi
+            fi
+          done
 
       - name: Publish to NuGet
         run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
@@ -93,8 +114,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.TAG }}
-          name: FluentAAS ${{ steps.version.outputs.TAG }}
-          body: ${{ steps.build_changelog.outputs.changelog || 'Release.' }}
+          name: FluentAAS ${{ steps.version.outputs.VERSION }}
+          body: ${{ steps.build_changelog.outputs.changelog || 'Release notes will be added here.' }}
           files: ./artifacts/*.nupkg
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
