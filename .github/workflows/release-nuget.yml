@@ -1,13 +1,23 @@
-name: Build & Publish NuGet
+name: Build & Publish NuGet (Tag Release)
 
 permissions:
   contents: write
 
 on:
   push:
-    branches:
-      - release
+    tags:
+      - "v*"
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. v0.2.0.12)"
+        required: true
+        type: string
+      ref:
+        description: "Git reference (commit SHA, branch, or tag) to create the release from"
+        required: true
+        type: string
+        default: "main"
 
 jobs:
   build-pack-push:
@@ -17,69 +27,96 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}   # allows pushing tags
+          fetch-depth: 0
+          ref: ${{ inputs.ref || github.ref }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
 
-      # Read base version from central config file and build full version
-      - name: Determine version
+      - name: Determine version (from tag or input)
         id: version
+        shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          BASE_VERSION=$(cat VERSION.txt)
-          echo "Base version: $BASE_VERSION"
-          FULL_VERSION="$BASE_VERSION.${GITHUB_RUN_NUMBER}"
-          echo "Full version: $FULL_VERSION"
-          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_OUTPUT
-          echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            TAG="$INPUT_VERSION"
+          else
+            TAG="$GITHUB_REF_NAME"
+          fi
 
-      # Find solution file dynamically (first .sln we encounter)
+          echo "Tag: $TAG"
+
+          # Guardrail: must start with v and look like vX.Y.Z(.W)
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "❌ Invalid tag format: $TAG"
+            echo "Expected format: v<major>.<minor>.<patch>[.<revision>] (e.g., v0.2.0.12 or v1.2.3)"
+            exit 1
+          fi
+
+          VERSION="${TAG#v}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+          echo "✅ Valid version format: $VERSION"
+
       - name: Locate solution file
         id: solution
+        shell: bash
         run: |
           SOLUTION=$(find . -maxdepth 5 -name "*.sln" | head -n 1)
           if [ -z "$SOLUTION" ]; then
             echo "❌ No solution file (*.sln) found in the repo."
             exit 1
           fi
-          echo "Found solution: $SOLUTION"
           echo "SOLUTION_PATH=$SOLUTION" >> $GITHUB_OUTPUT
+          echo "✅ Found solution: $SOLUTION"
 
-      # Restore using the solution
-      - name: Restore
+      - name: Restore dependencies
         run: dotnet restore "${{ steps.solution.outputs.SOLUTION_PATH }}"
 
-      # Pack all packable projects into ./artifacts with unified version
-      - name: Pack all NuGet projects
-        run: dotnet pack "./FluentAAS/FluentAAS.sln" -c Release -o ./artifacts /p:PackageVersion=${{ steps.version.outputs.FULL_VERSION }}
+      - name: Build solution
+        run: dotnet build "${{ steps.solution.outputs.SOLUTION_PATH }}" -c Release --no-restore
 
-      # Publish NuGet packages to nuget.org
-      - name: Publish to NuGet
-        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+      - name: Pack NuGet packages
+        run: dotnet pack "${{ steps.solution.outputs.SOLUTION_PATH }}" -c Release -o ./artifacts --no-build /p:PackageVersion=${{ steps.version.outputs.VERSION }}
 
-      # Create a new Git tag for this version
-      - name: Create and push Git tag
+      - name: Verify package versions
+        shell: bash
         run: |
-          TAG="v${{ steps.version.outputs.FULL_VERSION }}"
-          echo "Creating git tag: $TAG"
-          git tag $TAG
-          git push origin $TAG
-
-      # Check if there are any tags yet (first release => no tags)
-      - name: Check for existing tags
-        id: check_tags
-        run: |
-          if git tag --list | grep . > /dev/null; then
-            echo "has_tags=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_tags=false" >> $GITHUB_OUTPUT
+          shopt -s nullglob
+          packages=(./artifacts/*.nupkg)
+          
+          if [ ${#packages[@]} -eq 0 ]; then
+            echo "❌ No NuGet packages found in ./artifacts/"
+            exit 1
           fi
+          
+          echo "📦 Generated NuGet packages:"
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          ESCAPED_VERSION="${VERSION//./\\.}"
+          
+          for pkg in "${packages[@]}"; do
+            filename=$(basename "$pkg")
+            echo "  - $filename"
+            # Verify the package name contains the expected version using escaped dots
+            if [[ "$filename" =~ \.$ESCAPED_VERSION\.nupkg$ ]]; then
+              echo "✅ Version matches tag: $VERSION"
+            else
+              echo "❌ Version mismatch in package name"
+              exit 1
+            fi
+          done
 
-      # Build changelog / release notes automatically (only if we have tags)
+      - name: Publish to NuGet
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key "$NUGET_API_KEY" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
       - name: Build Changelog
-        if: steps.check_tags.outputs.has_tags == 'true'
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v6
         with:
@@ -88,20 +125,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Upload artifacts to the workflow run
       - name: Upload NuGet Artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: nuget-packages-${{ steps.version.outputs.FULL_VERSION }}
+          name: nuget-packages-${{ steps.version.outputs.VERSION }}
           path: ./artifacts/*.nupkg
 
-      # Create GitHub Release with generated changelog and attach .nupkg files
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.FULL_VERSION }}
-          name: FluentAAS v${{ steps.version.outputs.FULL_VERSION }}
-          body: ${{ steps.build_changelog.outputs.changelog || 'Initial release of FluentAAS.' }}
+          tag_name: ${{ steps.version.outputs.TAG }}
+          name: FluentAAS ${{ steps.version.outputs.VERSION }}
+          body: ${{ steps.build_changelog.outputs.changelog || 'Release notes will be added here.' }}
           files: ./artifacts/*.nupkg
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
