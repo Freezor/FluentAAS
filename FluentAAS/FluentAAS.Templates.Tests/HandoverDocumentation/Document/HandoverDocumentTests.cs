@@ -96,7 +96,7 @@ public class HandoverDocumentTests
         result.Category.ShouldBeNull();
         result.Description.ShouldBeNull();
         result.SemanticId.ShouldNotBeNull();
-        result.Value.Count.ShouldBe(3); // DocumentIds, DocumentClassifications, DocumentVersions
+        result.Value!.Count.ShouldBe(3); // DocumentIds, DocumentClassifications, DocumentVersions
     }
 
     [Fact]
@@ -109,9 +109,9 @@ public class HandoverDocumentTests
         var result = document.ToDocumentCollection();
 
         // Assert
-        var documentIdsList = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIds);
+        var documentIdsList = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIds);
         documentIdsList.ShouldNotBeNull();
-        documentIdsList.ShouldBeOfType<SubmodelElementList>();
+        _ = documentIdsList.ShouldBeOfType<SubmodelElementList>();
     }
 
     [Fact]
@@ -124,9 +124,9 @@ public class HandoverDocumentTests
         var result = document.ToDocumentCollection();
 
         // Assert
-        var classificationsList = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentClassifications);
+        var classificationsList = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentClassifications);
         classificationsList.ShouldNotBeNull();
-        classificationsList.ShouldBeOfType<SubmodelElementList>();
+        _ = classificationsList.ShouldBeOfType<SubmodelElementList>();
     }
 
     [Fact]
@@ -139,9 +139,9 @@ public class HandoverDocumentTests
         var result = document.ToDocumentCollection();
 
         // Assert
-        var versionsList = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentVersions);
+        var versionsList = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentVersions);
         versionsList.ShouldNotBeNull();
-        versionsList.ShouldBeOfType<SubmodelElementList>();
+        _ = versionsList.ShouldBeOfType<SubmodelElementList>();
     }
 
     [Fact]

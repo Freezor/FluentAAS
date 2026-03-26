@@ -18,8 +18,11 @@ public sealed class ShellBuilder : IShellBuilder
     /// </exception>
     internal ShellBuilder(AasBuilder parent, AssetAdministrationShell shell)
     {
-        Parent = parent ?? throw new ArgumentNullException(nameof(parent));
-        Shell  = shell ?? throw new ArgumentNullException(nameof(shell));
+        ArgumentNullException.ThrowIfNull(parent);
+        ArgumentNullException.ThrowIfNull(shell);
+
+        Parent = parent;
+        Shell = shell;
     }
 
     public AssetAdministrationShell Shell { get; }

@@ -61,7 +61,7 @@ public class HandoverDocumentIdTests
         result.Category.ShouldBeNull();
         result.Description.ShouldBeNull();
         result.SemanticId.ShouldNotBeNull();
-        result.Value.Count.ShouldBe(2); // DocumentDomainId, DocumentIdentifier (no DocumentIsPrimary)
+        result.Value!.Count.ShouldBe(2); // DocumentDomainId, DocumentIdentifier (no DocumentIsPrimary)
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class HandoverDocumentIdTests
         result.Category.ShouldBeNull();
         result.Description.ShouldBeNull();
         result.SemanticId.ShouldNotBeNull();
-        result.Value.Count.ShouldBe(3); // DocumentDomainId, DocumentIdentifier, DocumentIsPrimary
+        result.Value!.Count.ShouldBe(3); // DocumentDomainId, DocumentIdentifier, DocumentIsPrimary
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class HandoverDocumentIdTests
         result.Category.ShouldBeNull();
         result.Description.ShouldBeNull();
         result.SemanticId.ShouldNotBeNull();
-        result.Value.Count.ShouldBe(3); // DocumentDomainId, DocumentIdentifier, DocumentIsPrimary
+        result.Value!.Count.ShouldBe(3); // DocumentDomainId, DocumentIdentifier, DocumentIsPrimary
     }
 
     [Fact]
@@ -111,11 +111,11 @@ public class HandoverDocumentIdTests
         var result = documentId.ToCollection();
 
         // Assert
-        var domainIdElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentDomainId);
+        var domainIdElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentDomainId);
         domainIdElement.ShouldNotBeNull();
         domainIdElement.ShouldBeOfType<Property>();
         
-        var domainIdProperty = (Property)domainIdElement;
+        var domainIdProperty = (Property)domainIdElement!;
         domainIdProperty.Value.ShouldBe(domainId);
         domainIdProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         domainIdProperty.SemanticId.ShouldNotBeNull();
@@ -132,11 +132,11 @@ public class HandoverDocumentIdTests
         var result = documentId.ToCollection();
 
         // Assert
-        var identifierElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIdentifier);
+        var identifierElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIdentifier);
         identifierElement.ShouldNotBeNull();
         identifierElement.ShouldBeOfType<Property>();
         
-        var identifierProperty = (Property)identifierElement;
+        var identifierProperty = (Property)identifierElement!;
         identifierProperty.Value.ShouldBe(identifier);
         identifierProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         identifierProperty.SemanticId.ShouldNotBeNull();
@@ -152,11 +152,11 @@ public class HandoverDocumentIdTests
         var result = documentId.ToCollection();
 
         // Assert
-        var primaryElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
+        var primaryElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
         primaryElement.ShouldNotBeNull();
         primaryElement.ShouldBeOfType<Property>();
         
-        var primaryProperty = (Property)primaryElement;
+        var primaryProperty = (Property)primaryElement!;
         primaryProperty.Value.ShouldBe("true");
         primaryProperty.ValueType.ShouldBe(DataTypeDefXsd.Boolean);
         primaryProperty.SemanticId.ShouldNotBeNull();
@@ -172,11 +172,11 @@ public class HandoverDocumentIdTests
         var result = documentId.ToCollection();
 
         // Assert
-        var primaryElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
+        var primaryElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
         primaryElement.ShouldNotBeNull();
         primaryElement.ShouldBeOfType<Property>();
         
-        var primaryProperty = (Property)primaryElement;
+        var primaryProperty = (Property)primaryElement!;
         primaryProperty.Value.ShouldBe("false");
         primaryProperty.ValueType.ShouldBe(DataTypeDefXsd.Boolean);
         primaryProperty.SemanticId.ShouldNotBeNull();
@@ -192,7 +192,7 @@ public class HandoverDocumentIdTests
         var result = documentId.ToCollection();
 
         // Assert
-        var primaryElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
+        var primaryElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
         primaryElement.ShouldBeNull();
     }
 
@@ -302,13 +302,13 @@ public class HandoverDocumentIdTests
         result.SemanticId.ShouldNotBeNull();
         
         // Individual element semantic IDs
-        var domainIdElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentDomainId);
+        var domainIdElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentDomainId);
         domainIdElement!.SemanticId.ShouldNotBeNull();
         
-        var identifierElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIdentifier);
+        var identifierElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIdentifier);
         identifierElement!.SemanticId.ShouldNotBeNull();
         
-        var primaryElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
+        var primaryElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentIsPrimary);
         primaryElement!.SemanticId.ShouldNotBeNull();
     }
 
@@ -328,7 +328,7 @@ public class HandoverDocumentIdTests
 
         // Assert
         result.ShouldNotBeNull();
-        result.Value.Count.ShouldBe(3);
+        result.Value!.Count.ShouldBe(3);
         
         var domainIdProperty = (Property)result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDocumentDomainId)!;
         domainIdProperty.Value.ShouldBe("ValidDomain");

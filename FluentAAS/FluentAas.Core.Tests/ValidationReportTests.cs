@@ -48,11 +48,11 @@ public sealed class ValidationReportTests
     public void HasErrors_ShouldBeFalse_WhenNoErrorLevelResults()
     {
         // Arrange
-        var results = new List<ValidationResult>
-        {
+        List<ValidationResult> results =
+        [
             CreateResult(ValidationLevel.Warning),
             CreateResult(ValidationLevel.Info)
-        };
+        ];
 
         // Act
         var report = new ValidationReport(results);
@@ -65,12 +65,12 @@ public sealed class ValidationReportTests
     public void HasErrors_ShouldBeTrue_WhenAtLeastOneErrorResultExists()
     {
         // Arrange
-        var results = new List<ValidationResult>
-        {
+        List<ValidationResult> results =
+        [
             CreateResult(ValidationLevel.Warning),
             CreateResult(ValidationLevel.Error),
             CreateResult(ValidationLevel.Warning)
-        };
+        ];
 
         // Act
         var report = new ValidationReport(results);
@@ -83,10 +83,10 @@ public sealed class ValidationReportTests
     public void HasErrors_ShouldNotChange_WhenOriginalCollectionIsModifiedAfterConstruction()
     {
         // Arrange
-        var results = new List<ValidationResult>
-        {
+        List<ValidationResult> results =
+        [
             CreateResult(ValidationLevel.Warning)
-        };
+        ];
 
         var report = new ValidationReport(results);
 
@@ -124,10 +124,10 @@ public sealed class ValidationReportTests
     public void ValidationReport_ShouldBeImmutableFromTheOutside()
     {
         // Arrange
-        var results = new List<ValidationResult>
-        {
+        List<ValidationResult> results =
+        [
             CreateResult(ValidationLevel.Error)
-        };
+        ];
 
         var report = new ValidationReport(results);
 

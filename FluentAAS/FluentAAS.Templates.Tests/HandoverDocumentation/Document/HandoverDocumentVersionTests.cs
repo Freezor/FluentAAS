@@ -153,7 +153,7 @@ public class HandoverDocumentVersionTests
         result.Category.ShouldBeNull();
         result.Description.ShouldBeNull();
         result.SemanticId.ShouldNotBeNull();
-        result.Value.Count.ShouldBeGreaterThan(8); // At least: Languages, Version, Title, Description, StatusSetDate, StatusValue, OrgShortName, OrgOfficialName, DigitalFiles
+        result.Value!.Count.ShouldBeGreaterThan(8); // At least: Languages, Version, Title, Description, StatusSetDate, StatusValue, OrgShortName, OrgOfficialName, DigitalFiles
     }
 
     [Fact]
@@ -168,12 +168,12 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var languageElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortLanguage);
+        var languageElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortLanguage);
         languageElement.ShouldNotBeNull();
         languageElement.ShouldBeOfType<SubmodelElementList>();
 
-        var languageList = (SubmodelElementList)languageElement;
-        languageList.Value.Count.ShouldBe(2);
+        var languageList = (SubmodelElementList)languageElement!;
+        languageList.Value!.Count.ShouldBe(2);
         languageList.TypeValueListElement.ShouldBe(AasSubmodelElements.Property);
         languageList.OrderRelevant.ShouldBe(false);
     }
@@ -190,11 +190,11 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var versionElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortVersion);
+        var versionElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortVersion);
         versionElement.ShouldNotBeNull();
         versionElement.ShouldBeOfType<Property>();
 
-        var versionProperty = (Property)versionElement;
+        var versionProperty = (Property)versionElement!;
         versionProperty.Value.ShouldBe(versionNumber);
         versionProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
     }
@@ -213,12 +213,12 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var titleElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortTitle);
+        var titleElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortTitle);
         titleElement.ShouldNotBeNull();
         titleElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var titleProperty = (MultiLanguageProperty)titleElement;
-        titleProperty.Value.Count.ShouldBe(1);
+        var titleProperty = (MultiLanguageProperty)titleElement!;
+        titleProperty.Value!.Count.ShouldBe(1);
         titleProperty.Value[0].Language.ShouldBe(titleLanguage);
         titleProperty.Value[0].Text.ShouldBe(title);
     }
@@ -237,12 +237,12 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var descriptionElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDescription);
+        var descriptionElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDescription);
         descriptionElement.ShouldNotBeNull();
         descriptionElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var descriptionProperty = (MultiLanguageProperty)descriptionElement;
-        descriptionProperty.Value.Count.ShouldBe(1);
+        var descriptionProperty = (MultiLanguageProperty)descriptionElement!;
+        descriptionProperty.Value!.Count.ShouldBe(1);
         descriptionProperty.Value[0].Language.ShouldBe(descriptionLanguage);
         descriptionProperty.Value[0].Text.ShouldBe(description);
     }
@@ -259,11 +259,11 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var dateElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortStatusSetDate);
+        var dateElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortStatusSetDate);
         dateElement.ShouldNotBeNull();
         dateElement.ShouldBeOfType<Property>();
 
-        var dateProperty = (Property)dateElement;
+        var dateProperty = (Property)dateElement!;
         dateProperty.Value.ShouldBe("2023-12-15");
         dateProperty.ValueType.ShouldBe(DataTypeDefXsd.Date);
     }
@@ -280,11 +280,11 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var statusElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortStatusValue);
+        var statusElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortStatusValue);
         statusElement.ShouldNotBeNull();
         statusElement.ShouldBeOfType<Property>();
 
-        var statusProperty = (Property)statusElement;
+        var statusProperty = (Property)statusElement!;
         statusProperty.Value.ShouldBe(statusValue);
         statusProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
     }
@@ -303,15 +303,15 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var shortNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortOrganizationShortName);
+        var shortNameElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortOrganizationShortName);
         shortNameElement.ShouldNotBeNull();
         shortNameElement.ShouldBeOfType<Property>();
-        ((Property)shortNameElement).Value.ShouldBe(shortName);
+        ((Property)shortNameElement!).Value.ShouldBe(shortName);
 
-        var officialNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortOrganizationOfficialName);
+        var officialNameElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortOrganizationOfficialName);
         officialNameElement.ShouldNotBeNull();
         officialNameElement.ShouldBeOfType<Property>();
-        ((Property)officialNameElement).Value.ShouldBe(officialName);
+        ((Property)officialNameElement!).Value.ShouldBe(officialName);
     }
 
     [Fact]
@@ -324,14 +324,14 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var filesElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDigitalFiles);
+        var filesElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortDigitalFiles);
         filesElement.ShouldNotBeNull();
         filesElement.ShouldBeOfType<SubmodelElementList>();
 
-        var filesList = (SubmodelElementList)filesElement;
+        var filesList = (SubmodelElementList)filesElement!;
         filesList.TypeValueListElement.ShouldBe(AasSubmodelElements.File);
         filesList.OrderRelevant.ShouldBe(false);
-        filesList.Value.Count.ShouldBe(version.DigitalFiles.Count);
+        filesList.Value!.Count.ShouldBe(version.DigitalFiles.Count);
     }
 
     [Fact]
@@ -348,12 +348,12 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var subtitleElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
+        var subtitleElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
         subtitleElement.ShouldNotBeNull();
         subtitleElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var subtitleProperty = (MultiLanguageProperty)subtitleElement;
-        subtitleProperty.Value.Count.ShouldBe(1);
+        var subtitleProperty = (MultiLanguageProperty)subtitleElement!;
+        subtitleProperty.Value!.Count.ShouldBe(1);
         subtitleProperty.Value[0].Language.ShouldBe(subtitleLanguage);
         subtitleProperty.Value[0].Text.ShouldBe(subtitle);
     }
@@ -373,12 +373,12 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var subtitleElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
+        var subtitleElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
         subtitleElement.ShouldNotBeNull();
         subtitleElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var subtitleProperty = (MultiLanguageProperty)subtitleElement;
-        subtitleProperty.Value[0].Language.ShouldBe(titleLanguage);
+        var subtitleProperty = (MultiLanguageProperty)subtitleElement!;
+        subtitleProperty.Value![0].Language.ShouldBe(titleLanguage);
     }
 
     [Fact]
@@ -392,7 +392,7 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var subtitleElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
+        var subtitleElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
         subtitleElement.ShouldBeNull();
     }
 
@@ -410,7 +410,7 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var subtitleElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
+        var subtitleElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortSubtitle);
         subtitleElement.ShouldBeNull();
     }
 
@@ -426,12 +426,12 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var keyWordsElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortKeyWords);
+        var keyWordsElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortKeyWords);
         keyWordsElement.ShouldNotBeNull();
         keyWordsElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var keyWordsProperty = (MultiLanguageProperty)keyWordsElement;
-        keyWordsProperty.Value.Count.ShouldBe(2);
+        var keyWordsProperty = (MultiLanguageProperty)keyWordsElement!;
+        keyWordsProperty.Value!.Count.ShouldBe(2);
         keyWordsProperty.Value.ShouldContain(ls => ls.Language == "en" && ls.Text == "test");
         keyWordsProperty.Value.ShouldContain(ls => ls.Language == "de" && ls.Text == "prüfung");
     }
@@ -447,7 +447,7 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var keyWordsElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortKeyWords);
+        var keyWordsElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortKeyWords);
         keyWordsElement.ShouldBeNull();
     }
 
@@ -462,7 +462,7 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var previewElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortPreviewFile);
+        var previewElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortPreviewFile);
         previewElement.ShouldNotBeNull();
         previewElement.ShouldBeOfType<AasCore.Aas3_0.File>();
     }
@@ -478,7 +478,7 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var previewElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortPreviewFile);
+        var previewElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortPreviewFile);
         previewElement.ShouldBeNull();
     }
 
@@ -624,7 +624,7 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var dateElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortStatusSetDate);
+        var dateElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortStatusSetDate);
         var dateProperty = (Property)dateElement!;
         dateProperty.Value.ShouldBe("2023-05-15");
     }
@@ -646,9 +646,9 @@ public class HandoverDocumentVersionTests
         var result = version.ToCollection();
 
         // Assert
-        var titleElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortTitle);
+        var titleElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortTitle);
         var titleProperty = (MultiLanguageProperty)titleElement!;
-        titleProperty.Value[0].Language.ShouldBe(language);
+        titleProperty.Value![0].Language.ShouldBe(language);
         titleProperty.Value[0].Text.ShouldBe(title);
     }
 
@@ -665,7 +665,7 @@ public class HandoverDocumentVersionTests
         result.SemanticId.ShouldNotBeNull();
         
         // Check that all elements have semantic IDs
-        foreach (var element in result.Value)
+        foreach (var element in result.Value!)
         {
             if (element.IdShort != HandoverDocumentationSemantics.IdShortDigitalFiles && 
                 element.IdShort != HandoverDocumentationSemantics.IdShortLanguage)

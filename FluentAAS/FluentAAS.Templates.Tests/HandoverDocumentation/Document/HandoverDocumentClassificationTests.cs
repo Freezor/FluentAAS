@@ -65,7 +65,7 @@ public class HandoverDocumentClassificationTests
         result.Category.ShouldBeNull();
         result.Description.ShouldBeNull();
         result.SemanticId.ShouldNotBeNull();
-        result.Value.Count.ShouldBe(3); // ClassId, ClassName, ClassificationSystem
+        result.Value!.Count.ShouldBe(3); // ClassId, ClassName, ClassificationSystem
     }
 
     [Fact]
@@ -79,11 +79,11 @@ public class HandoverDocumentClassificationTests
         var result = classification.ToCollection();
 
         // Assert
-        var classIdElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassId);
+        var classIdElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassId);
         classIdElement.ShouldNotBeNull();
         classIdElement.ShouldBeOfType<Property>();
         
-        var classIdProperty = (Property)classIdElement;
+        var classIdProperty = (Property)classIdElement!;
         classIdProperty.Value.ShouldBe(classId);
         classIdProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         classIdProperty.SemanticId.ShouldNotBeNull();
@@ -101,12 +101,12 @@ public class HandoverDocumentClassificationTests
         var result = classification.ToCollection();
 
         // Assert
-        var classNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
+        var classNameElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
         classNameElement.ShouldNotBeNull();
         classNameElement.ShouldBeOfType<MultiLanguageProperty>();
         
-        var classNameProperty = (MultiLanguageProperty)classNameElement;
-        classNameProperty.Value.Count.ShouldBe(1);
+        var classNameProperty = (MultiLanguageProperty)classNameElement!;
+        classNameProperty.Value!.Count.ShouldBe(1);
         classNameProperty.Value[0].Language.ShouldBe(classNameLanguage);
         classNameProperty.Value[0].Text.ShouldBe(className);
         classNameProperty.SemanticId.ShouldNotBeNull();
@@ -123,11 +123,11 @@ public class HandoverDocumentClassificationTests
         var result = classification.ToCollection();
 
         // Assert
-        var systemElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassificationSystem);
+        var systemElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassificationSystem);
         systemElement.ShouldNotBeNull();
         systemElement.ShouldBeOfType<Property>();
         
-        var systemProperty = (Property)systemElement;
+        var systemProperty = (Property)systemElement!;
         systemProperty.Value.ShouldBe(classificationSystem);
         systemProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         systemProperty.SemanticId.ShouldNotBeNull();
@@ -288,9 +288,9 @@ public class HandoverDocumentClassificationTests
         var result = classification.ToCollection();
 
         // Assert
-        var classNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
+        var classNameElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
         var classNameProperty = (MultiLanguageProperty)classNameElement!;
-        classNameProperty.Value[0].Language.ShouldBe("en");
+        classNameProperty.Value![0].Language.ShouldBe("en");
         classNameProperty.Value[0].Text.ShouldBe(className);
     }
 
@@ -310,7 +310,7 @@ public class HandoverDocumentClassificationTests
         var result = classification.ToCollection();
 
         // Assert
-        var systemElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassificationSystem);
+        var systemElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassificationSystem);
         var systemProperty = (Property)systemElement!;
         systemProperty.Value.ShouldBe(HandoverDocumentationSemantics.Vdi2770ClassificationSystemName);
     }
@@ -329,13 +329,13 @@ public class HandoverDocumentClassificationTests
         result.SemanticId.ShouldNotBeNull();
         
         // Individual element semantic IDs
-        var classIdElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassId);
+        var classIdElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassId);
         classIdElement!.SemanticId.ShouldNotBeNull();
         
-        var classNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
+        var classNameElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
         classNameElement!.SemanticId.ShouldNotBeNull();
         
-        var systemElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassificationSystem);
+        var systemElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassificationSystem);
         systemElement!.SemanticId.ShouldNotBeNull();
     }
 
@@ -354,9 +354,9 @@ public class HandoverDocumentClassificationTests
         var result = classification.ToCollection();
 
         // Assert
-        var classNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
+        var classNameElement = result.Value!.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortClassName);
         var classNameProperty = (MultiLanguageProperty)classNameElement!;
-        classNameProperty.Value[0].Language.ShouldBe(language);
+        classNameProperty.Value![0].Language.ShouldBe(language);
         classNameProperty.Value[0].Text.ShouldBe(className);
     }
 
