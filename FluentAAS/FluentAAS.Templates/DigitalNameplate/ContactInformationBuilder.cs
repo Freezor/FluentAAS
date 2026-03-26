@@ -322,7 +322,7 @@ public sealed class ContactInformationBuilder
             var address = new SubmodelElementCollection
                           {
                               IdShort    = DigitalNameplateIdentifiers.AddressInformationIdShort,
-                              SemanticId = ReferenceFactory.GlobalConceptDescription(AddressInformation)
+                              SemanticId = ReferenceFactory.GlobalConceptDescription(ContactAddressInformation)
                           };
 
             var values = new List<ISubmodelElement>

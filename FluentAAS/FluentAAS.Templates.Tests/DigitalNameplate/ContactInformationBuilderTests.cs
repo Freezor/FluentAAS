@@ -35,7 +35,7 @@ public class ContactInformationBuilderTests
         var address = contact.Value!
                              .OfType<SubmodelElementCollection>()
                              .Single(x => x.IdShort == DigitalNameplateIdentifiers.AddressInformationIdShort);
-        address.SemanticId!.Keys.Single().Value.ShouldBe(AddressInformation);
+        address.SemanticId!.Keys.Single().Value.ShouldBe(ContactAddressInformation);
     }
 
     [Fact]

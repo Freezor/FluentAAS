@@ -163,6 +163,11 @@ public static class DigitalNameplateSemantics
     public const string AddressState = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/AddressInformation/State";
 
     /// <summary>
+    /// Semantic identifier for the IDTA 3.0 contact address information collection.
+    /// </summary>
+    public const string ContactAddressInformation = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/AddressInformation";
+
+    /// <summary>
     /// Semantic identifier for the address information collection.
     /// </summary>
     public const string AddressInformation = "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/AddressInformation";
