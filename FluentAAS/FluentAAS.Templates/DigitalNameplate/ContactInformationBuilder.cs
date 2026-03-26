@@ -146,28 +146,25 @@ public sealed class ContactInformationBuilder
 
         elements.Add(BuildManufacturerContact());
 
-        elements.Add(new Property(DataTypeDefXsd.String, _serviceHotline!)
-                     {
-                         IdShort    = DigitalNameplateIdentifiers.ServiceHotlineIdShort,
-                         SemanticId = ReferenceFactory.GlobalConceptDescription(ServiceHotline)
-                     });
+        elements.Add(CreateStringProperty(
+            DigitalNameplateIdentifiers.ServiceHotlineIdShort,
+            ServiceHotline,
+            _serviceHotline!));
 
         if (!string.IsNullOrWhiteSpace(_email))
         {
-            elements.Add(new Property(DataTypeDefXsd.String, _email)
-                         {
-                             IdShort    = DigitalNameplateIdentifiers.EmailIdShort,
-                             SemanticId = ReferenceFactory.GlobalConceptDescription(EmailAddress)
-                         });
+            elements.Add(CreateStringProperty(
+                DigitalNameplateIdentifiers.EmailIdShort,
+                EmailAddress,
+                _email!));
         }
 
         if (!string.IsNullOrWhiteSpace(_websiteUrl))
         {
-            elements.Add(new Property(DataTypeDefXsd.String, _websiteUrl)
-                         {
-                             IdShort    = DigitalNameplateIdentifiers.WebsiteUrlIdShort,
-                             SemanticId = ReferenceFactory.GlobalConceptDescription(WebsiteUrl)
-                         });
+            elements.Add(CreateStringProperty(
+                DigitalNameplateIdentifiers.WebsiteUrlIdShort,
+                WebsiteUrl,
+                _websiteUrl!));
         }
 
         if (_address is not null)
@@ -189,25 +186,22 @@ public sealed class ContactInformationBuilder
 
         var values = new List<ISubmodelElement>
                      {
-                         new Property(DataTypeDefXsd.String, "Manufacturer")
-                         {
-                             IdShort    = DigitalNameplateIdentifiers.ContactRoleIdShort,
-                             SemanticId = ReferenceFactory.GlobalConceptDescription(ContactRole)
-                         },
-                         new Property(DataTypeDefXsd.String, _manufacturerName!)
-                         {
-                             IdShort    = DigitalNameplateIdentifiers.ContactNameIdShort,
-                             SemanticId = ReferenceFactory.GlobalConceptDescription(ContactName)
-                         }
+                         CreateStringProperty(
+                             DigitalNameplateIdentifiers.ContactRoleIdShort,
+                             ContactRole,
+                             "Manufacturer"),
+                         CreateStringProperty(
+                             DigitalNameplateIdentifiers.ContactNameIdShort,
+                             ContactName,
+                             _manufacturerName!)
                      };
 
         if (!string.IsNullOrWhiteSpace(_manufacturerPhone))
         {
-            values.Add(new Property(DataTypeDefXsd.String, _manufacturerPhone)
-                       {
-                           IdShort    = DigitalNameplateIdentifiers.PhoneIdShort,
-                           SemanticId = ReferenceFactory.GlobalConceptDescription(Phone)
-                       });
+            values.Add(CreateStringProperty(
+                DigitalNameplateIdentifiers.PhoneIdShort,
+                Phone,
+                _manufacturerPhone!));
         }
 
         manufacturerContact.Value = values;
@@ -235,6 +229,16 @@ public sealed class ContactInformationBuilder
         {
             throw new ArgumentException("Phone number format is invalid.", paramName);
         }
+    }
+
+    private static Property CreateStringProperty(string idShort, string semanticId, string value)
+    {
+        return new Property(
+            idShort: idShort,
+            category: null,
+            semanticId: ReferenceFactory.GlobalConceptDescription(semanticId),
+            valueType: DataTypeDefXsd.String,
+            value: value);
     }
 
     private sealed class AddressInformationBuilder
@@ -323,35 +327,30 @@ public sealed class ContactInformationBuilder
 
             var values = new List<ISubmodelElement>
                          {
-                             new Property(DataTypeDefXsd.String, _street)
-                             {
-                                 IdShort    = DigitalNameplateIdentifiers.StreetIdShort,
-                                 SemanticId = ReferenceFactory.GlobalConceptDescription(AddressStreet)
-                             },
-                             new Property(DataTypeDefXsd.String, _city)
-                             {
-                                 IdShort    = DigitalNameplateIdentifiers.CityIdShort,
-                                 SemanticId = ReferenceFactory.GlobalConceptDescription(AddressCity)
-                             },
-                             new Property(DataTypeDefXsd.String, _postalCode)
-                             {
-                                 IdShort    = DigitalNameplateIdentifiers.PostalCodeIdShort,
-                                 SemanticId = ReferenceFactory.GlobalConceptDescription(AddressPostalCode)
-                             },
-                             new Property(DataTypeDefXsd.String, _countryCode)
-                             {
-                                 IdShort    = DigitalNameplateIdentifiers.CountryCodeIdShort,
-                                 SemanticId = ReferenceFactory.GlobalConceptDescription(AddressCountryCode)
-                             }
+                             CreateStringProperty(
+                                 DigitalNameplateIdentifiers.StreetIdShort,
+                                 AddressStreet,
+                                 _street!),
+                             CreateStringProperty(
+                                 DigitalNameplateIdentifiers.CityIdShort,
+                                 AddressCity,
+                                 _city!),
+                             CreateStringProperty(
+                                 DigitalNameplateIdentifiers.PostalCodeIdShort,
+                                 AddressPostalCode,
+                                 _postalCode!),
+                             CreateStringProperty(
+                                 DigitalNameplateIdentifiers.CountryCodeIdShort,
+                                 AddressCountryCode,
+                                 _countryCode!)
                          };
 
             if (!string.IsNullOrWhiteSpace(_state))
             {
-                values.Add(new Property(DataTypeDefXsd.String, _state)
-                           {
-                               IdShort    = DigitalNameplateIdentifiers.StateIdShort,
-                               SemanticId = ReferenceFactory.GlobalConceptDescription(AddressState)
-                           });
+                values.Add(CreateStringProperty(
+                    DigitalNameplateIdentifiers.StateIdShort,
+                    AddressState,
+                    _state!));
             }
 
             address.Value = values;
