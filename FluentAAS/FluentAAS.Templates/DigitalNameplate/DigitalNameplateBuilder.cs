@@ -41,6 +41,7 @@ public sealed class DigitalNameplateBuilder
     private string? _uniqueFacilityIdentifier;
 
     // Complex AAS elements from the template
+    private SubmodelElementCollection? _contactInformation;
     private SubmodelElementCollection? _addressInformation;
     private Aas.File?                  _companyLogo;
     private SubmodelElementList?       _markings;
@@ -425,6 +426,24 @@ public sealed class DigitalNameplateBuilder
     }
 
     /// <summary>
+    /// Configures structured contact information via <see cref="ContactInformationBuilder"/>.
+    /// </summary>
+    /// <param name="configure">Action used to populate contact information fields.</param>
+    /// <returns>The current <see cref="DigitalNameplateBuilder"/> for fluent chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is <c>null</c>.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when required contact roles are missing.</exception>
+    public DigitalNameplateBuilder WithContactInformation(Action<ContactInformationBuilder> configure)
+    {
+        ArgumentNullException.ThrowIfNull(configure);
+
+        var builder = new ContactInformationBuilder();
+        configure(builder);
+        _contactInformation = builder.Build();
+
+        return this;
+    }
+
+    /// <summary>
     /// Sets the address information structure (<c>AddressInformation</c>).
     /// </summary>
     /// <param name="addressInformation">
@@ -673,6 +692,11 @@ public sealed class DigitalNameplateBuilder
     private void AddComplexElements(Submodel submodel)
     {
         var elements = EnsureSubmodelElements(submodel);
+
+        AddComplexElementIfPresent(
+                                   elements,
+                                   _contactInformation, DigitalNameplateIdentifiers.ContactInformationIdShort,
+                                   ReferenceFactory.GlobalConceptDescription(ContactInformation));
 
         AddComplexElementIfPresent(
                                    elements,
