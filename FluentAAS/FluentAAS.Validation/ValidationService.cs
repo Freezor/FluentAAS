@@ -38,7 +38,7 @@ public sealed class ValidationService : IValidationService
     {
         ArgumentNullException.ThrowIfNull(environment);
 
-        var results = new List<ValidationResult>();
+        List<ValidationResult> results = [];
 
         foreach (var rule in _rules)
         {
