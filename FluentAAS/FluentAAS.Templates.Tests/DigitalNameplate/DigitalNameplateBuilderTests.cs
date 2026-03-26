@@ -372,4 +372,44 @@ public class DigitalNameplateBuilderTests
         Record.Exception(() => sut.WithAssetSpecificProperties(null!))
               .ShouldBeOfType<ArgumentNullException>();
     }
+    [Fact]
+    public void Build_ShouldAttachStructuredContactInformation_WhenConfigured()
+    {
+        var (_, sut, buildEnv) = CreateBuilder();
+
+        sut.WithManufacturerName("en", "ACME")
+           .WithManufacturerProductDesignation("en", "Unit")
+           .WithSerialNumber("SN-1")
+           .WithContactInformation(contact => contact
+               .WithManufacturerContact("ACME Support", "+49 89 123456")
+               .WithServiceHotline("+49 800 111222")
+               .WithEmail("support@acme.example")
+               .WithWebsiteUrl("https://acme.example/support")
+               .WithAddress("Main Street 1", "Munich", "80331", "DE"));
+
+        sut.BuildDigitalNameplate();
+        var env      = buildEnv();
+        var submodel = env.Submodels!.Single();
+
+        var contact = submodel.SubmodelElements!
+                              .OfType<SubmodelElementCollection>()
+                              .Single(e => e.IdShort == DigitalNameplateIdentifiers.ContactInformationIdShort);
+
+        contact.SemanticId!.Keys.Single().Value.ShouldBe(ContactInformation);
+
+        var hotline = contact.Value!
+                             .OfType<Property>()
+                             .Single(p => p.IdShort == DigitalNameplateIdentifiers.ServiceHotlineIdShort);
+        hotline.Value.ShouldBe("+49 800 111222");
+    }
+
+    [Fact]
+    public void WithContactInformation_ShouldThrow_WhenConfigureIsNull()
+    {
+        var (_, sut, _) = CreateBuilder();
+
+        Record.Exception(() => sut.WithContactInformation(null!))
+              .ShouldBeOfType<ArgumentNullException>();
+    }
+
 }

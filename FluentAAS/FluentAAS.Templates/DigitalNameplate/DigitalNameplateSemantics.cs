@@ -98,6 +98,71 @@ public static class DigitalNameplateSemantics
     public const string UniqueFacilityIdentifier = "https://admin-shell.io/idta/nameplate/3/0/UniqueFacilityIdentifier";
 
     /// <summary>
+    /// Semantic identifier for the top-level contact information collection.
+    /// </summary>
+    public const string ContactInformation = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation";
+
+    /// <summary>
+    /// Semantic identifier for the manufacturer contact collection.
+    /// </summary>
+    public const string ManufacturerContact = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/ManufacturerContact";
+
+    /// <summary>
+    /// Semantic identifier for the service hotline field.
+    /// </summary>
+    public const string ServiceHotline = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/ServiceHotline";
+
+    /// <summary>
+    /// Semantic identifier for the email field.
+    /// </summary>
+    public const string EmailAddress = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/Email";
+
+    /// <summary>
+    /// Semantic identifier for the website URL field.
+    /// </summary>
+    public const string WebsiteUrl = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/WebsiteUrl";
+
+    /// <summary>
+    /// Semantic identifier for the contact role field.
+    /// </summary>
+    public const string ContactRole = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/Role";
+
+    /// <summary>
+    /// Semantic identifier for the contact name field.
+    /// </summary>
+    public const string ContactName = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/Name";
+
+    /// <summary>
+    /// Semantic identifier for the phone field.
+    /// </summary>
+    public const string Phone = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/Phone";
+
+    /// <summary>
+    /// Semantic identifier for street within address information.
+    /// </summary>
+    public const string AddressStreet = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/AddressInformation/Street";
+
+    /// <summary>
+    /// Semantic identifier for city within address information.
+    /// </summary>
+    public const string AddressCity = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/AddressInformation/City";
+
+    /// <summary>
+    /// Semantic identifier for postal code within address information.
+    /// </summary>
+    public const string AddressPostalCode = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/AddressInformation/PostalCode";
+
+    /// <summary>
+    /// Semantic identifier for country code within address information.
+    /// </summary>
+    public const string AddressCountryCode = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/AddressInformation/CountryCode";
+
+    /// <summary>
+    /// Semantic identifier for state within address information.
+    /// </summary>
+    public const string AddressState = "https://admin-shell.io/idta/nameplate/3/0/ContactInformation/AddressInformation/State";
+
+    /// <summary>
     /// Semantic identifier for the address information collection.
     /// </summary>
     public const string AddressInformation = "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/AddressInformation";

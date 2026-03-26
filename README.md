@@ -102,10 +102,14 @@ Use these when your submodel matches an official IDTA template. The builder enfo
 ```csharp
 .AddDigitalNameplate("urn:submodel:nameplate")
     .WithManufacturerName("en", "Acme Ltd.")    // required
+    .WithManufacturerProductDesignation("en", "Controller") // required
     .WithSerialNumber("SN-001")                  // required
     .WithContactInformation(contact => contact
-        .WithPhone("+49 123 456789")
-        .WithEmail("info@acme.example"))
+        .WithManufacturerContact("Acme Service Desk", "+49 123 456789") // required role
+        .WithServiceHotline("+49 800 111222")                            // required role
+        .WithEmail("info@acme.example")
+        .WithWebsiteUrl("https://acme.example/support")
+        .WithAddress("Industrial Ave 3", "Munich", "80331", "DE"))
     .BuildDigitalNameplate()
 ```
 
