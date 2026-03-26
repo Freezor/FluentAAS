@@ -172,7 +172,7 @@ public class HandoverDocumentVersionTests
         languageElement.ShouldNotBeNull();
         languageElement.ShouldBeOfType<SubmodelElementList>();
 
-        var languageList = (SubmodelElementList)languageElement;
+        var languageList = (SubmodelElementList)languageElement!;
         languageList.Value.Count.ShouldBe(2);
         languageList.TypeValueListElement.ShouldBe(AasSubmodelElements.Property);
         languageList.OrderRelevant.ShouldBe(false);
@@ -194,7 +194,7 @@ public class HandoverDocumentVersionTests
         versionElement.ShouldNotBeNull();
         versionElement.ShouldBeOfType<Property>();
 
-        var versionProperty = (Property)versionElement;
+        var versionProperty = (Property)versionElement!;
         versionProperty.Value.ShouldBe(versionNumber);
         versionProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
     }
@@ -217,7 +217,7 @@ public class HandoverDocumentVersionTests
         titleElement.ShouldNotBeNull();
         titleElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var titleProperty = (MultiLanguageProperty)titleElement;
+        var titleProperty = (MultiLanguageProperty)titleElement!;
         titleProperty.Value.Count.ShouldBe(1);
         titleProperty.Value[0].Language.ShouldBe(titleLanguage);
         titleProperty.Value[0].Text.ShouldBe(title);
@@ -241,7 +241,7 @@ public class HandoverDocumentVersionTests
         descriptionElement.ShouldNotBeNull();
         descriptionElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var descriptionProperty = (MultiLanguageProperty)descriptionElement;
+        var descriptionProperty = (MultiLanguageProperty)descriptionElement!;
         descriptionProperty.Value.Count.ShouldBe(1);
         descriptionProperty.Value[0].Language.ShouldBe(descriptionLanguage);
         descriptionProperty.Value[0].Text.ShouldBe(description);
@@ -263,7 +263,7 @@ public class HandoverDocumentVersionTests
         dateElement.ShouldNotBeNull();
         dateElement.ShouldBeOfType<Property>();
 
-        var dateProperty = (Property)dateElement;
+        var dateProperty = (Property)dateElement!;
         dateProperty.Value.ShouldBe("2023-12-15");
         dateProperty.ValueType.ShouldBe(DataTypeDefXsd.Date);
     }
@@ -284,7 +284,7 @@ public class HandoverDocumentVersionTests
         statusElement.ShouldNotBeNull();
         statusElement.ShouldBeOfType<Property>();
 
-        var statusProperty = (Property)statusElement;
+        var statusProperty = (Property)statusElement!;
         statusProperty.Value.ShouldBe(statusValue);
         statusProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
     }
@@ -306,12 +306,12 @@ public class HandoverDocumentVersionTests
         var shortNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortOrganizationShortName);
         shortNameElement.ShouldNotBeNull();
         shortNameElement.ShouldBeOfType<Property>();
-        ((Property)shortNameElement).Value.ShouldBe(shortName);
+        ((Property)shortNameElement!).Value.ShouldBe(shortName);
 
         var officialNameElement = result.Value.FirstOrDefault(e => e.IdShort == HandoverDocumentationSemantics.IdShortOrganizationOfficialName);
         officialNameElement.ShouldNotBeNull();
         officialNameElement.ShouldBeOfType<Property>();
-        ((Property)officialNameElement).Value.ShouldBe(officialName);
+        ((Property)officialNameElement!).Value.ShouldBe(officialName);
     }
 
     [Fact]
@@ -328,7 +328,7 @@ public class HandoverDocumentVersionTests
         filesElement.ShouldNotBeNull();
         filesElement.ShouldBeOfType<SubmodelElementList>();
 
-        var filesList = (SubmodelElementList)filesElement;
+        var filesList = (SubmodelElementList)filesElement!;
         filesList.TypeValueListElement.ShouldBe(AasSubmodelElements.File);
         filesList.OrderRelevant.ShouldBe(false);
         filesList.Value.Count.ShouldBe(version.DigitalFiles.Count);
@@ -352,7 +352,7 @@ public class HandoverDocumentVersionTests
         subtitleElement.ShouldNotBeNull();
         subtitleElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var subtitleProperty = (MultiLanguageProperty)subtitleElement;
+        var subtitleProperty = (MultiLanguageProperty)subtitleElement!;
         subtitleProperty.Value.Count.ShouldBe(1);
         subtitleProperty.Value[0].Language.ShouldBe(subtitleLanguage);
         subtitleProperty.Value[0].Text.ShouldBe(subtitle);
@@ -377,7 +377,7 @@ public class HandoverDocumentVersionTests
         subtitleElement.ShouldNotBeNull();
         subtitleElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var subtitleProperty = (MultiLanguageProperty)subtitleElement;
+        var subtitleProperty = (MultiLanguageProperty)subtitleElement!;
         subtitleProperty.Value[0].Language.ShouldBe(titleLanguage);
     }
 
@@ -430,7 +430,7 @@ public class HandoverDocumentVersionTests
         keyWordsElement.ShouldNotBeNull();
         keyWordsElement.ShouldBeOfType<MultiLanguageProperty>();
 
-        var keyWordsProperty = (MultiLanguageProperty)keyWordsElement;
+        var keyWordsProperty = (MultiLanguageProperty)keyWordsElement!;
         keyWordsProperty.Value.Count.ShouldBe(2);
         keyWordsProperty.Value.ShouldContain(ls => ls.Language == "en" && ls.Text == "test");
         keyWordsProperty.Value.ShouldContain(ls => ls.Language == "de" && ls.Text == "prüfung");

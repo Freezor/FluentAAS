@@ -83,7 +83,7 @@ public class HandoverDocumentClassificationTests
         classIdElement.ShouldNotBeNull();
         classIdElement.ShouldBeOfType<Property>();
         
-        var classIdProperty = (Property)classIdElement;
+        var classIdProperty = (Property)classIdElement!;
         classIdProperty.Value.ShouldBe(classId);
         classIdProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         classIdProperty.SemanticId.ShouldNotBeNull();
@@ -105,7 +105,7 @@ public class HandoverDocumentClassificationTests
         classNameElement.ShouldNotBeNull();
         classNameElement.ShouldBeOfType<MultiLanguageProperty>();
         
-        var classNameProperty = (MultiLanguageProperty)classNameElement;
+        var classNameProperty = (MultiLanguageProperty)classNameElement!;
         classNameProperty.Value.Count.ShouldBe(1);
         classNameProperty.Value[0].Language.ShouldBe(classNameLanguage);
         classNameProperty.Value[0].Text.ShouldBe(className);
@@ -127,7 +127,7 @@ public class HandoverDocumentClassificationTests
         systemElement.ShouldNotBeNull();
         systemElement.ShouldBeOfType<Property>();
         
-        var systemProperty = (Property)systemElement;
+        var systemProperty = (Property)systemElement!;
         systemProperty.Value.ShouldBe(classificationSystem);
         systemProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         systemProperty.SemanticId.ShouldNotBeNull();

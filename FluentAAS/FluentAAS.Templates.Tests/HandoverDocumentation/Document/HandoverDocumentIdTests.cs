@@ -115,7 +115,7 @@ public class HandoverDocumentIdTests
         domainIdElement.ShouldNotBeNull();
         domainIdElement.ShouldBeOfType<Property>();
         
-        var domainIdProperty = (Property)domainIdElement;
+        var domainIdProperty = (Property)domainIdElement!;
         domainIdProperty.Value.ShouldBe(domainId);
         domainIdProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         domainIdProperty.SemanticId.ShouldNotBeNull();
@@ -136,7 +136,7 @@ public class HandoverDocumentIdTests
         identifierElement.ShouldNotBeNull();
         identifierElement.ShouldBeOfType<Property>();
         
-        var identifierProperty = (Property)identifierElement;
+        var identifierProperty = (Property)identifierElement!;
         identifierProperty.Value.ShouldBe(identifier);
         identifierProperty.ValueType.ShouldBe(DataTypeDefXsd.String);
         identifierProperty.SemanticId.ShouldNotBeNull();
@@ -156,7 +156,7 @@ public class HandoverDocumentIdTests
         primaryElement.ShouldNotBeNull();
         primaryElement.ShouldBeOfType<Property>();
         
-        var primaryProperty = (Property)primaryElement;
+        var primaryProperty = (Property)primaryElement!;
         primaryProperty.Value.ShouldBe("true");
         primaryProperty.ValueType.ShouldBe(DataTypeDefXsd.Boolean);
         primaryProperty.SemanticId.ShouldNotBeNull();
@@ -176,7 +176,7 @@ public class HandoverDocumentIdTests
         primaryElement.ShouldNotBeNull();
         primaryElement.ShouldBeOfType<Property>();
         
-        var primaryProperty = (Property)primaryElement;
+        var primaryProperty = (Property)primaryElement!;
         primaryProperty.Value.ShouldBe("false");
         primaryProperty.ValueType.ShouldBe(DataTypeDefXsd.Boolean);
         primaryProperty.SemanticId.ShouldNotBeNull();
