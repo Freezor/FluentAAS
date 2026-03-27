@@ -168,6 +168,50 @@ You get full control when you need it.
 
 ---
 
+## Staged Submodel Composition (`.AddSubmodel(...)`)
+
+For modular systems (DDD layers, plugins, stepwise enrichment), you can now register and enrich submodels at any point before `Build()`.
+
+### Register fully built submodels
+
+```csharp
+var builder = AasBuilder.Create()
+    .AddShell("urn:aas:example:machine-42", "Machine42")
+    .CompleteShellConfiguration()
+    .AddSubmodel(new Submodel("urn:submodel:ops") { IdShort = "Operations" })
+    .AddSubmodel(new Submodel("urn:submodel:maintenance") { IdShort = "Maintenance" });
+```
+
+### Add staged fragments by submodel ID
+
+```csharp
+builder
+    .AddSubmodelFragment("urn:submodel:ops", fragment => fragment
+        .AddProperty("Status", "Running")
+        .AddProperty("Shift", "Night"))
+    .AddSubmodelFragment("urn:submodel:maintenance", fragment => fragment
+        .AddMultiLanguageProperty("LastService", ls => ls
+            .Add("en", "Completed")
+            .Add("de", "Abgeschlossen")));
+
+var environment = builder.Build();
+```
+
+### Why use staged composition?
+
+- Build submodels in separate modules/services and attach them later.
+- Support plugin-style late binding with runtime-loaded components.
+- Preserve fluent chaining and existing inline builder methods.
+- Keep strong validation guarantees:
+  - `Submodel.Id` and `Submodel.IdShort` are validated on add.
+  - Duplicate submodel IDs are rejected at build-time.
+  - Fragment targets must exist.
+  - Shell submodel references must resolve to known submodels.
+
+> Backward compatibility note: `AddExistingSubmodel(...)` still works, but it delegates to `AddSubmodelInternal(...)` (not `AddSubmodel(...)`) and therefore skips the additional public `IdShort` validation performed by `AddSubmodel(...)`.
+
+---
+
 ## Project Structure
 
 | Package                  | What it does                                |
