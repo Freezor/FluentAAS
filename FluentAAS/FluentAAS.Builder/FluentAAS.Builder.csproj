@@ -1,30 +1,53 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <LangVersion>latest</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <WarningsAsErrors>CS1591</WarningsAsErrors>
-        <NoWarn>CS1591</NoWarn>
-        <Nullable>enable</Nullable>
-        <PackageId>FluentAAS.Builder</PackageId>
-        <Authors>Oliver Fries</Authors>
-        <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
-        <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>
-        <PackageProjectUrl>https://github.com/Freezor/FluentAAS</PackageProjectUrl>
-        <RepositoryUrl>hhttps://github.com/Freezor/FluentAAS.git</RepositoryUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryType>git</RepositoryType>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <IsPackable>true</IsPackable>
-    </PropertyGroup>
+    <!-- PackageId must exactly match the NuGet package name so GitHub/nuget.org resolve the same package identity. -->
+    <PackageId>FluentAAS.Builder</PackageId>
 
-    <ItemGroup>
-        <PackageReference Include="AasCore.Aas3_0" Version="1.0.5"/>
-    </ItemGroup>
+    <!-- Authors appears on nuget.org and helps users identify the maintainer/organization behind the package. -->
+    <Authors>Oliver Fries</Authors>
 
-    <ItemGroup>
-        <ProjectReference Include="..\FluentAAS.Core\FluentAAS.Core.csproj"/>
-    </ItemGroup>
+    <!-- Description is the primary long-form package blurb shown on nuget.org and package clients. -->
+    <Description>Fluent API for building Asset Administration Shell (AAS) models in .NET with template helpers and strong typing.</Description>
+
+    <!-- Summary is a short package synopsis shown in NuGet metadata surfaces and improves quick scanning/discoverability. -->
+    <Summary>Build and export Asset Administration Shell (AAS) models in C# using a fluent developer-friendly API.</Summary>
+
+    <!-- PackageTags improve search discoverability on nuget.org and in IDE package managers. -->
+    <PackageTags>AAS;AssetAdministrationShell;Industry4.0;DigitalTwin;FluentAAS;dotnet</PackageTags>
+
+    <!-- RepositoryUrl links the package back to this GitHub repository for trust, source browsing, and issue tracking. -->
+    <RepositoryUrl>https://github.com/Freezor/FluentAAS</RepositoryUrl>
+
+    <!-- RepositoryType='git' tells NuGet/GitHub what source control system the repository uses. -->
+    <RepositoryType>git</RepositoryType>
+
+    <!-- PackageProjectUrl is the "homepage" URL on nuget.org (can be repo URL or direct package/docs URL). -->
+    <PackageProjectUrl>https://www.nuget.org/packages/FluentAAS.Builder</PackageProjectUrl>
+
+    <!-- PackageLicenseExpression exposes license metadata directly on nuget.org and GitHub package views. -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- RepositoryCommit embeds the source commit in package metadata (when available) for source/package traceability. -->
+    <RepositoryCommit Condition="'$(SourceRevisionId)' != ''">$(SourceRevisionId)</RepositoryCommit>
+
+    <!-- PublishRepositoryUrl includes repository metadata in the generated .nupkg for richer source linking. -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FluentAAS.Core\FluentAAS.Core.csproj" />
+    <ProjectReference Include="..\FluentAAS.Templates\FluentAAS.Templates.csproj" />
+    <ProjectReference Include="..\FluentAAS.IO\FluentAAS.IO.csproj" />
+    <ProjectReference Include="..\FluentAAS.Validation\FluentAAS.Validation.csproj" />
+    <PackageReference Include="AasCore.Aas3_0" Version="1.0.5"/>
+  </ItemGroup>
+
 </Project>
