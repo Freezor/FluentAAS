@@ -208,7 +208,7 @@ var environment = builder.Build();
   - Fragment targets must exist.
   - Shell submodel references must resolve to known submodels.
 
-> Backward compatibility note: `AddExistingSubmodel(...)` still works and delegates to `AddSubmodel(...)`.
+> Backward compatibility note: `AddExistingSubmodel(...)` still works, but it delegates to `AddSubmodelInternal(...)` (not `AddSubmodel(...)`) and therefore skips the additional public `IdShort` validation performed by `AddSubmodel(...)`.
 
 ---
 
