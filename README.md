@@ -31,7 +31,7 @@ That's it. A valid, IDTA-compliant AAS model. Ready to export.
 **FluentAAS.Builder is published on NuGet and ready for production use.**
 
 - **Package page:** https://www.nuget.org/packages/FluentAAS.Builder/
-- **Package metadata (NuGet):** https://www.nuget.org/packages/FluentAAS.Builder/#readme-body-tab
+- **Package README (NuGet):** https://www.nuget.org/packages/FluentAAS.Builder/#readme-body-tab
 - **Documentation:** https://github.com/Freezor/FluentAAS#readme
 - **GitHub releases:** https://github.com/Freezor/FluentAAS/releases
 
