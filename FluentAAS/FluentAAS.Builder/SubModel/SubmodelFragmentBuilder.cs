@@ -21,9 +21,7 @@ public sealed class SubmodelFragmentBuilder
     /// <param name="value">The property value.</param>
     /// <param name="valueType">The property value type. Defaults to <see cref="DataTypeDefXsd.String"/>.</param>
     /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="idShort"/> or <paramref name="value"/> is null, empty, or whitespace.
-    /// </exception>
+    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="idShort"/> or <paramref name="value"/> is null, empty, or whitespace.</remarks>
     public SubmodelFragmentBuilder AddProperty(string idShort, string value, DataTypeDefXsd valueType = DataTypeDefXsd.String)
     {
         if (string.IsNullOrWhiteSpace(idShort))
@@ -52,8 +50,7 @@ public sealed class SubmodelFragmentBuilder
     /// <param name="idShort">The short identifier of the multi-language property.</param>
     /// <param name="configure">Configuration callback for language strings.</param>
     /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="idShort"/> is null, empty, or whitespace.</exception>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is null.</exception>
+    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="idShort"/> is invalid and <see cref="ArgumentNullException"/> when <paramref name="configure"/> is null.</remarks>
     public SubmodelFragmentBuilder AddMultiLanguageProperty(string idShort, Action<LangStringSetBuilder> configure)
     {
         if (string.IsNullOrWhiteSpace(idShort))
@@ -75,7 +72,7 @@ public sealed class SubmodelFragmentBuilder
     /// </summary>
     /// <param name="element">The submodel element to add.</param>
     /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="element"/> is null.</exception>
+    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="element"/> is null.</remarks>
     public SubmodelFragmentBuilder AddElement(ISubmodelElement element)
     {
         ArgumentNullException.ThrowIfNull(element);

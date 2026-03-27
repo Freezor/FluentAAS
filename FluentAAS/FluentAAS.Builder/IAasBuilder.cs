@@ -17,9 +17,7 @@ public interface IAasBuilder
     /// <returns>
     /// A <see cref="ShellBuilder"/> instance for further configuration of the shell.
     /// </returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.
-    /// </exception>
+    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.</remarks>
     IShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance);
 
     /// <summary>
@@ -28,10 +26,7 @@ public interface IAasBuilder
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
-    /// <exception cref="ArgumentException">
-    /// Thrown when required submodel fields (for example <see cref="IReferable.IdShort"/>) are invalid.
-    /// </exception>
+    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="submodel"/> is null and <see cref="ArgumentException"/> when required submodel fields are invalid.</remarks>
     IAasBuilder AddSubmodel(Submodel submodel);
 
     /// <summary>
@@ -39,7 +34,7 @@ public interface IAasBuilder
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="AasBuilder"/> instance for fluent chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
+    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="submodel"/> is null.</remarks>
     IAasBuilder AddExistingSubmodel(Submodel submodel);
 
     /// <summary>
@@ -49,17 +44,13 @@ public interface IAasBuilder
     /// <param name="submodelId">The identifier of the target submodel.</param>
     /// <param name="configure">Callback that contributes submodel elements.</param>
     /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="submodelId"/> is null, empty, or whitespace.</exception>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is null.</exception>
+    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="submodelId"/> is invalid and <see cref="ArgumentNullException"/> when <paramref name="configure"/> is null.</remarks>
     IAasBuilder AddSubmodelFragment(string submodelId, Action<SubmodelFragmentBuilder> configure);
 
     /// <summary>
     /// Builds and returns the configured <see cref="Environment"/> instance.
     /// </summary>
-    /// <returns>
-    /// A new <see cref="Environment"/> containing the configured asset administration
-    /// shells and submodels.
-    /// </returns>
+    /// <returns>A new <see cref="Environment"/> containing the configured asset administration shells and submodels.</returns>
     IEnvironment Build();
 
     /// <summary>
@@ -67,7 +58,7 @@ public interface IAasBuilder
     /// Intended for internal use by <see cref="ShellBuilder"/>.
     /// </summary>
     /// <param name="shell">The shell instance to add.</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="shell"/> is null.</exception>
+    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="shell"/> is null.</remarks>
     void AddShellInternal(AssetAdministrationShell shell);
 
     /// <summary>
@@ -75,6 +66,6 @@ public interface IAasBuilder
     /// Intended for internal use by shell or submodel builders.
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
+    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="submodel"/> is null.</remarks>
     void AddSubmodelInternal(Submodel submodel);
 }

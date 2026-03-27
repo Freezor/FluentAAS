@@ -267,6 +267,93 @@ public class AasBuilderTests
     }
 
     [Fact]
+    public void Build_WithShellReferencingKnownSubmodelId_ShouldSucceed()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodelId = _fixture.Create<string>()!;
+        builder.AddSubmodel(new Submodel(id: submodelId, idShort: "known-submodel"));
+
+        var shell = new AssetAdministrationShell(
+            id: _fixture.Create<string>()!,
+            assetInformation: new AssetInformation(AssetKind.Instance))
+        {
+            IdShort = "shell-with-known-ref",
+            Submodels =
+            [
+                new Reference(
+                    ReferenceTypes.ModelReference,
+                    [new Key(KeyTypes.Submodel, submodelId)])
+            ]
+        };
+
+        builder.AddShellInternal(shell);
+
+        // Act
+        var environment = builder.Build();
+
+        // Assert
+        var builtShell = environment.AssetAdministrationShells!.OfType<AssetAdministrationShell>().Single();
+        builtShell.Submodels.ShouldNotBeNull();
+        builtShell.Submodels.Count.ShouldBe(1);
+        builtShell.Submodels.Single().Keys.Single().Value.ShouldBe(submodelId);
+    }
+
+    [Fact]
+    public void Build_WithShellReferencingUnknownSubmodelId_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var unknownSubmodelId = _fixture.Create<string>()!;
+
+        var shell = new AssetAdministrationShell(
+            id: _fixture.Create<string>()!,
+            assetInformation: new AssetInformation(AssetKind.Instance))
+        {
+            IdShort = "shell-with-unknown-ref",
+            Submodels =
+            [
+                new Reference(
+                    ReferenceTypes.ModelReference,
+                    [new Key(KeyTypes.Submodel, unknownSubmodelId)])
+            ]
+        };
+
+        builder.AddShellInternal(shell);
+
+        // Act
+        var act = () => builder.Build();
+
+        // Assert
+        var ex = Should.Throw<InvalidOperationException>(act);
+        ex.Message.ShouldContain($"references unknown submodel id '{unknownSubmodelId}'");
+    }
+
+    [Fact]
+    public void Build_WhenFragmentBatchFails_ShouldRollbackAppliedFragmentsBeforeRetry()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var existingSubmodelId = _fixture.Create<string>();
+        var missingSubmodelId  = _fixture.Create<string>();
+
+        builder.AddSubmodel(new Submodel(id: existingSubmodelId, idShort: "existing"));
+        builder.AddSubmodelFragment(existingSubmodelId, fragment => fragment.AddProperty("temperature", "21.5"));
+        builder.AddSubmodelFragment(missingSubmodelId, fragment => fragment.AddProperty("pressure", "1.0"));
+
+        // Act
+        Should.Throw<InvalidOperationException>(() => builder.Build());
+
+        builder.AddSubmodel(new Submodel(id: missingSubmodelId, idShort: "missing-now-added"));
+        var env = builder.Build();
+
+        // Assert
+        var existingSubmodel = env.Submodels!.OfType<Submodel>().Single(s => s.Id == existingSubmodelId);
+        existingSubmodel.SubmodelElements.ShouldNotBeNull();
+        existingSubmodel.SubmodelElements.Count(e => e.IdShort == "temperature").ShouldBe(1);
+    }
+
+    [Fact]
     public void Build_WhenCalledMultipleTimes_ShouldReturnNewEnvironmentInstancesWithSameContent()
     {
         // Arrange
