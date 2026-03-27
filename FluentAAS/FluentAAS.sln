@@ -22,6 +22,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAAS.Templates.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C6E453E0-8363-4653-A26B-6348DB665F80}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{0EB9316B-BF79-4223-BCC0-5E512E74BF67}"
+	ProjectSection(SolutionItems) = preProject
+		..\CODE_OF_CONDUCT.md = ..\CODE_OF_CONDUCT.md
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+		..\SECURITY.md = ..\SECURITY.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
