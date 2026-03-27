@@ -141,18 +141,7 @@ public sealed class AasBuilder : IAasBuilder
             throw new InvalidOperationException($"Duplicate submodel id(s) detected at build-time: {duplicateIdList}. Each submodel id must be unique.");
         }
 
-        foreach (var (submodelId, applyFragment) in _submodelFragments)
-        {
-            var submodel = _submodels.OfType<Submodel>().FirstOrDefault(sm => string.Equals(sm.Id, submodelId, StringComparison.Ordinal));
-            if (submodel is null)
-            {
-                throw new InvalidOperationException($"No base submodel with id '{submodelId}' was found for a staged fragment. Add the submodel before adding fragments.");
-            }
-
-            applyFragment(submodel);
-        }
-
-        _submodelFragments.Clear();
+        ApplySubmodelFragmentsTransactionally();
 
         var knownSubmodelIds = _submodels.OfType<Submodel>()
                                          .Select(s => s.Id)
@@ -182,6 +171,74 @@ public sealed class AasBuilder : IAasBuilder
                    AssetAdministrationShells = _shells.ToList(),
                    Submodels                 = _submodels.ToList()
                };
+    }
+
+    /// <summary>
+    /// Applies all staged submodel fragments as a single transactional batch.
+    /// If any fragment fails, all element additions made by this batch are rolled back.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when a staged fragment references an unknown submodel id.</exception>
+    private void ApplySubmodelFragmentsTransactionally()
+    {
+        if (_submodelFragments.Count == 0)
+        {
+            return;
+        }
+
+        var submodelsById = _submodels.OfType<Submodel>()
+                                      .Where(sm => !string.IsNullOrWhiteSpace(sm.Id))
+                                      .ToDictionary(sm => sm.Id!, StringComparer.Ordinal);
+
+        foreach (var (submodelId, _) in _submodelFragments)
+        {
+            if (!submodelsById.ContainsKey(submodelId))
+            {
+                throw new InvalidOperationException($"No base submodel with id '{submodelId}' was found for a staged fragment. Add the submodel before adding fragments.");
+            }
+        }
+
+        var snapshots = new Dictionary<Submodel, (bool HadCollection, int InitialCount)>();
+
+        try
+        {
+            foreach (var (submodelId, applyFragment) in _submodelFragments)
+            {
+                var submodel = submodelsById[submodelId];
+
+                if (!snapshots.ContainsKey(submodel))
+                {
+                    snapshots[submodel] = (submodel.SubmodelElements is not null, submodel.SubmodelElements?.Count ?? 0);
+                }
+
+                applyFragment(submodel);
+            }
+
+            _submodelFragments.Clear();
+        }
+        catch
+        {
+            foreach (var (submodel, snapshot) in snapshots)
+            {
+                if (!snapshot.HadCollection)
+                {
+                    submodel.SubmodelElements = null;
+                    continue;
+                }
+
+                if (submodel.SubmodelElements is null)
+                {
+                    submodel.SubmodelElements = [];
+                    continue;
+                }
+
+                while (submodel.SubmodelElements.Count > snapshot.InitialCount)
+                {
+                    submodel.SubmodelElements.RemoveAt(submodel.SubmodelElements.Count - 1);
+                }
+            }
+
+            throw;
+        }
     }
 
     /// <summary>
