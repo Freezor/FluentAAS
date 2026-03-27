@@ -267,28 +267,34 @@ jobs:
               },
               "label_extractor": [
                 {
-                  "pattern": "(?i)^(enhancement|feature|feat)$",
-                  "target": "$1"
+                  "pattern": "^(enhancement|feature|feat)$",
+                  "target": "$1",
+                  "flags": "i"
                 },
                 {
-                  "pattern": "(?i)^(bug|fix|bugfix)$",
-                  "target": "$1"
+                  "pattern": "^(bug|fix|bugfix)$",
+                  "target": "$1",
+                  "flags": "i"
                 },
                 {
-                  "pattern": "(?i)^(docs|documentation)$",
-                  "target": "$1"
+                  "pattern": "^(docs|documentation)$",
+                  "target": "$1",
+                  "flags": "i"
                 },
                 {
-                  "pattern": "(?i)^(test|tests|qa)$",
-                  "target": "$1"
+                  "pattern": "^(test|tests|qa)$",
+                  "target": "$1",
+                  "flags": "i"
                 },
                 {
-                  "pattern": "(?i)^(chore|ci|build|dependencies|refactor)$",
-                  "target": "$1"
+                  "pattern": "^(chore|ci|build|dependencies|refactor)$",
+                  "target": "$1",
+                  "flags": "i"
                 },
                 {
-                  "pattern": "(?i)^security$",
-                  "target": "$0"
+                  "pattern": "^security$",
+                  "target": "$0",
+                  "flags": "i"
                 }
               ],
               "autolabeler": [
