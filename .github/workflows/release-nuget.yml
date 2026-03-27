@@ -178,6 +178,140 @@ jobs:
         with:
           fetchReleaseInformation: true
           failOnError: false
+          mode: "HYBRID"
+          configurationJson: |
+            {
+              "template": "## What's Changed\n\n#{{CHANGELOG}}\n\n**Full Changelog**: #{{RELEASE_DIFF}}",
+              "empty_template": "## What's Changed\n\nNo user-facing changes in this release.",
+              "pr_template": "- #{{TITLE}} by @#{{AUTHOR}} in ##{{NUMBER}}",
+              "commit_template": "- #{{TITLE}} by @#{{AUTHOR}} (`#{{MERGE_SHA}}`)",
+              "categories": [
+                {
+                  "title": "## 🚀 Features",
+                  "labels": ["enhancement", "feature", "feat"],
+                  "mode": "PR"
+                },
+                {
+                  "title": "## 🐛 Bug Fixes",
+                  "labels": ["bug", "fix", "bugfix"],
+                  "mode": "PR"
+                },
+                {
+                  "title": "## 📝 Documentation",
+                  "labels": ["docs", "documentation"],
+                  "mode": "PR"
+                },
+                {
+                  "title": "## 🧪 Tests",
+                  "labels": ["test", "tests", "qa"],
+                  "mode": "PR"
+                },
+                {
+                  "title": "## 🧰 Maintenance",
+                  "labels": ["chore", "ci", "build", "dependencies", "refactor"],
+                  "mode": "PR"
+                },
+                {
+                  "title": "## 🔒 Security",
+                  "labels": ["security"],
+                  "mode": "PR"
+                },
+                {
+                  "title": "## 🚀 Features (Direct Commits)",
+                  "mode": "COMMIT",
+                  "rules": [
+                    {
+                      "pattern": "^(feat|feature)(\\(.+\\))?:\\s+.+$",
+                      "flags": "giu",
+                      "on_property": "title"
+                    }
+                  ]
+                },
+                {
+                  "title": "## 🐛 Bug Fixes (Direct Commits)",
+                  "mode": "COMMIT",
+                  "rules": [
+                    {
+                      "pattern": "^(fix|bugfix|bug)(\\(.+\\))?:\\s+.+$",
+                      "flags": "giu",
+                      "on_property": "title"
+                    }
+                  ]
+                },
+                {
+                  "title": "## 🧰 Maintenance (Direct Commits)",
+                  "mode": "COMMIT",
+                  "rules": [
+                    {
+                      "pattern": "^(build|chore|ci|refactor|perf|style|test|docs)(\\(.+\\))?:\\s+.+$",
+                      "flags": "giu",
+                      "on_property": "title"
+                    }
+                  ]
+                },
+                {
+                  "title": "## 📦 Other Direct Commits",
+                  "mode": "COMMIT",
+                  "rules": [
+                    {
+                      "pattern": "^.+$",
+                      "flags": "gu",
+                      "on_property": "title"
+                    }
+                  ]
+                }
+              ],
+              "sort": {
+                "order": "ASC",
+                "on_property": "mergedAt"
+              },
+              "label_extractor": [
+                {
+                  "pattern": "^(enhancement|feature|feat)$",
+                  "target": "$1",
+                  "flags": "i"
+                },
+                {
+                  "pattern": "^(bug|fix|bugfix)$",
+                  "target": "$1",
+                  "flags": "i"
+                },
+                {
+                  "pattern": "^(docs|documentation)$",
+                  "target": "$1",
+                  "flags": "i"
+                },
+                {
+                  "pattern": "^(test|tests|qa)$",
+                  "target": "$1",
+                  "flags": "i"
+                },
+                {
+                  "pattern": "^(chore|ci|build|dependencies|refactor)$",
+                  "target": "$1",
+                  "flags": "i"
+                },
+                {
+                  "pattern": "^security$",
+                  "target": "$0",
+                  "flags": "i"
+                }
+              ],
+              "autolabeler": [
+                {
+                  "label": "docs",
+                  "files": ["**/*.md", "docs/**"]
+                },
+                {
+                  "label": "test",
+                  "files": ["**/*test*/**", "**/*tests*/**", "**/*.tests/**", "**/*.Tests/**"]
+                },
+                {
+                  "label": "ci",
+                  "files": [".github/workflows/**"]
+                }
+              ]
+            }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
