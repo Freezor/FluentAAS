@@ -168,6 +168,7 @@ public class AasBuilderTests
         returned.ShouldBeSameAs(builder);
 
         var environment = builder.Build();
+        environment.Submodels.ShouldNotBeNull();
         environment.Submodels.ShouldContain(submodel);
     }
 
@@ -223,6 +224,30 @@ public class AasBuilderTests
         var submodel = env.Submodels.ShouldHaveSingleItem().ShouldBeOfType<Submodel>();
         submodel.SubmodelElements.ShouldNotBeNull();
         submodel.SubmodelElements.ShouldContain(e => e.IdShort == "temperature");
+    }
+
+    [Fact]
+    public void Build_WhenCalledMultipleTimes_WithFragments_ShouldNotDuplicateFragmentElements()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodelId = _fixture.Create<string>();
+        builder.AddSubmodel(new Submodel(id: submodelId, idShort: "composed-submodel"));
+        builder.AddSubmodelFragment(submodelId, fragment => fragment.AddProperty("temperature", "21.5"));
+
+        // Act
+        var env1 = builder.Build();
+        var env2 = builder.Build();
+
+        // Assert
+        var firstSubmodel = env1.Submodels.ShouldHaveSingleItem().ShouldBeOfType<Submodel>();
+        var secondSubmodel = env2.Submodels.ShouldHaveSingleItem().ShouldBeOfType<Submodel>();
+
+        firstSubmodel.SubmodelElements.ShouldNotBeNull();
+        secondSubmodel.SubmodelElements.ShouldNotBeNull();
+
+        firstSubmodel.SubmodelElements.Count(e => e.IdShort == "temperature").ShouldBe(1);
+        secondSubmodel.SubmodelElements.Count(e => e.IdShort == "temperature").ShouldBe(1);
     }
 
     [Fact]
@@ -332,6 +357,22 @@ public class AasBuilderTests
             id: _fixture.Create<string>()!,
             idShort: _fixture.Create<string>()!
         );
+
+        // Act
+        builder.AddSubmodelInternal(submodel);
+        var environment = builder.Build();
+
+        // Assert
+        environment.Submodels.ShouldHaveSingleItem();
+        environment.Submodels.Single().ShouldBeSameAs(submodel);
+    }
+
+    [Fact]
+    public void AddSubmodelInternal_WithMissingIdShort_ShouldStillAddSubmodel()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel = new Submodel(id: _fixture.Create<string>()!);
 
         // Act
         builder.AddSubmodelInternal(submodel);

@@ -81,6 +81,7 @@ public sealed class AasBuilder : IAasBuilder
     /// </exception>
     public IAasBuilder AddSubmodel(Submodel submodel)
     {
+        ValidateSubmodelForPublicAdd(submodel);
         AddSubmodelInternal(submodel);
         return this;
     }
@@ -93,7 +94,8 @@ public sealed class AasBuilder : IAasBuilder
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
     public IAasBuilder AddExistingSubmodel(Submodel submodel)
     {
-        return AddSubmodel(submodel);
+        AddSubmodelInternal(submodel);
+        return this;
     }
 
     /// <summary>
@@ -155,6 +157,8 @@ public sealed class AasBuilder : IAasBuilder
             applyFragment(submodel);
         }
 
+        _submodelFragments.Clear();
+
         var knownSubmodelIds = _submodels.OfType<Submodel>()
                                          .Select(s => s.Id)
                                          .Where(id => !string.IsNullOrWhiteSpace(id))
@@ -210,7 +214,7 @@ public sealed class AasBuilder : IAasBuilder
     public void AddSubmodelInternal(Submodel submodel)
     {
         ArgumentNullException.ThrowIfNull(submodel);
-        ValidateSubmodel(submodel);
+        ValidateSubmodelId(submodel);
 
         if (!_submodels.Contains(submodel))
         {
@@ -218,12 +222,19 @@ public sealed class AasBuilder : IAasBuilder
         }
     }
 
-    private static void ValidateSubmodel(Submodel submodel)
+    private static void ValidateSubmodelId(Submodel submodel)
     {
+        ArgumentNullException.ThrowIfNull(submodel);
+
         if (string.IsNullOrWhiteSpace(submodel.Id))
         {
             throw new ArgumentException("Submodel id must not be empty.", nameof(submodel));
         }
+    }
+
+    private static void ValidateSubmodelForPublicAdd(Submodel submodel)
+    {
+        ValidateSubmodelId(submodel);
 
         if (string.IsNullOrWhiteSpace(submodel.IdShort))
         {
