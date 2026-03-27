@@ -152,6 +152,96 @@ public class AasBuilderTests
     }
 
     [Fact]
+    public void AddSubmodel_WithValidSubmodel_ShouldAddToEnvironmentAndReturnBuilder()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel = new Submodel(
+            id: _fixture.Create<string>()!,
+            idShort: _fixture.Create<string>()!
+        );
+
+        // Act
+        var returned = builder.AddSubmodel(submodel);
+
+        // Assert
+        returned.ShouldBeSameAs(builder);
+
+        var environment = builder.Build();
+        environment.Submodels.ShouldContain(submodel);
+    }
+
+    [Fact]
+    public void AddSubmodel_WithInvalidIdShort_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel = new Submodel(id: _fixture.Create<string>()!)
+        {
+            IdShort = "  "
+        };
+
+        // Act
+        var act = () => builder.AddSubmodel(submodel);
+
+        // Assert
+        var ex = Should.Throw<ArgumentException>(act);
+        ex.ParamName.ShouldBe("submodel");
+    }
+
+    [Fact]
+    public void Build_WithDuplicateSubmodelIds_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var duplicateId = _fixture.Create<string>();
+
+        builder.AddSubmodel(new Submodel(id: duplicateId, idShort: "submodel-a"));
+        builder.AddSubmodel(new Submodel(id: duplicateId, idShort: "submodel-b"));
+
+        // Act
+        var act = () => builder.Build();
+
+        // Assert
+        var ex = Should.Throw<InvalidOperationException>(act);
+        ex.Message.ShouldContain("Duplicate submodel id(s) detected at build-time");
+    }
+
+    [Fact]
+    public void AddSubmodelFragment_ShouldApplyContributionAtBuildTime()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodelId = _fixture.Create<string>();
+        builder.AddSubmodel(new Submodel(id: submodelId, idShort: "composed-submodel"));
+
+        // Act
+        builder.AddSubmodelFragment(submodelId, fragment => fragment.AddProperty("temperature", "21.5"));
+        var env = builder.Build();
+
+        // Assert
+        var submodel = env.Submodels.ShouldHaveSingleItem().ShouldBeOfType<Submodel>();
+        submodel.SubmodelElements.ShouldNotBeNull();
+        submodel.SubmodelElements.ShouldContain(e => e.IdShort == "temperature");
+    }
+
+    [Fact]
+    public void AddSubmodelFragment_WithoutBaseSubmodel_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var missingId = _fixture.Create<string>();
+        builder.AddSubmodelFragment(missingId, fragment => fragment.AddProperty("p", "v"));
+
+        // Act
+        var act = () => builder.Build();
+
+        // Assert
+        var ex = Should.Throw<InvalidOperationException>(act);
+        ex.Message.ShouldContain("No base submodel");
+    }
+
+    [Fact]
     public void Build_WhenCalledMultipleTimes_ShouldReturnNewEnvironmentInstancesWithSameContent()
     {
         // Arrange
