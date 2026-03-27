@@ -20,15 +20,6 @@ public sealed class SubmodelFragmentBuilder
     }
 
     /// <summary>
-    /// Adds a <see cref="Property"/> to the target submodel fragment.
-    /// </summary>
-    /// <param name="idShort">The short identifier of the property.</param>
-    /// <param name="value">The property value.</param>
-    /// <param name="valueType">The property value type. Defaults to <see cref="DataTypeDefXsd.String"/>.</param>
-    /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="idShort"/> or <paramref name="value"/> is null, empty, or whitespace.
-    /// <summary>
     /// Adds a Property with the specified idShort, value, and data type to the target Submodel.
     /// </summary>
     /// <param name="idShort">Short identifier for the Property; must not be null, empty, or whitespace.</param>
@@ -58,14 +49,7 @@ public sealed class SubmodelFragmentBuilder
 
         return this;
     }
-
-    /// <summary>
-    /// Adds a <see cref="MultiLanguageProperty"/> element to the target submodel.
-    /// </summary>
-    /// <param name="idShort">The short identifier of the multi-language property.</param>
-    /// <param name="configure">Configuration callback for language strings.</param>
-    /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="idShort"/> is null, empty, or whitespace.</exception>
+    
     /// <summary>
     /// Adds a multilingual (language-string) property to the target submodel and stages it for later build operations.
     /// </summary>
@@ -90,11 +74,6 @@ public sealed class SubmodelFragmentBuilder
         return this;
     }
 
-    /// <summary>
-    /// Adds an arbitrary <see cref="ISubmodelElement"/> instance to the target submodel.
-    /// </summary>
-    /// <param name="element">The submodel element to add.</param>
-    /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
     /// <summary>
     /// Appends a submodel element to the target submodel and returns this builder for chaining.
     /// </summary>

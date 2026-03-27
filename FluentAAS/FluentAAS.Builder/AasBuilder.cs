@@ -41,16 +41,6 @@ public sealed class AasBuilder : IAasBuilder
     /// <returns>
     /// A <see cref="ShellBuilder"/> instance for further configuration of the shell.
     /// </returns>
-    /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.
-    /// <summary>
-    /// Begins registering a new Asset Administration Shell with the specified identifier and short name.
-    /// </summary>
-    /// <param name="id">The unique identifier for the shell; must not be null, empty, or whitespace.</param>
-    /// <param name="idShort">A short, human-readable name for the shell; must not be null, empty, or whitespace.</param>
-    /// <param name="kind">The asset kind for the shell's AssetInformation. Defaults to <see cref="AssetKind.Instance"/>.</param>
-    /// <returns>An <see cref="IShellBuilder"/> to configure the created shell.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.</exception>
     public IShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance)
     {
         if (string.IsNullOrWhiteSpace(id))
@@ -82,15 +72,6 @@ public sealed class AasBuilder : IAasBuilder
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
-    /// <exception cref="ArgumentException">
-    /// Thrown when required submodel fields are invalid.
-    /// <summary>
-    /// Registers the given submodel with the builder after validating its identifiers.
-    /// </summary>
-    /// <param name="submodel">The submodel to add; must have a non-empty `Id` and `IdShort`.</param>
-    /// <returns>The same builder instance for fluent chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="submodel"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown if the submodel's `Id` or `IdShort` is null, empty, or whitespace.</exception>
     public IAasBuilder AddSubmodel(Submodel submodel)
     {
@@ -99,11 +80,6 @@ public sealed class AasBuilder : IAasBuilder
         return this;
     }
 
-    /// <summary>
-    /// Adds an existing <see cref="Submodel"/> to the environment.
-    /// </summary>
-    /// <param name="submodel">The submodel instance to add.</param>
-    /// <returns>The current <see cref="AasBuilder"/> instance for fluent chaining.</returns>
     /// <summary>
     /// Registers an existing <see cref="Submodel"/> instance with the builder without requiring an <c>IdShort</c> value.
     /// </summary>
@@ -117,14 +93,6 @@ public sealed class AasBuilder : IAasBuilder
         return this;
     }
 
-    /// <summary>
-    /// Adds a staged fragment to an already registered submodel, identified by submodel id.
-    /// Fragments are applied in registration order during <see cref="Build"/>.
-    /// </summary>
-    /// <param name="submodelId">The identifier of the target submodel.</param>
-    /// <param name="configure">Callback that contributes submodel elements.</param>
-    /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="submodelId"/> is null, empty, or whitespace.</exception>
     /// <summary>
     /// Stages a submodel fragment configuration to be applied to the submodel with the specified id during Build.
     /// </summary>
@@ -151,12 +119,6 @@ public sealed class AasBuilder : IAasBuilder
         return this;
     }
 
-    /// <summary>
-    /// Builds and returns the configured <see cref="Environment"/> instance.
-    /// </summary>
-    /// <returns>
-    /// A new <see cref="Environment"/> containing the configured asset administration
-    /// shells and submodels.
     /// <summary>
     /// Builds an Environment containing the builder's registered shells and submodels after applying any staged submodel fragments and validating build-time invariants.
     /// </summary>
@@ -238,11 +200,6 @@ public sealed class AasBuilder : IAasBuilder
         }
     }
 
-    /// <summary>
-    /// Adds a fully constructed <see cref="Submodel"/> to the environment.
-    /// Intended for internal use by shell or submodel builders.
-    /// </summary>
-    /// <param name="submodel">The submodel instance to add.</param>
     /// <summary>
     /// Registers the given submodel in the builder's internal collection if the same instance is not already present.
     /// </summary>

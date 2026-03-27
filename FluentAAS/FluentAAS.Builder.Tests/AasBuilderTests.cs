@@ -537,7 +537,7 @@ public class AasBuilderTests
         // Assert
         returned.ShouldBeSameAs(builder);
         var environment = builder.Build();
-        environment.Submodels.Count.ShouldBe(2);
+        environment.Submodels!.Count.ShouldBe(2);
     }
 
     [Fact]
@@ -685,7 +685,7 @@ public class AasBuilderTests
 
         // Assert
         env.ShouldNotBeNull();
-        env.Submodels.ShouldContain(submodel);
+        env.Submodels!.ShouldContain(submodel);
         env.AssetAdministrationShells.ShouldHaveSingleItem();
     }
 
@@ -747,7 +747,7 @@ public class AasBuilderTests
         var env2 = builder.Build();
 
         // Assert
-        env1.Submodels.Count.ShouldBe(1);
-        env2.Submodels.Count.ShouldBe(1);
+        env1.Submodels!.Count.ShouldBe(1);
+        env2.Submodels!.Count.ShouldBe(1);
     }
 }
