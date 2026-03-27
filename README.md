@@ -23,6 +23,32 @@ var environment = AasBuilder.Create()
 
 That's it. A valid, IDTA-compliant AAS model. Ready to export.
 
+
+## 📦 Published NuGet Package
+
+[![NuGet Version](https://img.shields.io/nuget/v/FluentAAS.Builder?label=NuGet%20Version)](https://www.nuget.org/packages/FluentAAS.Builder/)
+
+**FluentAAS.Builder is published on NuGet and ready for production use.**
+
+- **Package page:** https://www.nuget.org/packages/FluentAAS.Builder/
+- **Package metadata (NuGet):** https://www.nuget.org/packages/FluentAAS.Builder/#readme-body-tab
+- **Documentation:** https://github.com/Freezor/FluentAAS#readme
+- **GitHub releases:** https://github.com/Freezor/FluentAAS/releases
+
+### Install
+
+```bash
+dotnet add package FluentAAS.Builder
+```
+
+### Quick Reference
+
+- Build AAS environments with a fluent C# API.
+- Use official IDTA-oriented templates like Digital Nameplate.
+- Validate and export models as JSON or AASX.
+
+---
+
 ---
 
 ## The Problem

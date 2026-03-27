@@ -10,12 +10,14 @@
         <Nullable>enable</Nullable>
         <PackageId>FluentAAS.Builder</PackageId>
         <Authors>Oliver Fries</Authors>
-        <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
-        <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>
-        <PackageProjectUrl>https://github.com/Freezor/FluentAAS</PackageProjectUrl>
-        <RepositoryUrl>hhttps://github.com/Freezor/FluentAAS.git</RepositoryUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Description>Fluent Asset Administration Shell (AAS) builder for .NET with fluent APIs and IDTA-aligned model creation.</Description>
+        <Summary>Fluent C# builders for creating Asset Administration Shell models.</Summary>
+        <PackageTags>AAS;AssetAdministrationShell;DigitalTwin;FluentAAS;IDTA;dotnet</PackageTags>
+        <PackageProjectUrl>https://www.nuget.org/packages/FluentAAS.Builder/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Freezor/FluentAAS.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
     </PropertyGroup>

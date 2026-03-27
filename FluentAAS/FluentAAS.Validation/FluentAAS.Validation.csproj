@@ -11,12 +11,14 @@
         <NoWarn>CS1591</NoWarn>
         <PackageId>FluentAAS.Validation</PackageId>
         <Authors>Oliver Fries</Authors>
-        <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
-        <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>
-        <PackageProjectUrl>https://github.com/Freezor/FluentAAS</PackageProjectUrl>
-        <RepositoryUrl>hhttps://github.com/Freezor/FluentAAS.git</RepositoryUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Description>Validation services and rules for Asset Administration Shell (AAS) models built with FluentAAS.</Description>
+        <Summary>Validation rules and reporting for FluentAAS models.</Summary>
+        <PackageTags>AAS;AssetAdministrationShell;DigitalTwin;FluentAAS;Validation;dotnet</PackageTags>
+        <PackageProjectUrl>https://www.nuget.org/packages/FluentAAS.Validation/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Freezor/FluentAAS.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
     </PropertyGroup>

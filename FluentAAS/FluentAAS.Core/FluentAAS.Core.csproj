@@ -11,12 +11,14 @@
         <NoWarn>CS1591</NoWarn>
         <PackageId>FluentAAS.Core</PackageId>
         <Authors>Oliver Fries</Authors>
-        <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
-        <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>
-        <PackageProjectUrl>https://github.com/Freezor/FluentAAS</PackageProjectUrl>
-        <RepositoryUrl>hhttps://github.com/Freezor/FluentAAS.git</RepositoryUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Description>Core immutable Asset Administration Shell (AAS) model types used by FluentAAS packages.</Description>
+        <Summary>Core AAS record types and primitives for FluentAAS.</Summary>
+        <PackageTags>AAS;AssetAdministrationShell;DigitalTwin;FluentAAS;Core;dotnet</PackageTags>
+        <PackageProjectUrl>https://www.nuget.org/packages/FluentAAS.Core/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Freezor/FluentAAS.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
     </PropertyGroup>

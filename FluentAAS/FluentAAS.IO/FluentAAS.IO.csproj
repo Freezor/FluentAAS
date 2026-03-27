@@ -10,12 +10,14 @@
         <NoWarn>CS1591</NoWarn>
         <PackageId>FluentAAS.IO</PackageId>
         <Authors>Oliver Fries</Authors>
-        <Description>Fluent Asset Administration Shell (AAS) builder.</Description>
-        <PackageTags>AAS AssetAdministrationShell DigitalTwin FluentAAS</PackageTags>
-        <PackageProjectUrl>https://github.com/Freezor/FluentAAS</PackageProjectUrl>
-        <RepositoryUrl>hhttps://github.com/Freezor/FluentAAS.git</RepositoryUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Description>JSON and AASX serialization/export utilities for Asset Administration Shell (AAS) models in FluentAAS.</Description>
+        <Summary>I/O helpers for serializing and packaging FluentAAS models.</Summary>
+        <PackageTags>AAS;AssetAdministrationShell;DigitalTwin;FluentAAS;Serialization;AASX;dotnet</PackageTags>
+        <PackageProjectUrl>https://www.nuget.org/packages/FluentAAS.IO/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Freezor/FluentAAS.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
     </PropertyGroup>
