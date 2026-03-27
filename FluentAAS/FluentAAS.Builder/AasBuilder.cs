@@ -41,7 +41,16 @@ public sealed class AasBuilder : IAasBuilder
     /// <returns>
     /// A <see cref="ShellBuilder"/> instance for further configuration of the shell.
     /// </returns>
-    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.</remarks>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.
+    /// <summary>
+    /// Begins registering a new Asset Administration Shell with the specified identifier and short name.
+    /// </summary>
+    /// <param name="id">The unique identifier for the shell; must not be null, empty, or whitespace.</param>
+    /// <param name="idShort">A short, human-readable name for the shell; must not be null, empty, or whitespace.</param>
+    /// <param name="kind">The asset kind for the shell's AssetInformation. Defaults to <see cref="AssetKind.Instance"/>.</param>
+    /// <returns>An <see cref="IShellBuilder"/> to configure the created shell.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="id"/> or <paramref name="idShort"/> is null, empty, or whitespace.</exception>
     public IShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance)
     {
         if (string.IsNullOrWhiteSpace(id))
@@ -73,7 +82,16 @@ public sealed class AasBuilder : IAasBuilder
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
-    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="submodel"/> is null and <see cref="ArgumentException"/> when required submodel fields are invalid.</remarks>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown when required submodel fields are invalid.
+    /// <summary>
+    /// Registers the given submodel with the builder after validating its identifiers.
+    /// </summary>
+    /// <param name="submodel">The submodel to add; must have a non-empty `Id` and `IdShort`.</param>
+    /// <returns>The same builder instance for fluent chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="submodel"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if the submodel's `Id` or `IdShort` is null, empty, or whitespace.</exception>
     public IAasBuilder AddSubmodel(Submodel submodel)
     {
         ValidateSubmodelForPublicAdd(submodel);
@@ -86,7 +104,13 @@ public sealed class AasBuilder : IAasBuilder
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="AasBuilder"/> instance for fluent chaining.</returns>
-    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="submodel"/> is null.</remarks>
+    /// <summary>
+    /// Registers an existing <see cref="Submodel"/> instance with the builder without requiring an <c>IdShort</c> value.
+    /// </summary>
+    /// <param name="submodel">The submodel to register; its <c>Id</c> must be set (non-empty).</param>
+    /// <returns>The current builder instance for fluent chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="submodel"/> has a null, empty, or whitespace <c>Id</c>.</exception>
     public IAasBuilder AddExistingSubmodel(Submodel submodel)
     {
         AddSubmodelInternal(submodel);
@@ -100,7 +124,15 @@ public sealed class AasBuilder : IAasBuilder
     /// <param name="submodelId">The identifier of the target submodel.</param>
     /// <param name="configure">Callback that contributes submodel elements.</param>
     /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
-    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="submodelId"/> is invalid and <see cref="ArgumentNullException"/> when <paramref name="configure"/> is null.</remarks>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="submodelId"/> is null, empty, or whitespace.</exception>
+    /// <summary>
+    /// Stages a submodel fragment configuration to be applied to the submodel with the specified id during Build.
+    /// </summary>
+    /// <param name="submodelId">Identifier of the target submodel; must not be null, empty, or whitespace.</param>
+    /// <param name="configure">Callback that receives a <see cref="SubmodelFragmentBuilder"/> to configure the fragment.</param>
+    /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="submodelId"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is null.</exception>
     public IAasBuilder AddSubmodelFragment(string submodelId, Action<SubmodelFragmentBuilder> configure)
     {
         if (string.IsNullOrWhiteSpace(submodelId))
@@ -122,13 +154,20 @@ public sealed class AasBuilder : IAasBuilder
     /// <summary>
     /// Builds and returns the configured <see cref="Environment"/> instance.
     /// </summary>
-    /// <returns>A new <see cref="Environment"/> containing the configured asset administration shells and submodels.</returns>
+    /// <returns>
+    /// A new <see cref="Environment"/> containing the configured asset administration
+    /// shells and submodels.
+    /// <summary>
+    /// Builds an Environment containing the builder's registered shells and submodels after applying any staged submodel fragments and validating build-time invariants.
+    /// </summary>
+    /// <returns>An Environment with copies of the registered AssetAdministrationShells and Submodels.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when one or more duplicate submodel ids are detected among registered Submodel instances.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when a staged submodel fragment references a base submodel id that has not been added.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when a shell contains a submodel reference without a valid identifier.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when a shell references a submodel id that is not present among the registered submodels.</exception>
     public IEnvironment Build()
     {
-        var workingSubmodels = CloneSubmodels(_submodels);
-        var workingShells    = CloneShells(_shells);
-
-        var duplicateSubmodelIds = workingSubmodels.OfType<Submodel>()
+        var duplicateSubmodelIds = _submodels.OfType<Submodel>()
                                              .GroupBy(s => s.Id, StringComparer.Ordinal)
                                              .Where(g => !string.IsNullOrWhiteSpace(g.Key) && g.Count() > 1)
                                              .Select(g => g.Key)
@@ -140,28 +179,25 @@ public sealed class AasBuilder : IAasBuilder
             throw new InvalidOperationException($"Duplicate submodel id(s) detected at build-time: {duplicateIdList}. Each submodel id must be unique.");
         }
 
-        var submodelsById = workingSubmodels.OfType<Submodel>()
-                                            .ToDictionary(sm => sm.Id, StringComparer.Ordinal);
-
-        foreach (var (submodelId, _) in _submodelFragments)
+        foreach (var (submodelId, applyFragment) in _submodelFragments)
         {
-            if (!submodelsById.ContainsKey(submodelId))
+            var submodel = _submodels.OfType<Submodel>().FirstOrDefault(sm => string.Equals(sm.Id, submodelId, StringComparison.Ordinal));
+            if (submodel is null)
             {
                 throw new InvalidOperationException($"No base submodel with id '{submodelId}' was found for a staged fragment. Add the submodel before adding fragments.");
             }
+
+            applyFragment(submodel);
         }
 
-        foreach (var (submodelId, applyFragment) in _submodelFragments)
-        {
-            applyFragment(submodelsById[submodelId]);
-        }
+        _submodelFragments.Clear();
 
-        var knownSubmodelIds = workingSubmodels.OfType<Submodel>()
-                                               .Select(s => s.Id)
-                                               .Where(id => !string.IsNullOrWhiteSpace(id))
-                                               .ToHashSet(StringComparer.Ordinal);
+        var knownSubmodelIds = _submodels.OfType<Submodel>()
+                                         .Select(s => s.Id)
+                                         .Where(id => !string.IsNullOrWhiteSpace(id))
+                                         .ToHashSet(StringComparer.Ordinal);
 
-        foreach (var shell in workingShells.OfType<AssetAdministrationShell>())
+        foreach (var shell in _shells.OfType<AssetAdministrationShell>())
         {
             foreach (var reference in shell.Submodels ?? [])
             {
@@ -178,17 +214,11 @@ public sealed class AasBuilder : IAasBuilder
             }
         }
 
-        _submodels.Clear();
-        _submodels.AddRange(workingSubmodels);
-        _shells.Clear();
-        _shells.AddRange(workingShells);
-        _submodelFragments.Clear();
-
         // Return a fresh Environment each time, with copies of the internal lists
         return new Environment
                {
-                   AssetAdministrationShells = CloneShells(_shells),
-                   Submodels                 = CloneSubmodels(_submodels)
+                   AssetAdministrationShells = _shells.ToList(),
+                   Submodels                 = _submodels.ToList()
                };
     }
 
@@ -197,7 +227,7 @@ public sealed class AasBuilder : IAasBuilder
     /// Intended for internal use by <see cref="ShellBuilder"/>.
     /// </summary>
     /// <param name="shell">The shell instance to add.</param>
-    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="shell"/> is null.</remarks>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="shell"/> is null.</exception>
     public void AddShellInternal(AssetAdministrationShell shell)
     {
         ArgumentNullException.ThrowIfNull(shell);
@@ -213,7 +243,11 @@ public sealed class AasBuilder : IAasBuilder
     /// Intended for internal use by shell or submodel builders.
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
-    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="submodel"/> is null.</remarks>
+    /// <summary>
+    /// Registers the given submodel in the builder's internal collection if the same instance is not already present.
+    /// </summary>
+    /// <param name="submodel">The submodel to register; must not be null and must have a non-empty Id.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
     public void AddSubmodelInternal(Submodel submodel)
     {
         ArgumentNullException.ThrowIfNull(submodel);
@@ -225,6 +259,12 @@ public sealed class AasBuilder : IAasBuilder
         }
     }
 
+    /// <summary>
+    /// Validates that the provided <paramref name="submodel"/> is not null and has a non-empty Id.
+    /// </summary>
+    /// <param name="submodel">The submodel to validate; its <c>Id</c> must not be null, empty, or whitespace.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="submodel"/>'s <c>Id</c> is null, empty, or consists only of whitespace.</exception>
     private static void ValidateSubmodelId(Submodel submodel)
     {
         ArgumentNullException.ThrowIfNull(submodel);
@@ -235,6 +275,11 @@ public sealed class AasBuilder : IAasBuilder
         }
     }
 
+    /// <summary>
+    /// Validates that a submodel has a non-empty identifier and a non-empty IdShort.
+    /// </summary>
+    /// <param name="submodel">The submodel to validate; its identifier and IdShort must be set.</param>
+    /// <exception cref="ArgumentException">Thrown when <c>submodel.IdShort</c> is null, empty, or whitespace.</exception>
     private static void ValidateSubmodelForPublicAdd(Submodel submodel)
     {
         ValidateSubmodelId(submodel);
@@ -243,46 +288,5 @@ public sealed class AasBuilder : IAasBuilder
         {
             throw new ArgumentException("Submodel idShort must not be empty.", nameof(submodel));
         }
-    }
-
-    private static List<ISubmodel> CloneSubmodels(IEnumerable<ISubmodel> submodels)
-    {
-        return submodels.Select(submodel => submodel is Submodel concreteSubmodel
-                                                ? (ISubmodel)CloneSubmodel(concreteSubmodel)
-                                                : submodel)
-                        .ToList();
-    }
-
-    private static Submodel CloneSubmodel(Submodel source)
-    {
-        return new Submodel(id: source.Id)
-               {
-                   IdShort          = source.IdShort,
-                   SubmodelElements = source.SubmodelElements?.ToList()
-               };
-    }
-
-    private static List<IAssetAdministrationShell> CloneShells(IEnumerable<IAssetAdministrationShell> shells)
-    {
-        return shells.Select(shell => shell is AssetAdministrationShell concreteShell
-                                          ? (IAssetAdministrationShell)CloneShell(concreteShell)
-                                          : shell)
-                     .ToList();
-    }
-
-    private static AssetAdministrationShell CloneShell(AssetAdministrationShell source)
-    {
-        return new AssetAdministrationShell(id: source.Id, assetInformation: source.AssetInformation)
-               {
-                   IdShort   = source.IdShort,
-                   Submodels = source.Submodels?.Select(CloneReference).ToList()
-               };
-    }
-
-    private static Reference CloneReference(Reference source)
-    {
-        return new Reference(
-                             source.Type,
-                             source.Keys.Select(key => new Key(key.Type, key.Value)).ToList());
     }
 }

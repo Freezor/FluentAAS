@@ -8,6 +8,11 @@ public sealed class SubmodelFragmentBuilder
 {
     private readonly Submodel _target;
 
+    /// <summary>
+    /// Initializes a SubmodelFragmentBuilder for the specified submodel and ensures its SubmodelElements collection is initialized.
+    /// </summary>
+    /// <param name="target">The submodel to which staged elements will be appended.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="target"/> is null.</exception>
     internal SubmodelFragmentBuilder(Submodel target)
     {
         _target = target ?? throw new ArgumentNullException(nameof(target));
@@ -21,7 +26,17 @@ public sealed class SubmodelFragmentBuilder
     /// <param name="value">The property value.</param>
     /// <param name="valueType">The property value type. Defaults to <see cref="DataTypeDefXsd.String"/>.</param>
     /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="idShort"/> or <paramref name="value"/> is null, empty, or whitespace.</remarks>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="idShort"/> or <paramref name="value"/> is null, empty, or whitespace.
+    /// <summary>
+    /// Adds a Property with the specified idShort, value, and data type to the target Submodel.
+    /// </summary>
+    /// <param name="idShort">Short identifier for the Property; must not be null, empty, or whitespace.</param>
+    /// <param name="value">Value for the Property; must not be null, empty, or whitespace.</param>
+    /// <param name="valueType">Data type for the Property value. Defaults to <see cref="DataTypeDefXsd.String"/>.</param>
+    /// <returns>The current <see cref="SubmodelFragmentBuilder"/> instance for fluent chaining.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="idShort"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="value"/> is null, empty, or whitespace.</exception>
     public SubmodelFragmentBuilder AddProperty(string idShort, string value, DataTypeDefXsd valueType = DataTypeDefXsd.String)
     {
         if (string.IsNullOrWhiteSpace(idShort))
@@ -50,7 +65,15 @@ public sealed class SubmodelFragmentBuilder
     /// <param name="idShort">The short identifier of the multi-language property.</param>
     /// <param name="configure">Configuration callback for language strings.</param>
     /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <remarks>Throws <see cref="ArgumentException"/> when <paramref name="idShort"/> is invalid and <see cref="ArgumentNullException"/> when <paramref name="configure"/> is null.</remarks>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="idShort"/> is null, empty, or whitespace.</exception>
+    /// <summary>
+    /// Adds a multilingual (language-string) property to the target submodel and stages it for later build operations.
+    /// </summary>
+    /// <param name="idShort">The short identifier for the property; must not be null, empty, or whitespace.</param>
+    /// <param name="configure">A configuration callback that populates the <see cref="LangStringSetBuilder"/> with language entries.</param>
+    /// <returns>The current <see cref="SubmodelFragmentBuilder"/> instance for fluent chaining.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="idShort"/> is null, empty, or consists only of whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is null.</exception>
     public SubmodelFragmentBuilder AddMultiLanguageProperty(string idShort, Action<LangStringSetBuilder> configure)
     {
         if (string.IsNullOrWhiteSpace(idShort))
@@ -72,7 +95,12 @@ public sealed class SubmodelFragmentBuilder
     /// </summary>
     /// <param name="element">The submodel element to add.</param>
     /// <returns>The current <see cref="SubmodelFragmentBuilder"/>.</returns>
-    /// <remarks>Throws <see cref="ArgumentNullException"/> when <paramref name="element"/> is null.</remarks>
+    /// <summary>
+    /// Appends a submodel element to the target submodel and returns this builder for chaining.
+    /// </summary>
+    /// <param name="element">The submodel element to add to the target submodel.</param>
+    /// <returns>The current <see cref="SubmodelFragmentBuilder"/> instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="element"/> is null.</exception>
     public SubmodelFragmentBuilder AddElement(ISubmodelElement element)
     {
         ArgumentNullException.ThrowIfNull(element);

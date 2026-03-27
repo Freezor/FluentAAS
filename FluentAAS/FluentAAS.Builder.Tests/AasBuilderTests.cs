@@ -469,4 +469,285 @@ public class AasBuilderTests
         environment.Submodels.ShouldHaveSingleItem();
         environment.Submodels.Single().ShouldBeSameAs(submodel);
     }
+
+    [Fact]
+    public void AddSubmodel_WithNullSubmodel_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        Submodel? submodel = null;
+
+        // Act
+        var act = () => builder.AddSubmodel(submodel!);
+
+        // Assert
+        var ex = Should.Throw<ArgumentNullException>(act);
+        ex.ParamName.ShouldBe("submodel");
+    }
+
+    [Fact]
+    public void AddSubmodel_WithNullOrWhitespaceId_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel = new Submodel(id: "   ")
+        {
+            IdShort = _fixture.Create<string>()
+        };
+
+        // Act
+        var act = () => builder.AddSubmodel(submodel);
+
+        // Assert
+        var ex = Should.Throw<ArgumentException>(act);
+        ex.ParamName.ShouldBe("submodel");
+    }
+
+    [Fact]
+    public void AddSubmodel_WithNullIdShort_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel = new Submodel(id: _fixture.Create<string>()!)
+        {
+            IdShort = null
+        };
+
+        // Act
+        var act = () => builder.AddSubmodel(submodel);
+
+        // Assert
+        var ex = Should.Throw<ArgumentException>(act);
+        ex.ParamName.ShouldBe("submodel");
+    }
+
+    [Fact]
+    public void AddSubmodel_ShouldReturnSameBuilderForFluentChaining()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel1 = new Submodel(id: _fixture.Create<string>()!, idShort: "submodel-a");
+        var submodel2 = new Submodel(id: _fixture.Create<string>()!, idShort: "submodel-b");
+
+        // Act
+        var returned = builder
+            .AddSubmodel(submodel1)
+            .AddSubmodel(submodel2);
+
+        // Assert
+        returned.ShouldBeSameAs(builder);
+        var environment = builder.Build();
+        environment.Submodels.Count.ShouldBe(2);
+    }
+
+    [Fact]
+    public void AddSubmodelFragment_WithNullSubmodelId_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        string? submodelId = null;
+
+        // Act
+        var act = () => builder.AddSubmodelFragment(submodelId!, _ => { });
+
+        // Assert
+        var ex = Should.Throw<ArgumentException>(act);
+        ex.ParamName.ShouldBe("submodelId");
+    }
+
+    [Fact]
+    public void AddSubmodelFragment_WithWhitespaceSubmodelId_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var builder = CreateSut();
+
+        // Act
+        var act = () => builder.AddSubmodelFragment("   ", _ => { });
+
+        // Assert
+        var ex = Should.Throw<ArgumentException>(act);
+        ex.ParamName.ShouldBe("submodelId");
+    }
+
+    [Fact]
+    public void AddSubmodelFragment_WithNullConfigureAction_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodelId = _fixture.Create<string>();
+        Action<FluentAAS.Builder.SubModel.SubmodelFragmentBuilder>? configure = null;
+
+        // Act
+        var act = () => builder.AddSubmodelFragment(submodelId, configure!);
+
+        // Assert
+        Should.Throw<ArgumentNullException>(act);
+    }
+
+    [Fact]
+    public void AddSubmodelFragment_ShouldReturnSameBuilderForFluentChaining()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodelId = _fixture.Create<string>();
+        builder.AddSubmodel(new Submodel(id: submodelId, idShort: "sm"));
+
+        // Act
+        var returned = builder.AddSubmodelFragment(submodelId, _ => { });
+
+        // Assert
+        returned.ShouldBeSameAs(builder);
+    }
+
+    [Fact]
+    public void AddSubmodelFragment_WithMultipleFragmentsOnSameSubmodel_ShouldApplyAllInRegistrationOrder()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodelId = _fixture.Create<string>();
+        builder.AddSubmodel(new Submodel(id: submodelId, idShort: "ordered-submodel"));
+
+        // Act
+        builder.AddSubmodelFragment(submodelId, f => f.AddProperty("first", "1"));
+        builder.AddSubmodelFragment(submodelId, f => f.AddProperty("second", "2"));
+        builder.AddSubmodelFragment(submodelId, f => f.AddProperty("third", "3"));
+        var env = builder.Build();
+
+        // Assert
+        var submodel = env.Submodels.ShouldHaveSingleItem().ShouldBeOfType<Submodel>();
+        submodel.SubmodelElements.ShouldNotBeNull();
+        submodel.SubmodelElements.Count.ShouldBe(3);
+
+        var idShorts = submodel.SubmodelElements.Select(e => e.IdShort).ToList();
+        idShorts[0].ShouldBe("first");
+        idShorts[1].ShouldBe("second");
+        idShorts[2].ShouldBe("third");
+    }
+
+    [Fact]
+    public void Build_WithShellReferencingUnknownSubmodel_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var shellId        = _fixture.Create<string>();
+        var unknownSubmodelId = _fixture.Create<string>();
+
+        var shell = new AssetAdministrationShell(
+            id: shellId,
+            assetInformation: new AssetInformation(AssetKind.Instance),
+            idShort: "test-shell")
+        {
+            Submodels =
+            [
+                new Reference(
+                    ReferenceTypes.ModelReference,
+                    [new Key(KeyTypes.Submodel, unknownSubmodelId)])
+            ]
+        };
+
+        builder.AddShellInternal(shell);
+
+        // Act
+        var act = () => builder.Build();
+
+        // Assert
+        var ex = Should.Throw<InvalidOperationException>(act);
+        ex.Message.ShouldContain(unknownSubmodelId);
+    }
+
+    [Fact]
+    public void Build_WithShellReferencingKnownSubmodel_ShouldSucceed()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodelId = _fixture.Create<string>();
+
+        var submodel = new Submodel(id: submodelId, idShort: "known-submodel");
+        builder.AddSubmodel(submodel);
+
+        var shell = new AssetAdministrationShell(
+            id: _fixture.Create<string>(),
+            assetInformation: new AssetInformation(AssetKind.Instance),
+            idShort: "shell-with-ref")
+        {
+            Submodels =
+            [
+                new Reference(
+                    ReferenceTypes.ModelReference,
+                    [new Key(KeyTypes.Submodel, submodelId)])
+            ]
+        };
+
+        builder.AddShellInternal(shell);
+
+        // Act
+        var env = builder.Build();
+
+        // Assert
+        env.ShouldNotBeNull();
+        env.Submodels.ShouldContain(submodel);
+        env.AssetAdministrationShells.ShouldHaveSingleItem();
+    }
+
+    [Fact]
+    public void Build_WithShellSubmodelReferenceWithoutValidIdentifier_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var shellId = _fixture.Create<string>();
+
+        var shell = new AssetAdministrationShell(
+            id: shellId,
+            assetInformation: new AssetInformation(AssetKind.Instance),
+            idShort: "test-shell")
+        {
+            Submodels =
+            [
+                new Reference(
+                    ReferenceTypes.ModelReference,
+                    [new Key(KeyTypes.Submodel, "  ")])
+            ]
+        };
+
+        builder.AddShellInternal(shell);
+
+        // Act
+        var act = () => builder.Build();
+
+        // Assert
+        var ex = Should.Throw<InvalidOperationException>(act);
+        ex.Message.ShouldContain("submodel reference without a valid identifier");
+    }
+
+    [Fact]
+    public void AddSubmodelInternal_WithEmptyId_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel = new Submodel(id: "   ");
+
+        // Act
+        var act = () => builder.AddSubmodelInternal(submodel);
+
+        // Assert
+        var ex = Should.Throw<ArgumentException>(act);
+        ex.ParamName.ShouldBe("submodel");
+    }
+
+    [Fact]
+    public void AddSubmodel_AddedSubmodel_ShouldNotBeDuplicatedOnSecondBuild()
+    {
+        // Arrange
+        var builder = CreateSut();
+        var submodel = new Submodel(id: _fixture.Create<string>()!, idShort: "build-idempotent");
+        builder.AddSubmodel(submodel);
+
+        // Act - call Build twice
+        var env1 = builder.Build();
+        var env2 = builder.Build();
+
+        // Assert
+        env1.Submodels.Count.ShouldBe(1);
+        env2.Submodels.Count.ShouldBe(1);
+    }
 }
