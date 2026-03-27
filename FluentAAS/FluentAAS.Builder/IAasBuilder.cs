@@ -1,3 +1,5 @@
+using FluentAAS.Builder.SubModel;
+
 namespace FluentAAS.Builder;
 
 public interface IAasBuilder
@@ -21,12 +23,35 @@ public interface IAasBuilder
     IShellBuilder AddShell(string id, string idShort, AssetKind kind = AssetKind.Instance);
 
     /// <summary>
+    /// Adds an existing, fully constructed <see cref="Submodel"/> to the environment.
+    /// The submodel participates in build-time uniqueness validation.
+    /// </summary>
+    /// <param name="submodel">The submodel instance to add.</param>
+    /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown when required submodel fields (for example <see cref="IReferable.IdShort"/>) are invalid.
+    /// </exception>
+    IAasBuilder AddSubmodel(Submodel submodel);
+
+    /// <summary>
     /// Adds an existing <see cref="Submodel"/> to the environment.
     /// </summary>
     /// <param name="submodel">The submodel instance to add.</param>
     /// <returns>The current <see cref="AasBuilder"/> instance for fluent chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="submodel"/> is null.</exception>
     IAasBuilder AddExistingSubmodel(Submodel submodel);
+
+    /// <summary>
+    /// Adds a staged fragment to an already registered submodel, identified by submodel id.
+    /// Fragments are applied in registration order during <see cref="Build"/>.
+    /// </summary>
+    /// <param name="submodelId">The identifier of the target submodel.</param>
+    /// <param name="configure">Callback that contributes submodel elements.</param>
+    /// <returns>The current <see cref="IAasBuilder"/> instance for fluent chaining.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="submodelId"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is null.</exception>
+    IAasBuilder AddSubmodelFragment(string submodelId, Action<SubmodelFragmentBuilder> configure);
 
     /// <summary>
     /// Builds and returns the configured <see cref="Environment"/> instance.
