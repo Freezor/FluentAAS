@@ -3,6 +3,11 @@ using FluentAAS.Builder.SubModel;
 
 namespace FluentAAS.Templates.TechnicalData;
 
+/// <summary>
+/// Fluent builder for composing an IDTA Technical Data submodel with typed groups,
+/// ECLASS semantic mapping and IEC 61360-oriented validation.
+/// The builder fails fast so invalid technical parameter sets are rejected during composition.
+/// </summary>
 public sealed class TechnicalDataBuilder
 {
     private readonly IShellBuilder _shellBuilder;
@@ -29,6 +34,13 @@ public sealed class TechnicalDataBuilder
         _idShort = idShort;
     }
 
+    /// <summary>
+    /// Overrides the submodel identifiers used for the generated Technical Data submodel.
+    /// This allows callers to align the template with project-specific naming and ID strategies.
+    /// </summary>
+    /// <param name="id">Globally unique submodel identifier.</param>
+    /// <param name="idShort">Human-readable short identifier.</param>
+    /// <returns>The current builder for fluent chaining.</returns>
     public TechnicalDataBuilder WithIds(string id, string idShort)
     {
         if (string.IsNullOrWhiteSpace(id))
@@ -46,6 +58,12 @@ public sealed class TechnicalDataBuilder
         return this;
     }
 
+    /// <summary>
+    /// Configures the strongly typed motor performance group.
+    /// Using this method guarantees that only motor-performance properties are assigned in this group.
+    /// </summary>
+    /// <param name="configure">Callback that fills the motor performance properties.</param>
+    /// <returns>The current builder for fluent chaining.</returns>
     public TechnicalDataBuilder WithMotorPerformance(Action<MotorPerformanceGroupBuilder> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
@@ -56,6 +74,12 @@ public sealed class TechnicalDataBuilder
         return this;
     }
 
+    /// <summary>
+    /// Configures the strongly typed bearing characteristics group.
+    /// This prevents accidental mixing of unrelated technical parameters.
+    /// </summary>
+    /// <param name="configure">Callback that fills the bearing characteristic properties.</param>
+    /// <returns>The current builder for fluent chaining.</returns>
     public TechnicalDataBuilder WithBearingCharacteristics(Action<BearingCharacteristicsGroupBuilder> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
@@ -66,6 +90,14 @@ public sealed class TechnicalDataBuilder
         return this;
     }
 
+    /// <summary>
+    /// Validates and builds the Technical Data submodel, then attaches it to the parent shell.
+    /// This central build step ensures required parameters, units and semantics are validated before persistence.
+    /// </summary>
+    /// <returns>The parent shell builder to continue composing the AAS.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when required properties are missing or semantic mappings are invalid.
+    /// </exception>
     public IShellBuilder BuildTechnicalData()
     {
         ValidateRequiredParameters();
@@ -193,26 +225,58 @@ public sealed class TechnicalDataBuilder
         string Value,
         string Unit);
 
+    /// <summary>
+    /// Group builder for motor performance properties.
+    /// The API is deliberately constrained to valid motor fields for safer, more predictable template usage.
+    /// </summary>
     public sealed class MotorPerformanceGroupBuilder(TechnicalDataBuilder parent)
     {
+        /// <summary>
+        /// Sets rated voltage with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric rated voltage value.</param>
+        /// <param name="unit">Unit symbol (default: V).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current motor performance builder.</returns>
         public MotorPerformanceGroupBuilder WithRatedVoltage(decimal value, string unit = "V", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.MotorPerformance, TechnicalDataIdentifiers.RatedVoltage, value, unit, semanticId);
             return this;
         }
 
+        /// <summary>
+        /// Sets rated current with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric rated current value.</param>
+        /// <param name="unit">Unit symbol (default: A).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current motor performance builder.</returns>
         public MotorPerformanceGroupBuilder WithRatedCurrent(decimal value, string unit = "A", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.MotorPerformance, TechnicalDataIdentifiers.RatedCurrent, value, unit, semanticId);
             return this;
         }
 
+        /// <summary>
+        /// Sets rated power with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric rated power value.</param>
+        /// <param name="unit">Unit symbol (default: kW).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current motor performance builder.</returns>
         public MotorPerformanceGroupBuilder WithRatedPower(decimal value, string unit = "kW", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.MotorPerformance, TechnicalDataIdentifiers.RatedPower, value, unit, semanticId);
             return this;
         }
 
+        /// <summary>
+        /// Sets rated speed with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric rated speed value.</param>
+        /// <param name="unit">Unit symbol (default: 1/min).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current motor performance builder.</returns>
         public MotorPerformanceGroupBuilder WithRatedSpeed(decimal value, string unit = "1/min", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.MotorPerformance, TechnicalDataIdentifiers.RatedSpeed, value, unit, semanticId);
@@ -220,26 +284,58 @@ public sealed class TechnicalDataBuilder
         }
     }
 
+    /// <summary>
+    /// Group builder for bearing characteristics.
+    /// The focused API helps callers provide structurally valid bearing data with consistent semantics.
+    /// </summary>
     public sealed class BearingCharacteristicsGroupBuilder(TechnicalDataBuilder parent)
     {
+        /// <summary>
+        /// Sets bearing inner diameter with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric inner diameter value.</param>
+        /// <param name="unit">Unit symbol (default: mm).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current bearing characteristics builder.</returns>
         public BearingCharacteristicsGroupBuilder WithInnerDiameter(decimal value, string unit = "mm", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.BearingCharacteristics, TechnicalDataIdentifiers.InnerDiameter, value, unit, semanticId);
             return this;
         }
 
+        /// <summary>
+        /// Sets bearing outer diameter with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric outer diameter value.</param>
+        /// <param name="unit">Unit symbol (default: mm).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current bearing characteristics builder.</returns>
         public BearingCharacteristicsGroupBuilder WithOuterDiameter(decimal value, string unit = "mm", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.BearingCharacteristics, TechnicalDataIdentifiers.OuterDiameter, value, unit, semanticId);
             return this;
         }
 
+        /// <summary>
+        /// Sets bearing width with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric width value.</param>
+        /// <param name="unit">Unit symbol (default: mm).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current bearing characteristics builder.</returns>
         public BearingCharacteristicsGroupBuilder WithWidth(decimal value, string unit = "mm", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.BearingCharacteristics, TechnicalDataIdentifiers.Width, value, unit, semanticId);
             return this;
         }
 
+        /// <summary>
+        /// Sets bearing limiting speed with IEC 61360-conform unit and optional explicit semantic check.
+        /// </summary>
+        /// <param name="value">Numeric limiting speed value.</param>
+        /// <param name="unit">Unit symbol (default: 1/min).</param>
+        /// <param name="semanticId">Optional ECLASS IRDI for explicit semantic conformity check.</param>
+        /// <returns>The current bearing characteristics builder.</returns>
         public BearingCharacteristicsGroupBuilder WithLimitingSpeed(decimal value, string unit = "1/min", string? semanticId = null)
         {
             parent.UpsertDecimalProperty(TechnicalDataIdentifiers.BearingCharacteristics, TechnicalDataIdentifiers.LimitingSpeed, value, unit, semanticId);

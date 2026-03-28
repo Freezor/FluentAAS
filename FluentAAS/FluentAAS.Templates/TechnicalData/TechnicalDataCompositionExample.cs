@@ -2,8 +2,17 @@ using FluentAAS.Builder;
 
 namespace FluentAAS.Templates.TechnicalData;
 
+/// <summary>
+/// Provides a ready-to-run composition sample for the Technical Data template.
+/// The example demonstrates how to build a complete AAS environment with realistic motor and bearing data.
+/// </summary>
 public static class TechnicalDataCompositionExample
 {
+    /// <summary>
+    /// Builds an example <see cref="IEnvironment"/> containing one shell and one Technical Data submodel.
+    /// Integrators can use this as a reference implementation for production composition flows.
+    /// </summary>
+    /// <returns>A fully built AAS environment with technical parameter groups.</returns>
     public static IEnvironment BuildMotorAndBearingExampleEnvironment()
     {
         var aasBuilder = AasBuilder.Create();
