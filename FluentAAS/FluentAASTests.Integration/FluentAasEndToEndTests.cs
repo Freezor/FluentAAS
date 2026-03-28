@@ -7,6 +7,7 @@
     using FluentAAS.Templates.DigitalNameplate;
     using FluentAAS.Templates.HandoverDocumentation;
     using FluentAAS.Templates.HandoverDocumentation.Document;
+    using FluentAAS.Templates.TechnicalData;
     using Shouldly;
     using File = System.IO.File;
 
@@ -153,6 +154,50 @@
             AssertShellProperties(environment);
             AssertSubmodelProperties(environment);
             AssertDocumentContent(environment);
+        }
+
+        /// <summary>
+        ///     Verifies that the Technical Data template can be composed as part of a full environment
+        ///     and persists structured motor and bearing parameters with expected ECLASS semantics.
+        /// </summary>
+        [Fact]
+        public void CanCreateTechnicalDataWithFluentApi()
+        {
+            var environment = AasBuilder.Create()
+                                        .AddShell("urn:aas:example:drivetrain:1000", "DriveTrainAAS")
+                                        .AddTechnicalData("urn:aas:submodel:technical-data:drivetrain:1000")
+                                        .WithMotorPerformance(motor => motor
+                                            .WithRatedVoltage(400m, "V", TechnicalDataSemantics.RatedVoltage)
+                                            .WithRatedCurrent(82.5m, "A", TechnicalDataSemantics.RatedCurrent)
+                                            .WithRatedPower(45m, "kW", TechnicalDataSemantics.RatedPower)
+                                            .WithRatedSpeed(1470m, "1/min", TechnicalDataSemantics.RatedSpeed))
+                                        .WithBearingCharacteristics(bearing => bearing
+                                            .WithInnerDiameter(50m, "mm", TechnicalDataSemantics.InnerDiameter)
+                                            .WithOuterDiameter(90m, "mm", TechnicalDataSemantics.OuterDiameter)
+                                            .WithWidth(20m, "mm", TechnicalDataSemantics.Width)
+                                            .WithLimitingSpeed(6500m, "1/min", TechnicalDataSemantics.LimitingSpeed))
+                                        .BuildTechnicalData()
+                                        .CompleteShellConfiguration()
+                                        .Build();
+
+            environment.AssetAdministrationShells.ShouldNotBeNull();
+            environment.AssetAdministrationShells!.Count.ShouldBe(1);
+            environment.Submodels.ShouldNotBeNull();
+            environment.Submodels!.Count.ShouldBe(1);
+
+            var technicalData = environment.Submodels!.Single(sm => sm.Id == "urn:aas:submodel:technical-data:drivetrain:1000");
+            technicalData.SemanticId!.Keys.Single().Value.ShouldBe(TechnicalDataSemantics.SubmodelTechnicalData);
+
+            var motorPerformance = technicalData.SubmodelElements!
+                                               .OfType<SubmodelElementCollection>()
+                                               .Single(x => x.IdShort == TechnicalDataIdentifiers.MotorPerformance);
+            var ratedVoltage = motorPerformance.Value!
+                                               .OfType<Property>()
+                                               .Single(x => x.IdShort == TechnicalDataIdentifiers.RatedVoltage);
+
+            ratedVoltage.Value.ShouldBe("400");
+            ratedVoltage.SemanticId!.Keys.Single().Value.ShouldBe(TechnicalDataSemantics.RatedVoltage);
+            ratedVoltage.Category.ShouldBe("V");
         }
 
         private static IEnvironment CreateHandoverDocumentationEnvironment(DateTime testDate)
